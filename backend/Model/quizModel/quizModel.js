@@ -11,6 +11,6 @@ const quiz = mongoose.Schema(
   }
 );
 
-const quizSchema = mongoose.model("quizSchema", quiz);
+const quizSchema = mongoose.model("quiz", quiz);
 
 module.exports = quizSchema;

@@ -4,7 +4,7 @@ const Quiz = require("../Model/quizModel/quizModel");
 
 const addQuestion = asyncHandler(async (req, res) => {
   const { question, options, answer, category, type } = req.body;
-
+  
   const data = await Question.create({
     question,
     options,
@@ -24,6 +24,17 @@ const addQuestion = asyncHandler(async (req, res) => {
     });
   } else {
     console.log("not good");
+  }
+});
+
+const getQuestion = asyncHandler(async (req, res) => {
+  try {
+    const data = await Question.find({});
+    res.json({
+      data,
+    });
+  } catch (error) {
+    console.log(error);
   }
 });
 
@@ -49,4 +60,4 @@ const getQuiz = asyncHandler(async (req, res) => {
   }
 });
 
-module.exports = { addQuestion, addQuiz, getQuiz };
+module.exports = { addQuestion, getQuestion, addQuiz, getQuiz };

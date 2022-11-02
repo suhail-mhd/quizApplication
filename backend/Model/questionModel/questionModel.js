@@ -3,17 +3,16 @@ const mongoose = require("mongoose");
 const QuestionModel = mongoose.Schema(
     {
       question: {
-        type: String,
-        required: true,
+        type: String
+        
       },
-      options: [{
+      options: {
         type: Array,
-        index: true,
-        required: true,
-      }],
+        index: true
+        
+      },
       answer: {
-        type: String,
-        required: true
+        type: String
       },
       category: {
         type: String
