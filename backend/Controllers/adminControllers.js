@@ -1,6 +1,7 @@
 const asyncHandler = require("express-async-handler");
 const Question = require("../Model/questionModel/questionModel");
 const Quiz = require("../Model/quizModel/quizModel");
+const Category = require("../Model/categoryModel/categoryModel");
 
 const addQuestion = asyncHandler(async (req, res) => {
   const { question, option1,option2, option3, answer, category, type } = req.body;
@@ -14,6 +15,7 @@ const addQuestion = asyncHandler(async (req, res) => {
     category,
     type,
   });
+  console.log(data);
 
   if (data) {
     res.status(200).json({
@@ -64,4 +66,29 @@ const getQuiz = asyncHandler(async (req, res) => {
   }
 });
 
-module.exports = { addQuestion, getQuestion, addQuiz, getQuiz };
+
+const addCategory = asyncHandler(async (req, res) => {
+  const { category } = req.body;
+  const data = await Category.create({ category });
+
+  if (data) {
+    res.status(200).json({ status: true, category: data.category });
+  } else {
+    res.status(400).send("error while category value inserting to database");
+  }
+});
+
+const getCategory = asyncHandler(async (req, res) => {
+  try {
+    const data = await Category.find({});
+    res.json({
+      data,
+    });
+  } catch (error) {
+    console.log(error);
+  }
+});
+
+
+
+module.exports = { addQuestion, getQuestion, addQuiz, getQuiz, addCategory, getCategory };
