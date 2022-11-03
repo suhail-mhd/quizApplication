@@ -6,8 +6,18 @@ const QuestionModel = mongoose.Schema(
         type: String
         
       },
-      options: {
-        type: Array,
+      option1: {
+        type: String,
+        index: true
+        
+      },
+      option2: {
+        type: String,
+        index: true
+        
+      },
+      option3: {
+        type: String,
         index: true
         
       },
