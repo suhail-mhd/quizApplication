@@ -75,7 +75,7 @@ export default function TransitionsModal() {
   const questionHandler = () => {
     try {
       axios
-        .post("http://localhost:5000/api/admin/addQuestion", { question, option1,option2,option3, answer, category, type })
+        .post("/api/admin/addQuestion", { question, option1,option2,option3, answer, category, type })
         .then((res) => {
             setQuestion(res.data);
         });

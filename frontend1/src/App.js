@@ -3,7 +3,8 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import "./App.css";
 import AdminHome from "./pages/AdminHome";
 import AdminQuestions from "./pages/adminQuestionTable";
-import UserHome from "./pages/userHome";
+import UserHome from "./pages/userHome/userHome";
+import UserQuestions from "./pages/userQuestions/userQuestions";
 
 function App() {
   return (
@@ -12,6 +13,7 @@ function App() {
         <Route path="/admin" element={<AdminHome />} />
         <Route path="/admin/adminQuestions" element={<AdminQuestions />} />
         <Route path="/" element={<UserHome />} />
+        <Route path="/userQuestions" element={<UserQuestions />} />
       </Routes>
     </BrowserRouter>
   );

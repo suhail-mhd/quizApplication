@@ -35,7 +35,7 @@ const styleOne = {
   textAlign: "center",
 };
 
-const styleThree = {
+const styleTwo = {
   backgroundColor: "#001253",
   borderRadius: "20px",
   marginTop: 25,
@@ -110,7 +110,7 @@ export default function TransitionsModal() {
                 variant="contained"
                 type="submit"
                 value="submit"
-                style={styleThree}
+                style={styleTwo}
                 onClick={quizHandler}
               >
                 Save

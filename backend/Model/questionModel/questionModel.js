@@ -3,34 +3,39 @@ const mongoose = require("mongoose");
 const QuestionModel = mongoose.Schema(
     {
       question: {
-        type: String
-        
+        type: String,
+        require: true
       },
       option1: {
         type: String,
-        index: true
+        index: true,
+        require: true
         
       },
       option2: {
         type: String,
-        index: true
+        index: true,
+        require: true
         
       },
       option3: {
         type: String,
-        index: true
+        index: true,
+        require: true
         
       },
       answer: {
-        type: String
+        type: String,
+        enum: ["A", "B", "C", "D"],
+        require: true
       },
       category: {
-        type: String
-        
+        type: String,
+        require: true
       },
       type: {
-        type: String
-        
+        type: String,
+        require: true
       }
     },
     {

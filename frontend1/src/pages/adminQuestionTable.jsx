@@ -17,8 +17,8 @@ function AdminQuestions() {
 
   const questionShow = () => {
     try {
-      axios.get("http://localhost:5000/api/admin/getQuestion").then((res) => {
-        console.log(res.data.data);
+      axios.get("/api/admin/getQuestion").then((res) => {
+        // console.log(res.data.data);
         setQuestion(res.data.data);
       });
     } catch (error) {
