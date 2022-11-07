@@ -24,6 +24,12 @@ const QuestionModel = mongoose.Schema(
         require: true
         
       },
+      option4: {
+        type: String,
+        index: true,
+        require: true
+        
+      },
       answer: {
         type: String,
         enum: ["A", "B", "C", "D"],

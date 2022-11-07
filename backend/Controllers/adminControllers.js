@@ -4,13 +4,14 @@ const Quiz = require("../Model/quizModel/quizModel");
 const Category = require("../Model/categoryModel/categoryModel");
 
 const addQuestion = asyncHandler(async (req, res) => {
-  const { question, option1,option2, option3, answer, category, type } = req.body;
+  const { question, option1,option2, option3, option4, answer, category, type } = req.body;
   
   const data = await Question.create({
     question,
     option1,
     option2,
     option3,
+    option4,
     answer,
     category,
     type,
@@ -24,6 +25,7 @@ const addQuestion = asyncHandler(async (req, res) => {
       option1: data.option1,
       option2: data.option2,
       option3: data.option3,
+      option4: data.option4,
       answer: data.answer,
       category: data.category,
       type: data.type,

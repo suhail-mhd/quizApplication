@@ -4,7 +4,7 @@ import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
 import Typography from "@mui/material/Typography";
 import axios from "axios";
-import { useNavigate } from "react-router-dom";
+// import { useNavigate } from "react-router-dom";
 import Grid from "@mui/material/Grid";
 import Radio from "@mui/material/Radio";
 import RadioGroup from "@mui/material/RadioGroup";
@@ -18,12 +18,13 @@ const style = {
   left: "50%",
   transform: "translate(-50%, -50%)",
   width: 700,
-  height: 500,
+  height: "100%",
   bgcolor: "background.paper",
   border: "2px solid #000",
   borderRadius: "10px",
   boxShadow: 24,
-  // p: 4,
+  marginTop:"10rem",
+  marginBottom:"10rem",
 };
 
 const styleOne = {
@@ -34,7 +35,7 @@ const styleOne = {
   borderTopLeftRadius: "10px",
   padding: "60px",
   textAlign: "center",
-  fontWeight:"bold"
+  fontWeight: "bold",
 };
 
 const styleTwo = {
@@ -43,6 +44,7 @@ const styleTwo = {
   marginTop: 25,
   paddingLeft: "50px",
   paddingRight: "50px",
+  margin: "0 5px",
 };
 const styleThree = {
   backgroundColor: "#f4f4f4",
@@ -54,91 +56,101 @@ const styleThree = {
   width: "50px",
   marginTop: "-50px",
   fontWeight: "bold",
-  marginLeft:"2rem"
+  marginLeft: "2rem",
 };
 
 function UserShowQuestion() {
+  const [show, setShow] = useState([]);
+  const [checked, setCheck] = useState(null);
 
-    const [show, setShow] = useState([])
+  const questionShow = () => {
+    try {
+      axios.get("/api/user/getQuestion").then((res) => {
+        // console.log(res.data.data);
+        setShow(res.data.data);
+      });
+    } catch (error) {
+      console.log(error);
+    }
+  };
 
-    const questionShow = () => {
-        try {
-          axios.get("/api/user/getQuestion").then((res) => {
-            // console.log(res.data.data);
-            setShow(res.data.data);
-          });
-        } catch (error) {
-          console.log(error);
-        }
-      };
-    
-      useEffect(() => {
-        questionShow();
-      }, []);
+  const onSelect = () => {
+    // setCheck(true)
+    console.log("options change");
+  };
+
+  useEffect(() => {
+    questionShow();
+  }, []);
 
   return (
     <div>
       <Box sx={style}>
-        <Typography
+      <Typography
           id="transition-modal-title"
           variant="h4"
           component="h2"
           style={styleOne}
         >
-         Questions
+        Questions
         </Typography>
-        <Box textAlign="center">
-          <div
-            style={styleThree}
-            // onClick={quizHandler}
-          >
-            Question 1 of 5
-          </div>
-        </Box>
-        <Grid container style={{justifyContent:"center", marginTop:"4rem"}}>
-          
-            <FormControl>
-              <RadioGroup
-                row
-                aria-labelledby="demo-row-radio-buttons-group-label"
-                name="row-radio-buttons-group"
-              >
-                <Grid sm={12} xs={12} md={6} lg={6} xl={4}>
-
+       {show.length && show.map((data, i) => {
+        return(
+         <>
+          <Typography
+          id="transition-modal-title"
+          variant="h5"
+          component="h2"
+          style={{marginLeft:40, fontWeight:"bold", marginTop:60}}
+        >
+         {i+1}. {data.question}
+        </Typography>
+        <Grid container style={{ justifyContent: "center", marginTop: "4rem" }}>
+          <FormControl>
+            <RadioGroup
+              row
+              aria-labelledby="demo-row-radio-buttons-group-label"
+              name="row-radio-buttons-group"
+            >
+              <Grid sm={12} xs={12} md={6} lg={6} xl={4}>
+                <FormControlLabel
+                  value={false}
+                  control={<Radio />}
+                  label={data.option1}
+                  onChange={onSelect}
+                />
+              </Grid>
+              <Grid sm={12} xs={12} md={6} lg={6} xl={4}>
                 <FormControlLabel
                   value="options"
                   control={<Radio />}
-                  label="options"
+                  label={data.option2}
                 />
-                </Grid>
-                <Grid sm={12} xs={12} md={6} lg={6} xl={4}>
-
+              </Grid>
+              <Grid sm={12} xs={12} md={6} lg={6} xl={4}>
                 <FormControlLabel
                   value="options"
                   control={<Radio />}
-                  label="options"
+                  label={data.option3}
                 />
-                </Grid>
-                <Grid sm={12} xs={12} md={6} lg={6} xl={4}>
-
+              </Grid>
+              <Grid sm={12} xs={12} md={6} lg={6} xl={4}>
                 <FormControlLabel
                   value="options"
                   control={<Radio />}
-                  label="options"
+                  label={data.option4}
                 />
-                </Grid>
-                <Grid sm={12} xs={12} md={6} lg={6} xl={4}>
-                    
-                <FormControlLabel
-                  value="options"
-                  control={<Radio />}
-                  label="options"
-                />
-                </Grid>
-              </RadioGroup>
-            </FormControl>
+              </Grid>
+            </RadioGroup>
+          </FormControl>
         </Grid>
-        <Box textAlign="right" style={{marginRight:"2rem", marginTop:"5rem"}}>
+         </>
+        )
+       })}
+        <Box
+          textAlign="right"
+          style={{ marginRight: "2rem", marginTop: "5rem" }}
+        >
           <Button
             variant="contained"
             type="submit"
@@ -146,7 +158,7 @@ function UserShowQuestion() {
             style={styleTwo}
             // onClick={quizHandler}
           >
-            Next
+            Submit
           </Button>
         </Box>
       </Box>

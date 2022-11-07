@@ -8,9 +8,11 @@ function userQuestions() {
   const myStyle = {
     backgroundImage:
       "url('https://scr.vn/wp-content/uploads/2020/08/H%C3%ACnh-n%E1%BB%81n-background-vector-scaled.jpg')",
-    height: "100vh",
+    height: "100rem",
+    width: "100%",
     backgroundSize: "cover",
     backgroundRepeat: "no-repeat",
+    backgroundPosition: "center",
     marginTop:"-30px"
   };
 

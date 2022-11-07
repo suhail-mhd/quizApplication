@@ -79,7 +79,7 @@ function AdminQuestions() {
                         <li>{data.option1}</li>
                         <li>{data.option2}</li>
                         <li>{data.option3}</li>
-                        <li>None of the above</li>
+                        <li>{data.option4}</li>
                       </ol>
                     </TableCell>
                     <TableCell>{data.answer}</TableCell>

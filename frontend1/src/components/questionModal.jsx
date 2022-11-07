@@ -20,7 +20,7 @@ const style = {
   left: "50%",
   transform: "translate(-50%, -50%)",
   width: 400,
-  height: 600,
+  height: 700,
   bgcolor: "background.paper",
   border: "2px solid #000",
   borderRadius: "10px",
@@ -55,6 +55,7 @@ export default function TransitionsModal() {
   const [option1, setOption1] = useState("");
   const [option2, setOption2] = useState("");
   const [option3, setOption3] = useState("");
+  const [option4, setOption4] = useState("");
   const [answer, setAnswer] = useState("");
   const [category, setCategory] = useState("");
   const [type, setType] = useState("");
@@ -75,7 +76,7 @@ export default function TransitionsModal() {
   const questionHandler = () => {
     try {
       axios
-        .post("/api/admin/addQuestion", { question, option1,option2,option3, answer, category, type })
+        .post("/api/admin/addQuestion", { question, option1,option2,option3, option4,  answer, category, type })
         .then((res) => {
             setQuestion(res.data);
         });
@@ -162,6 +163,17 @@ export default function TransitionsModal() {
                     name="option3"
                     style={{ marginBottom: 5 }}
                     onChange={(e) => setOption3(e.target.value)}
+                  />
+                </Grid>
+                <Grid item lg={12}>
+                  <TextField
+                    variant="standard"
+                    label="Option4"
+                    placeholder="Enter the Options"
+                    type="text"
+                    name="option4"
+                    style={{ marginBottom: 5 }}
+                    onChange={(e) => setOption4(e.target.value)}
                   />
                 </Grid>
                 <Grid item lg={12}>
