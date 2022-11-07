@@ -46,7 +46,6 @@ const styleThree = {
 };
 
 export default function TransitionsModal() {
-
   const [open, setOpen] = React.useState(false);
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
@@ -59,6 +58,7 @@ export default function TransitionsModal() {
   const [answer, setAnswer] = useState("");
   const [category, setCategory] = useState("");
   const [type, setType] = useState("");
+  const [error, setError] = useState(false);
 
   const handleChange1 = (event) => {
     event.preventDefault();
@@ -74,13 +74,35 @@ export default function TransitionsModal() {
   };
 
   const questionHandler = () => {
+    if (
+      question.length == 0 ||
+      option1.length == 0 ||
+      option2.length == 0 ||
+      option3.length == 0 ||
+      option4.length == 0 ||
+      answer.length == 0 ||
+      category.length == 0 ||
+      type.length == 0
+    ) {
+      setError(true);
+    }
+
     try {
       axios
-        .post("/api/admin/addQuestion", { question, option1,option2,option3, option4,  answer, category, type })
+        .post("/api/admin/addQuestion", {
+          question,
+          option1,
+          option2,
+          option3,
+          option4,
+          answer,
+          category,
+          type,
+        })
         .then((res) => {
-            setQuestion(res.data);
+          setQuestion(res.data);
         });
-      navigate("/admin");
+      // navigate("/admin");
     } catch (error) {
       console.log("error occurred", error);
     }
@@ -120,63 +142,134 @@ export default function TransitionsModal() {
             >
               Add Questions
             </Typography>
-              <Grid style={{ textAlign: "center" }}>
-                <Grid item lg={12}>
-                  <TextField
-                    variant="standard"
-                    label="Question"
-                    placeholder="Enter the Question"
-                    type="text"
-                    name="question"
-                    style={{ marginBottom: 5 }}
-                    onChange={(e) => setQuestion(e.target.value)}
-                  />
-                </Grid>
-                <Grid item lg={12}>
-                  <TextField
-                    variant="standard"
-                    label="Option1"
-                    placeholder="Enter the Options"
-                    type="text"
-                    name="option1"
-                    style={{ marginBottom: 5 }}
-                    onChange={(e) => setOption1(e.target.value)}
-                  />
-                </Grid>
-                <Grid item lg={12}>
-                  <TextField
-                    variant="standard"
-                    label="Option2"
-                    placeholder="Enter the Options"
-                    type="text"
-                    name="option2"
-                    style={{ marginBottom: 5 }}
-                    onChange={(e) => setOption2(e.target.value)}
-                  />
-                </Grid>
-                <Grid item lg={12}>
-                  <TextField
-                    variant="standard"
-                    label="Option3"
-                    placeholder="Enter the Options"
-                    type="text"
-                    name="option3"
-                    style={{ marginBottom: 5 }}
-                    onChange={(e) => setOption3(e.target.value)}
-                  />
-                </Grid>
-                <Grid item lg={12}>
-                  <TextField
-                    variant="standard"
-                    label="Option4"
-                    placeholder="Enter the Options"
-                    type="text"
-                    name="option4"
-                    style={{ marginBottom: 5 }}
-                    onChange={(e) => setOption4(e.target.value)}
-                  />
-                </Grid>
-                <Grid item lg={12}>
+            <Grid style={{ textAlign: "center", marginLeft:"1rem" }}>
+             
+              <Grid item lg={12} style={{display:"flex"}}>
+                <TextField
+                  variant="standard"
+                  label="Question"
+                  placeholder="Enter the Question"
+                  type="text"
+                  name="question"
+                  style={{ marginBottom: 5 }}
+                  onChange={(e) => setQuestion(e.target.value)}
+                />
+                 {error && question.length <= 0 ? (
+                <p
+                  style={{
+                    color: "red",
+                    textAlign: "center",
+                    fontWeight: "bold",
+                  }}
+                >
+                  Question is required
+                </p>
+              ) : (
+                ""
+              )}
+              </Grid>
+              
+              <Grid item lg={12} style={{display:"flex"}}>
+                <TextField
+                  variant="standard"
+                  label="Option1"
+                  placeholder="Enter the Options"
+                  type="text"
+                  name="option1"
+                  style={{ marginBottom: 5 }}
+                  onChange={(e) => setOption1(e.target.value)}
+                />
+                {error && option1.length <= 0 ? (
+                <p
+                  style={{
+                    color: "red",
+                    textAlign: "center",
+                    fontWeight: "bold",
+                  }}
+                >
+                  Please fill in the field
+                </p>
+              ) : (
+                ""
+              )}
+              </Grid>
+              
+              <Grid item lg={12} style={{display:"flex"}}>
+                <TextField
+                  variant="standard"
+                  label="Option2"
+                  placeholder="Enter the Options"
+                  type="text"
+                  name="option2"
+                  style={{ marginBottom: 5 }}
+                  onChange={(e) => setOption2(e.target.value)}
+                />
+                {error && option2.length <= 0 ? (
+                <p
+                  style={{
+                    color: "red",
+                    textAlign: "center",
+                    fontWeight: "bold",
+                  }}
+                >
+                  Please fill in the field
+                </p>
+              ) : (
+                ""
+              )}
+              </Grid>
+             
+              <Grid item lg={12} style={{display:"flex"}}>
+                <TextField
+                  variant="standard"
+                  label="Option3"
+                  placeholder="Enter the Options"
+                  type="text"
+                  name="option3"
+                  style={{ marginBottom: 5 }}
+                  onChange={(e) => setOption3(e.target.value)}
+                />
+                 {error && option3.length <= 0 ? (
+                <p
+                  style={{
+                    color: "red",
+                    textAlign: "center",
+                    fontWeight: "bold",
+                  }}
+                >
+                  Please fill in the field
+                </p>
+              ) : (
+                ""
+              )}
+              </Grid>
+           
+              <Grid item lg={12} style={{display:"flex"}}>
+                <TextField
+                  variant="standard"
+                  label="Option4"
+                  placeholder="Enter the Options"
+                  type="text"
+                  name="option4"
+                  style={{ marginBottom: 5 }}
+                  onChange={(e) => setOption4(e.target.value)}
+                />
+                   {error && option4.length <= 0 ? (
+                <p
+                  style={{
+                    color: "red",
+                    textAlign: "center",
+                    fontWeight: "bold",
+                  }}
+                >
+                  Please fill in the field
+                </p>
+              ) : (
+                ""
+              )}
+              </Grid>
+              
+              <Grid item lg={12} style={{display:"flex"}}>
                 <FormControl variant="standard" sx={{ m: 1, minWidth: 200 }}>
                   <InputLabel htmlFor="demo-customized-select-native">
                     Answer
@@ -194,53 +287,96 @@ export default function TransitionsModal() {
                     <option>D</option>
                   </NativeSelect>
                 </FormControl>
-                </Grid>
-                <FormControl variant="standard" sx={{ m: 1, minWidth: 120 }}>
-                  <InputLabel htmlFor="demo-customized-select-native">
-                    Category
-                  </InputLabel>
-                  <NativeSelect
-                    id="demo-customized-select-native"
-                    value={category}
-                    onChange={handleChange2}
-                    label="category"
-                  >
-                    <option aria-label="None" value="" />
-                    <option>Javascript</option>
-                    <option>MongoDB</option>
-                    <option>Express</option>
-                    <option>React</option>
-                    <option>Node</option>
-                  </NativeSelect>
-                </FormControl>
-                <FormControl variant="standard" sx={{ m: 1, minWidth: 120 }}>
-                  <InputLabel htmlFor="demo-customized-select-native">
-                    Type
-                  </InputLabel>
-                  <NativeSelect
-                    id="demo-customized-select-native"
-                    value={type}
-                    onChange={handleChange3}
-                    label="type"
-                  >
-                    <option aria-label="None" value="" />
-                    <option>Software</option>
-                    <option>GK</option>
-                    <option>Other</option>
-                  </NativeSelect>
-                </FormControl>
-              </Grid>
-              <Box textAlign="center">
-                <Button
-                  variant="contained"
-                  type="submit"
-                  value="submit"
-                  style={styleThree}
-                  onClick={questionHandler}
+                {error && answer.length <= 0 ? (
+                <p
+                  style={{
+                    color: "red",
+                    textAlign: "center",
+                    fontWeight: "bold",
+                  }}
                 >
-                  Save
-                </Button>
-              </Box>
+                  Please fill in the field
+                </p>
+              ) : (
+                ""
+              )}
+              </Grid>
+             <div style={{display:"flex"}}>
+              <FormControl variant="standard" sx={{ m: 1, minWidth: 120 }}>
+                <InputLabel htmlFor="demo-customized-select-native">
+                  Category
+                </InputLabel>
+                <NativeSelect
+                  id="demo-customized-select-native"
+                  value={category}
+                  onChange={handleChange2}
+                  label="category"
+                >
+                  <option aria-label="None" value="" />
+                  <option>Javascript</option>
+                  <option>MongoDB</option>
+                  <option>Express</option>
+                  <option>React</option>
+                  <option>Node</option>
+                </NativeSelect>
+              </FormControl>
+              {error && category.length <= 0 ? (
+                <p
+                  style={{
+                    color: "red",
+                    textAlign: "center",
+                    fontWeight: "bold",
+                  }}
+                >
+                  Please fill in the field
+                </p>
+              ) : (
+                ""
+              )}
+             </div>
+            <div style={{display:"flex"}}> 
+              <FormControl variant="standard" sx={{ m: 1, minWidth: 120 }}>
+                <InputLabel htmlFor="demo-customized-select-native">
+                  Type
+                </InputLabel>
+                <NativeSelect
+                  id="demo-customized-select-native"
+                  value={type}
+                  onChange={handleChange3}
+                  label="type"
+                >
+                  <option aria-label="None" value="" />
+                  <option>Software</option>
+                  <option>GK</option>
+                  <option>Other</option>
+                </NativeSelect>
+              </FormControl>
+              {error && type.length <= 0 ? (
+                <p
+                  style={{
+                    color: "red",
+                    textAlign: "center",
+                    fontWeight: "bold",
+                  }}
+                >
+                  Please fill in the field
+                </p>
+              ) : (
+                ""
+              )}
+            </div>
+            </Grid>
+            <Box textAlign="center">
+              <Button
+                variant="contained"
+                type="submit"
+                value="submit"
+                style={styleThree}
+                onClick={questionHandler}
+              >
+                Save
+              </Button>
+            </Box>
           </Box>
         </Fade>
       </Modal>

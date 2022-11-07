@@ -3,6 +3,7 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import "./App.css";
 import AdminHome from "./pages/AdminHome";
 import AdminQuestions from "./pages/adminQuestionTable";
+import AdminCategory from "./pages/AdminCategory";
 import UserHome from "./pages/userHome/userHome";
 import UserQuestions from "./pages/userQuestions/userQuestions";
 
@@ -11,7 +12,8 @@ function App() {
     <BrowserRouter>
       <Routes>
         <Route path="/admin" element={<AdminHome />} />
-        <Route path="/admin/adminQuestions" element={<AdminQuestions />} />
+        <Route path="/adminQuestions" element={<AdminQuestions />} />
+        <Route path="/adminCategory" element={<AdminCategory />} />
         <Route path="/" element={<UserHome />} />
         <Route path="/userQuestions" element={<UserQuestions />} />
       </Routes>

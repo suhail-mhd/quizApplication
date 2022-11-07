@@ -92,7 +92,7 @@ function UserShowQuestion() {
           component="h2"
           style={styleOne}
         >
-        Questions
+       - Questions -
         </Typography>
        {show.length && show.map((data, i) => {
         return(
@@ -105,7 +105,7 @@ function UserShowQuestion() {
         >
          {i+1}. {data.question}
         </Typography>
-        <Grid container style={{ justifyContent: "center", marginTop: "4rem" }}>
+        <Grid container style={{ justifyContent: "center", marginTop: "2rem" }}>
           <FormControl>
             <RadioGroup
               row

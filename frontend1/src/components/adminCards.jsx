@@ -27,28 +27,42 @@ function Cards() {
 
   return (
     <div>
+      <Grid container>
       {show.length &&
         show.map((data) => {
           return (
-            <Grid
-            item xl={3} lg={4} md={4} sm={6} xs={12}
-              style={{ marginTop: 100, marginLeft: 100, borderRadius: 20 }}
-            >
-            <Link to='/admin/adminQuestions' style={{textDecoration:"none"}}>
-              <Card
-                sx={{ maxWidth: 345 }}
-                style={{ marginLeft: "30px", marginTop: "10px", width: 300 }}
+            <Link
+                  to="/adminQuestions"
+                  style={{ textDecoration: "none" }}
+                >
+              <Grid
+                sm={12} xs={12} md={6} lg={6} xl={4}
+                style={{ marginTop: 100, marginLeft: 100, borderRadius: 20 }}
               >
-                <CardContent>
-                  <Typography gutterBottom variant="h5" component="div" style={{fontWeight:"bold"}}>
-                    {data.quiz}
-                  </Typography>
-                </CardContent>
-              </Card>
-              </Link>
-            </Grid>
+                  <Card
+                    sx={{ maxWidth: 345 }}
+                    style={{
+                      marginLeft: "30px",
+                      marginTop: "10px",
+                      width: 300,
+                    }}
+                  >
+                    <CardContent>
+                      <Typography
+                        gutterBottom
+                        variant="h5"
+                        component="div"
+                        style={{ fontWeight: "bold" }}
+                      >
+                        {data.quiz}
+                      </Typography>
+                    </CardContent>
+                  </Card>
+              </Grid>
+                </Link>
           );
         })}
+      </Grid>
     </div>
   );
 }

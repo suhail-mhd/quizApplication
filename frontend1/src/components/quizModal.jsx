@@ -48,9 +48,14 @@ export default function TransitionsModal() {
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
   const [quiz, setQuiz] = useState("");
+  const [error, setError] = useState(false);
   const navigate = useNavigate();
 
   const quizHandler = () => {
+    if (quiz.length == 0) {
+      setError(true);
+    }
+
     try {
       axios
         .post("http://localhost:5000/api/admin/addQuiz", { quiz })
@@ -93,6 +98,19 @@ export default function TransitionsModal() {
             >
               Add Quiz
             </Typography>
+            {error && quiz.length <= 0 ? (
+              <p
+                style={{
+                  color: "red",
+                  textAlign: "center",
+                  fontWeight: "bold",
+                }}
+              >
+                Please fill in the field
+              </p>
+            ) : (
+              ""
+            )}
             <Grid style={{ textAlign: "center" }}>
               <Grid item lg={12}>
                 <TextField

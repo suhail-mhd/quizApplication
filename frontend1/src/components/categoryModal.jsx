@@ -1,5 +1,6 @@
 import * as React from "react";
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import Backdrop from "@mui/material/Backdrop";
 import Box from "@mui/material/Box";
 import Modal from "@mui/material/Modal";
@@ -8,7 +9,6 @@ import Button from "@mui/material/Button";
 import Typography from "@mui/material/Typography";
 import { TextField } from "@mui/material";
 import axios from "axios";
-import { useNavigate } from "react-router-dom";
 import Grid from "@mui/material/Grid";
 
 const style = {
@@ -48,18 +48,22 @@ export default function TransitionsModal() {
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
   const [category, setCategory] = useState("");
+  const [error, setError] = useState(false);
   const navigate = useNavigate();
 
   const categoryHandler = () => {
+    if (category.length == 0) {
+      setError(true);
+    }
+
     try {
-      axios
-        .post("/api/admin/addCategory", { category })
-        .then((res) => {
-            setCategory(res.data);
-        });
-      navigate("/admin");
+      axios.post("/api/admin/addCategory", { category }).then((res) => {
+        setCategory(res.data);
+      });
+      navigate("/adminCategory");
     } catch (error) {
       console.log("error occurred", error);
+      setError(false);
     }
   };
 
@@ -67,7 +71,12 @@ export default function TransitionsModal() {
     <div>
       <Button
         variant="contained"
-        style={{ float: "right", marginTop: 100, marginRight: 10 }}
+        style={{
+          float: "right",
+          marginTop: 100,
+          marginRight: 100,
+          marginBottom: "2rem",
+        }}
         onClick={handleOpen}
       >
         Add Category
@@ -93,6 +102,19 @@ export default function TransitionsModal() {
             >
               Add Category
             </Typography>
+            {error && category.length <= 0 ? (
+              <p
+                style={{
+                  color: "red",
+                  textAlign: "center",
+                  fontWeight: "bold",
+                }}
+              >
+                Please fill in the field
+              </p>
+            ) : (
+              ""
+            )}
             <Grid style={{ textAlign: "center" }}>
               <Grid item lg={12}>
                 <TextField

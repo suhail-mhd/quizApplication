@@ -60,21 +60,20 @@ function UserHome() {
                   >
                     <Box sx={{ display: "flex", flexDirection: "column" }}>
                       <CardContent sx={{ flex: "1 0 auto" }}>
-                       
-                          <Typography
-                            component="div"
-                            variant="h5"
-                            style={{ fontWeight: "bold" }}
-                          >
-                            {data.category}
-                          </Typography>
-                          <Link
+                        <Typography
+                          component="div"
+                          variant="h5"
+                          style={{ fontWeight: "bold" }}
+                        >
+                          {data.category}
+                        </Typography>
+                        <Link
                           to="/userQuestions"
                           style={{ textDecoration: "none" }}
                         >
-                        <CardActions>
-                          <Button size="small">Move to Questions</Button>
-                        </CardActions>
+                          <CardActions>
+                            <Button size="small">Move to Questions</Button>
+                          </CardActions>
                         </Link>
                       </CardContent>
                     </Box>

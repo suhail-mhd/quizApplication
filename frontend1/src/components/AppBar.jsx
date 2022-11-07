@@ -1,4 +1,5 @@
 import * as React from 'react';
+import { NavLink } from "react-router-dom";
 import AppBar from '@mui/material/AppBar';
 import Box from '@mui/material/Box';
 import Toolbar from '@mui/material/Toolbar';
@@ -10,9 +11,19 @@ import Container from '@mui/material/Container';
 import Avatar from '@mui/material/Avatar';
 import Tooltip from '@mui/material/Tooltip';
 import MenuItem from '@mui/material/MenuItem';
+import Button from '@mui/material/Button';
 // import AdbIcon from '@mui/material/Adb';
 
-// const pages = ['Products', 'Pricing', 'Blog'];
+let pages = [
+  {
+    name: "Home",
+    path: "/admin",
+  },
+  {
+    name: "Category",
+    path: "/adminCategory",
+  },
+];
 const settings = ['Profile', 'Account', 'Dashboard', 'Logout'];
 
 function ResponsiveAppBar() {
@@ -43,7 +54,7 @@ function ResponsiveAppBar() {
             variant="h6"
             noWrap
             component="a"
-            href="/"
+            href="/admin"
             sx={{
               mr: 2,
               display: { xs: 'none', md: 'flex' },
@@ -86,11 +97,19 @@ function ResponsiveAppBar() {
                 display: { xs: 'block', md: 'none' },
               }}
             >
-              {/* {pages.map((page) => (
+              {pages.map((page, index) => (
+                  <NavLink
+                  to={page.path}
+                  className={(navClass) =>
+                    navClass.isActive ? "nav__active nav__item" : "nav__item"
+                  }
+                  key={index}
+                >
                 <MenuItem key={page} onClick={handleCloseNavMenu}>
-                  <Typography textAlign="center">{page}</Typography>
+                  <Typography textAlign="center">{page.name}</Typography>
                 </MenuItem>
-              ))} */}
+                </NavLink>
+              ))}
             </Menu>
           </Box>
           {/* <AdbIcon sx={{ display: { xs: 'flex', md: 'none' }, mr: 1 }} /> */}
@@ -113,15 +132,24 @@ function ResponsiveAppBar() {
             Quiz Admin
           </Typography>
           <Box sx={{ flexGrow: 1, display: { xs: 'none', md: 'flex' } }}>
-            {/* {pages.map((page) => (
+            {pages.map((page, index) => (
+               <NavLink
+               to={page.path}
+               className={(navClass) =>
+                 navClass.isActive ? "nav__active nav__item" : "nav__item"
+               }
+               key={index}
+               style={{textDecoration:"none"}}
+             >
               <Button
                 key={page}
                 onClick={handleCloseNavMenu}
                 sx={{ my: 2, color: 'white', display: 'block' }}
               >
-                {page}
+                {page.name}
               </Button>
-            ))} */}
+             </NavLink>
+            ))}
           </Box>
 
           <Box sx={{ flexGrow: 0 }}>

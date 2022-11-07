@@ -1,80 +1,141 @@
-import React, { useState } from "react";
-import {
-  ProSidebarProvider,
-  Menu,
-  MenuItem,
-  //   SidebarHeader,
-  //   SidebarFooter,
-  Sidebar,
-} from "react-pro-sidebar";
-import { FaList, FaRegHeart } from "react-icons/fa";
-import {
-  FiHome,
-  FiLogOut,
-  FiArrowLeftCircle,
-  FiArrowRightCircle,
-} from "react-icons/fi";
-import { RiPencilLine } from "react-icons/ri";
-import { BiCog } from "react-icons/bi";
-import "react-pro-sidebar/dist/css/styles.css";
-import "./userSideBar.css";
+import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
+import "./userSideBar.css";
+import "boxicons";
 
-const Header = () => {
-  const [menuCollapse, setMenuCollapse] = useState(false);
+const Sidebar = () => {
+  const useMediaQuery = (query) => {
+    const [matches, setMatches] = useState(false);
 
-  const menuIconClick = () => {
-    menuCollapse ? setMenuCollapse(false) : setMenuCollapse(true);
+    useEffect(() => {
+      const media = window.matchMedia(query);
+      if (media.matches !== matches) {
+        setMatches(media.matches);
+      }
+      const listener = () => setMatches(media.matches);
+      window.addEventListener("resize", listener);
+      return () => window.removeEventListener("resize", listener);
+    }, [matches, query]);
+
+    return matches;
   };
+  let menuItems = [
+    {
+      name: "Eduhance",
+      iconName: "menu",
+    },
+    {
+      name: "Category",
+      iconName: "spreadsheet",
+      type: "solid",
+      path: "/",
+    },
+    {
+      name: "Type",
+      iconName: "compass",
+      type: "solid",
+      path: "/userQuestions",
+    },
+    {
+      name: "Starred",
+      iconName: "star",
+      type: "solid",
+    },
+    {
+      name: "Settings",
+      iconName: "cog",
+      type: "solid",
+    },
+    {
+      name: "Log Out",
+      iconName: "log-out",
+      color: "red",
+      rotate: "180",
+    },
+  ];
+
+  const [hovered, setHovered] = useState(null);
+  const [active, setActive] = useState(1);
+  const [animate, setAnimate] = useState(false);
+  const [expanded, setExpanded] = useState(false);
+  const changeSmall = useMediaQuery("(max-height: 550px)");
+  let delay = 1;
+  useEffect(() => {
+    setAnimate(true);
+    let timer = setTimeout(() => setAnimate(false), delay * 1000);
+
+    return () => {
+      clearTimeout(timer);
+    };
+  }, [active, delay]);
 
   return (
-    <>
-      <div id="header">
-        <ProSidebarProvider collapsed={menuCollapse}>
-          <div>
-            <div
-              className="logotext"
-              style={{
-                fontSize: "30px",
-                padding: "20px",
-                color: "#000",
-                fontWeight: "bold",
-              }}
+    <div
+      className={`sidebar ${expanded && "expanded"}`}
+      style={{ position: "absolute" }}
+    >
+      {menuItems.map((item, index) => {
+        let middle = false;
+        if (!(index === 0 || index === menuItems.length - 1)) {
+          middle = true;
+        }
+        return (
+          <>
+           {/* <Link to={item.path}> */}
+
+          <div
+            className={`boxicon-container ${
+              expanded && "expanded-boxicon-container"
+            }`}
+            onMouseEnter={() => {
+              if (middle) {
+                setHovered(index);
+              }
+            }}
+            onMouseLeave={() => {
+              if (middle) {
+                setHovered(null);
+              }
+            }}
+            onClick={() => {
+              if (middle) {
+                setActive(index);
+              }
+              if (index === 0) {
+                setExpanded(!expanded);
+              }
+            }}
+            key={index}
+          >
+            
+            <box-icon
+              class={`${middle && "boxicon"} 
+              ${!middle && "first-and-last-trash-fix"}
+              ${active === index && "active"}
+              `}
+              size={changeSmall ? "sm" : "md"}
+              name={item.iconName}
+              type={item.type}
+              color={
+                hovered === index || active === index ? "white" : item.color
+              }
+              animation={active === index && animate ? "tada" : ""}
+              rotate={item.rotate}
+            ></box-icon>
+            <p
+              className={`description 
+            ${expanded && "show-description"}
+            ${active === index && "active-description"}`}
             >
-              <p>{menuCollapse ? "= Q-M =" : "Quiz Master"}</p>
-            </div>
-            <div
-              className="closemenu"
-              style={{ marginTop: "-35px", marginRight: 5 }}
-              onClick={menuIconClick}
-            >
-              {menuCollapse ? <FiArrowRightCircle /> : <FiArrowLeftCircle />}
-            </div>
+              {item.name}
+            </p>
           </div>
-          <Sidebar>
-            <Menu iconShape="square">
-                 <Link
-                          to="/"
-                          style={{ textDecoration: "none" }}
-                        >
-              <MenuItem active={true} icon={<FiHome />}>
-                Category
-              </MenuItem>
-              </Link>
-              <MenuItem icon={<FaList />}>Type</MenuItem>
-              <MenuItem icon={<FaRegHeart />}>Author</MenuItem>
-              <MenuItem icon={<BiCog />}>Settings</MenuItem>
-            </Menu>
-          </Sidebar>
-          <div style={{ marginTop: "350px", borderTop: "1px solid #f4f4f4" }}>
-            <Menu iconShape="square">
-              <MenuItem icon={<FiLogOut />}>Logout</MenuItem>
-            </Menu>
-          </div>
-        </ProSidebarProvider>
-      </div>
-    </>
+           {/* </Link> */}
+          </>
+        );
+      })}
+    </div>
   );
 };
 
-export default Header;
+export default Sidebar;
