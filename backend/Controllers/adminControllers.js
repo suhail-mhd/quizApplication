@@ -16,7 +16,6 @@ const addQuestion = asyncHandler(async (req, res) => {
     category,
     type,
   });
-  console.log(data);
 
   if (data) {
     res.status(200).json({

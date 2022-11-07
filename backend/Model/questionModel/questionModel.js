@@ -4,44 +4,43 @@ const QuestionModel = mongoose.Schema(
     {
       question: {
         type: String,
-        require: true
+        required: true
       },
       option1: {
         type: String,
         index: true,
-        require: true
+        required: true
         
       },
       option2: {
         type: String,
         index: true,
-        require: true
+        required: true
         
       },
       option3: {
         type: String,
         index: true,
-        require: true
+        required: true
         
       },
       option4: {
         type: String,
         index: true,
-        require: true
+        required: true
         
       },
       answer: {
         type: String,
-        enum: ["A", "B", "C", "D"],
-        require: true
+        required: true
       },
       category: {
         type: String,
-        require: true
+        required: true
       },
       type: {
         type: String,
-        require: true
+        required: true
       }
     },
     {
