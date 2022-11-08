@@ -1,7 +1,7 @@
 import React from "react";
-import UserShowQuestion from "../../components/userShowQuestion/UserShowQuestion";
+import UserShowResult from "../../components/userShowResult/UserShowResult";
 
-function userQuestions() {
+function UserResult() {
   const myStyle = {
     backgroundImage:
       "url('https://scr.vn/wp-content/uploads/2020/08/H%C3%ACnh-n%E1%BB%81n-background-vector-scaled.jpg')",
@@ -23,9 +23,9 @@ function userQuestions() {
                 fontWeight: "bold",
                 
               }}>Quiz Master</p>
-              <UserShowQuestion/>
+              <UserShowResult/>
     </div>
   );
 }
 
-export default userQuestions;
+export default UserResult;

@@ -6,6 +6,7 @@ import AdminQuestions from "./pages/adminQuestionTable";
 import AdminCategory from "./pages/AdminCategory";
 import UserHome from "./pages/userHome/userHome";
 import UserQuestions from "./pages/userQuestions/userQuestions";
+import UserResult from "./pages/userResult/UserResult";
 
 function App() {
   return (
@@ -16,6 +17,7 @@ function App() {
         <Route path="/adminCategory" element={<AdminCategory />} />
         <Route path="/" element={<UserHome />} />
         <Route path="/userQuestions" element={<UserQuestions />} />
+        <Route path="/userResult" element={<UserResult />} />
       </Routes>
     </BrowserRouter>
   );

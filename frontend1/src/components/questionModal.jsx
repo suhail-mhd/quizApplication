@@ -13,6 +13,7 @@ import Grid from "@mui/material/Grid";
 import FormControl from "@mui/material/FormControl";
 import NativeSelect from "@mui/material/NativeSelect";
 import InputLabel from "@mui/material/InputLabel";
+import { useEffect } from "react";
 
 const style = {
   position: "absolute",
@@ -57,6 +58,7 @@ export default function TransitionsModal() {
   const [option4, setOption4] = useState("");
   const [answer, setAnswer] = useState("");
   const [category, setCategory] = useState("");
+  const [categoryList, setCategoryList] = useState([]);
   const [type, setType] = useState("");
   const [error, setError] = useState(false);
 
@@ -107,6 +109,23 @@ export default function TransitionsModal() {
       console.log("error occurred", error);
     }
   };
+
+  const getCategory = () => {
+    try{
+      axios.get('/api/user/getCategory').then((res) => {
+        console.log(res.data.data);
+        setCategoryList(res.data.data)
+      })
+    }catch(err) {
+      console.log(err);
+    }
+  }
+
+  useEffect(() => {
+    getCategory()
+  }, [])
+  
+
   return (
     <div>
       <Button
@@ -302,10 +321,12 @@ export default function TransitionsModal() {
               )}
               </Grid>
              <div style={{display:"flex"}}>
+           
               <FormControl variant="standard" sx={{ m: 1, minWidth: 120 }}>
                 <InputLabel htmlFor="demo-customized-select-native">
                   Category
                 </InputLabel>
+                
                 <NativeSelect
                   id="demo-customized-select-native"
                   value={category}
@@ -313,12 +334,13 @@ export default function TransitionsModal() {
                   label="category"
                 >
                   <option aria-label="None" value="" />
-                  <option>Javascript</option>
-                  <option>MongoDB</option>
-                  <option>Express</option>
-                  <option>React</option>
-                  <option>Node</option>
+                  {categoryList.length && categoryList.map((data) => {
+                return(
+                  <option value={data.category} key={data.id}>{data.category}</option>
+                  )
+                })}
                 </NativeSelect>
+               
               </FormControl>
               {error && category.length <= 0 ? (
                 <p
