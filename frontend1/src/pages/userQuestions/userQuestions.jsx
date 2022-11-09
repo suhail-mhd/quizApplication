@@ -1,17 +1,25 @@
-import React from "react";
-import UserShowQuestion from "../../components/userShowQuestion/UserShowQuestion";
+import React, { useEffect } from "react";
+import UserShowQuestion from "../../components/userShowQuestion/UserShowQuestion"
+import {useSelector} from 'react-redux'
 
-function userQuestions() {
+function useUserQuestions() {
   const myStyle = {
     backgroundImage:
       "url('https://scr.vn/wp-content/uploads/2020/08/H%C3%ACnh-n%E1%BB%81n-background-vector-scaled.jpg')",
-    height: "100rem",
+    height: "100vh",
     width: "100%",
     backgroundSize: "cover",
     backgroundRepeat: "no-repeat",
     backgroundPosition: "center",
     marginTop:"-30px"
   };
+
+  const state = useSelector(state => state)
+
+  useEffect(() => {
+    // console.log(state);
+  }, [])
+  
 
   return (
     <div style={myStyle}>
@@ -28,4 +36,4 @@ function userQuestions() {
   );
 }
 
-export default userQuestions;
+export default useUserQuestions;

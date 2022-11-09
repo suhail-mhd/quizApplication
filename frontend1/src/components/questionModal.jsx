@@ -111,20 +111,19 @@ export default function TransitionsModal() {
   };
 
   const getCategory = () => {
-    try{
-      axios.get('/api/user/getCategory').then((res) => {
+    try {
+      axios.get("/api/user/getCategory").then((res) => {
         console.log(res.data.data);
-        setCategoryList(res.data.data)
-      })
-    }catch(err) {
+        setCategoryList(res.data.data);
+      });
+    } catch (err) {
       console.log(err);
     }
-  }
+  };
 
   useEffect(() => {
-    getCategory()
-  }, [])
-  
+    getCategory();
+  }, []);
 
   return (
     <div>
@@ -161,9 +160,8 @@ export default function TransitionsModal() {
             >
               Add Questions
             </Typography>
-            <Grid style={{ textAlign: "center", marginLeft:"1rem" }}>
-             
-              <Grid item lg={12} style={{display:"flex"}}>
+            <Grid style={{ textAlign: "center", marginLeft: "1rem" }}>
+              <Grid item lg={12} style={{ display: "flex" }}>
                 <TextField
                   variant="standard"
                   label="Question"
@@ -173,22 +171,22 @@ export default function TransitionsModal() {
                   style={{ marginBottom: 5 }}
                   onChange={(e) => setQuestion(e.target.value)}
                 />
-                 {error && question.length <= 0 ? (
-                <p
-                  style={{
-                    color: "red",
-                    textAlign: "center",
-                    fontWeight: "bold",
-                  }}
-                >
-                  Question is required
-                </p>
-              ) : (
-                ""
-              )}
+                {error && question.length <= 0 ? (
+                  <p
+                    style={{
+                      color: "red",
+                      textAlign: "center",
+                      fontWeight: "bold",
+                    }}
+                  >
+                    Question is required
+                  </p>
+                ) : (
+                  ""
+                )}
               </Grid>
-              
-              <Grid item lg={12} style={{display:"flex"}}>
+
+              <Grid item lg={12} style={{ display: "flex" }}>
                 <TextField
                   variant="standard"
                   label="Option1"
@@ -199,21 +197,21 @@ export default function TransitionsModal() {
                   onChange={(e) => setOption1(e.target.value)}
                 />
                 {error && option1.length <= 0 ? (
-                <p
-                  style={{
-                    color: "red",
-                    textAlign: "center",
-                    fontWeight: "bold",
-                  }}
-                >
-                  Please fill in the field
-                </p>
-              ) : (
-                ""
-              )}
+                  <p
+                    style={{
+                      color: "red",
+                      textAlign: "center",
+                      fontWeight: "bold",
+                    }}
+                  >
+                    Please fill in the field
+                  </p>
+                ) : (
+                  ""
+                )}
               </Grid>
-              
-              <Grid item lg={12} style={{display:"flex"}}>
+
+              <Grid item lg={12} style={{ display: "flex" }}>
                 <TextField
                   variant="standard"
                   label="Option2"
@@ -224,21 +222,21 @@ export default function TransitionsModal() {
                   onChange={(e) => setOption2(e.target.value)}
                 />
                 {error && option2.length <= 0 ? (
-                <p
-                  style={{
-                    color: "red",
-                    textAlign: "center",
-                    fontWeight: "bold",
-                  }}
-                >
-                  Please fill in the field
-                </p>
-              ) : (
-                ""
-              )}
+                  <p
+                    style={{
+                      color: "red",
+                      textAlign: "center",
+                      fontWeight: "bold",
+                    }}
+                  >
+                    Please fill in the field
+                  </p>
+                ) : (
+                  ""
+                )}
               </Grid>
-             
-              <Grid item lg={12} style={{display:"flex"}}>
+
+              <Grid item lg={12} style={{ display: "flex" }}>
                 <TextField
                   variant="standard"
                   label="Option3"
@@ -248,22 +246,22 @@ export default function TransitionsModal() {
                   style={{ marginBottom: 5 }}
                   onChange={(e) => setOption3(e.target.value)}
                 />
-                 {error && option3.length <= 0 ? (
-                <p
-                  style={{
-                    color: "red",
-                    textAlign: "center",
-                    fontWeight: "bold",
-                  }}
-                >
-                  Please fill in the field
-                </p>
-              ) : (
-                ""
-              )}
+                {error && option3.length <= 0 ? (
+                  <p
+                    style={{
+                      color: "red",
+                      textAlign: "center",
+                      fontWeight: "bold",
+                    }}
+                  >
+                    Please fill in the field
+                  </p>
+                ) : (
+                  ""
+                )}
               </Grid>
-           
-              <Grid item lg={12} style={{display:"flex"}}>
+
+              <Grid item lg={12} style={{ display: "flex" }}>
                 <TextField
                   variant="standard"
                   label="Option4"
@@ -273,22 +271,22 @@ export default function TransitionsModal() {
                   style={{ marginBottom: 5 }}
                   onChange={(e) => setOption4(e.target.value)}
                 />
-                   {error && option4.length <= 0 ? (
-                <p
-                  style={{
-                    color: "red",
-                    textAlign: "center",
-                    fontWeight: "bold",
-                  }}
-                >
-                  Please fill in the field
-                </p>
-              ) : (
-                ""
-              )}
+                {error && option4.length <= 0 ? (
+                  <p
+                    style={{
+                      color: "red",
+                      textAlign: "center",
+                      fontWeight: "bold",
+                    }}
+                  >
+                    Please fill in the field
+                  </p>
+                ) : (
+                  ""
+                )}
               </Grid>
-              
-              <Grid item lg={12} style={{display:"flex"}}>
+
+              <Grid item lg={12} style={{ display: "flex" }}>
                 <FormControl variant="standard" sx={{ m: 1, minWidth: 200 }}>
                   <InputLabel htmlFor="demo-customized-select-native">
                     Answer
@@ -307,86 +305,87 @@ export default function TransitionsModal() {
                   </NativeSelect>
                 </FormControl>
                 {error && answer.length <= 0 ? (
-                <p
-                  style={{
-                    color: "red",
-                    textAlign: "center",
-                    fontWeight: "bold",
-                  }}
-                >
-                  Please fill in the field
-                </p>
-              ) : (
-                ""
-              )}
+                  <p
+                    style={{
+                      color: "red",
+                      textAlign: "center",
+                      fontWeight: "bold",
+                    }}
+                  >
+                    Please fill in the field
+                  </p>
+                ) : (
+                  ""
+                )}
               </Grid>
-             <div style={{display:"flex"}}>
-           
-              <FormControl variant="standard" sx={{ m: 1, minWidth: 120 }}>
-                <InputLabel htmlFor="demo-customized-select-native">
-                  Category
-                </InputLabel>
-                
-                <NativeSelect
-                  id="demo-customized-select-native"
-                  value={category}
-                  onChange={handleChange2}
-                  label="category"
-                >
-                  <option aria-label="None" value="" />
-                  {categoryList.length && categoryList.map((data) => {
-                return(
-                  <option value={data.category} key={data.id}>{data.category}</option>
-                  )
-                })}
-                </NativeSelect>
-               
-              </FormControl>
-              {error && category.length <= 0 ? (
-                <p
-                  style={{
-                    color: "red",
-                    textAlign: "center",
-                    fontWeight: "bold",
-                  }}
-                >
-                  Please fill in the field
-                </p>
-              ) : (
-                ""
-              )}
-             </div>
-            <div style={{display:"flex"}}> 
-              <FormControl variant="standard" sx={{ m: 1, minWidth: 120 }}>
-                <InputLabel htmlFor="demo-customized-select-native">
-                  Type
-                </InputLabel>
-                <NativeSelect
-                  id="demo-customized-select-native"
-                  value={type}
-                  onChange={handleChange3}
-                  label="type"
-                >
-                  <option aria-label="None" value="" />
-                  <option>Software</option>
-                  <option>GK</option>
-                  <option>Other</option>
-                </NativeSelect>
-              </FormControl>
-              {error && type.length <= 0 ? (
-                <p
-                  style={{
-                    color: "red",
-                    textAlign: "center",
-                    fontWeight: "bold",
-                  }}
-                >
-                  Please fill in the field
-                </p>
-              ) : (
-                ""
-              )}
-            </div>
+              <div style={{ display: "flex" }}>
+                <FormControl variant="standard" sx={{ m: 1, minWidth: 120 }}>
+                  <InputLabel htmlFor="demo-customized-select-native">
+                    Category
+                  </InputLabel>
+
+                  <NativeSelect
+                    id="demo-customized-select-native"
+                    value={category}
+                    onChange={handleChange2}
+                    label="category"
+                  >
+                    <option aria-label="None" value="" />
+                    {categoryList.length &&
+                      categoryList.map((data) => {
+                        return (
+                          <option value={data.category} key={data.id}>
+                            {data.category}
+                          </option>
+                        );
+                      })}
+                  </NativeSelect>
+                </FormControl>
+                {error && category.length <= 0 ? (
+                  <p
+                    style={{
+                      color: "red",
+                      textAlign: "center",
+                      fontWeight: "bold",
+                    }}
+                  >
+                    Please fill in the field
+                  </p>
+                ) : (
+                  ""
+                )}
+              </div>
+              <div style={{ display: "flex" }}>
+                <FormControl variant="standard" sx={{ m: 1, minWidth: 120 }}>
+                  <InputLabel htmlFor="demo-customized-select-native">
+                    Type
+                  </InputLabel>
+                  <NativeSelect
+                    id="demo-customized-select-native"
+                    value={type}
+                    onChange={handleChange3}
+                    label="type"
+                  >
+                    <option aria-label="None" value="" />
+                    <option>Software</option>
+                    <option>GK</option>
+                    <option>Other</option>
+                  </NativeSelect>
+                </FormControl>
+                {error && type.length <= 0 ? (
+                  <p
+                    style={{
+                      color: "red",
+                      textAlign: "center",
+                      fontWeight: "bold",
+                    }}
+                  >
+                    Please fill in the field
+                  </p>
+                ) : (
+                  ""
+                )}
+              </div>
             </Grid>
             <Box textAlign="center">
               <Button

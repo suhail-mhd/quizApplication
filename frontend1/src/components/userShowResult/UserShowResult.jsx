@@ -17,7 +17,7 @@ const style = {
   border: "2px solid #000",
   borderRadius: "10px",
   boxShadow: 24,
-  marginTop: "10rem",
+  // marginTop: "10rem",
   marginBottom: "10rem",
 };
 
