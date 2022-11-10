@@ -3,8 +3,17 @@ const Question = require("../Model/questionModel/questionModel");
 const Quiz = require("../Model/quizModel/quizModel");
 const Category = require("../Model/categoryModel/categoryModel");
 
+// questionHandles
+
 const addQuestion = asyncHandler(async (req, res) => {
   const { question, option1,option2, option3, option4, answer, category, type } = req.body;
+
+  const questionExist = await Question.findOne({ question });
+
+  if (questionExist) {
+    res.status(400);
+    throw new Error("Question Already Exist");
+  }
   
   const data = await Question.create({
     question,
@@ -45,8 +54,18 @@ const getQuestion = asyncHandler(async (req, res) => {
   }
 });
 
+// quizHandles
+
 const addQuiz = asyncHandler(async (req, res) => {
   const { quiz } = req.body;
+
+  const quizExist = await Quiz.findOne({ quiz });
+
+  if (quizExist) {
+    res.status(400);
+    throw new Error("Quiz Already Exist");
+  }
+
   const data = await Quiz.create({ quiz });
 
   if (data) {
@@ -67,9 +86,19 @@ const getQuiz = asyncHandler(async (req, res) => {
   }
 });
 
+// categoryHandles
+
 
 const addCategory = asyncHandler(async (req, res) => {
   const { category } = req.body;
+
+  const categoryExist = await Category.findOne({ category });
+
+  if (categoryExist) {
+    res.status(400);
+    throw new Error("category Already Exist");
+  }
+
   const data = await Category.create({ category });
 
   if (data) {
