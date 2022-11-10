@@ -10,6 +10,7 @@ import { TextField } from "@mui/material";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import Grid from "@mui/material/Grid";
+import ErrorMessage from "./ErrorMessage";
 
 const style = {
   position: "absolute",
@@ -50,6 +51,7 @@ export default function TransitionsModal() {
   const [quiz, setQuiz] = useState("");
   const [error, setError] = useState(false);
   const navigate = useNavigate();
+  const [errorMsg, setErrorMsg] = useState("");
 
   const quizHandler = () => {
     if (quiz.length == 0) {
@@ -62,9 +64,10 @@ export default function TransitionsModal() {
         .then((res) => {
           setQuiz(res.data);
         });
-      navigate("/admin");
+        handleClose()
     } catch (error) {
       console.log("error occurred", error);
+      setErrorMsg("Cannot use the existed quiz");
     }
   };
 
@@ -111,6 +114,7 @@ export default function TransitionsModal() {
             ) : (
               ""
             )}
+             {errorMsg && <ErrorMessage>{errorMsg}</ErrorMessage>}
             <Grid style={{ textAlign: "center" }}>
               <Grid item lg={12}>
                 <TextField

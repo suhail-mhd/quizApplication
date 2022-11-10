@@ -27,7 +27,7 @@ function AdminQuestions() {
 
   useEffect(() => {
     questionShow();
-  }, []);
+  }, [questionShow]);
 
   return (
     <div>

@@ -6,7 +6,16 @@ const Category = require("../Model/categoryModel/categoryModel");
 // questionHandles
 
 const addQuestion = asyncHandler(async (req, res) => {
-  const { question, option1,option2, option3, option4, answer, category, type } = req.body;
+  const {
+    question,
+    option1,
+    option2,
+    option3,
+    option4,
+    answer,
+    category,
+    type,
+  } = req.body;
 
   const questionExist = await Question.findOne({ question });
 
@@ -14,7 +23,7 @@ const addQuestion = asyncHandler(async (req, res) => {
     res.status(400);
     throw new Error("Question Already Exist");
   }
-  
+
   const data = await Question.create({
     question,
     option1,
@@ -88,7 +97,6 @@ const getQuiz = asyncHandler(async (req, res) => {
 
 // categoryHandles
 
-
 const addCategory = asyncHandler(async (req, res) => {
   const { category } = req.body;
 
@@ -119,6 +127,11 @@ const getCategory = asyncHandler(async (req, res) => {
   }
 });
 
-
-
-module.exports = { addQuestion, getQuestion, addQuiz, getQuiz, addCategory, getCategory };
+module.exports = {
+  addQuestion,
+  getQuestion,
+  addQuiz,
+  getQuiz,
+  addCategory,
+  getCategory,
+};

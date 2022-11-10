@@ -28,7 +28,7 @@ function AdminCategory() {
     
       useEffect(() => {
         categoryShow();
-      }, []);
+      }, [categoryShow]);
 
   return (
     <div>

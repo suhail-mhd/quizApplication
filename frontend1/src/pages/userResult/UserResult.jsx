@@ -5,7 +5,7 @@ function UserResult() {
   const myStyle = {
     backgroundImage:
       "url('https://scr.vn/wp-content/uploads/2020/08/H%C3%ACnh-n%E1%BB%81n-background-vector-scaled.jpg')",
-    height: "100rem",
+    height: "100vh",
     width: "100%",
     backgroundSize: "cover",
     backgroundRepeat: "no-repeat",

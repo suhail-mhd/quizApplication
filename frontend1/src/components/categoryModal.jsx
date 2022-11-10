@@ -10,6 +10,7 @@ import Typography from "@mui/material/Typography";
 import { TextField } from "@mui/material";
 import axios from "axios";
 import Grid from "@mui/material/Grid";
+import ErrorMessage from "./ErrorMessage";
 
 const style = {
   position: "absolute",
@@ -50,6 +51,7 @@ export default function TransitionsModal() {
   const [category, setCategory] = useState("");
   const [error, setError] = useState(false);
   const navigate = useNavigate();
+  const [errorMsg, setErrorMsg] = useState("");
 
   const categoryHandler = () => {
     if (category.length == 0) {
@@ -60,10 +62,12 @@ export default function TransitionsModal() {
       axios.post("/api/admin/addCategory", { category }).then((res) => {
         setCategory(res.data);
       });
-      navigate("/adminCategory");
+      handleClose()
     } catch (error) {
       console.log("error occurred", error);
       setError(false);
+      setErrorMsg("Cannot use the existed Category");
+
     }
   };
 
@@ -115,6 +119,7 @@ export default function TransitionsModal() {
             ) : (
               ""
             )}
+             {errorMsg && <ErrorMessage>{errorMsg}</ErrorMessage>}
             <Grid style={{ textAlign: "center" }}>
               <Grid item lg={12}>
                 <TextField

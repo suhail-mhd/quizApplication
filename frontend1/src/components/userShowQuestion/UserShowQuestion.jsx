@@ -10,6 +10,9 @@ import Radio from "@mui/material/Radio";
 import RadioGroup from "@mui/material/RadioGroup";
 import FormControlLabel from "@mui/material/FormControlLabel";
 import FormControl from "@mui/material/FormControl";
+import { useDispatch } from "react-redux";
+
+import { PushAnswer } from "../../hooks/setResult";
 
 const style = {
   position: "absolute",
@@ -73,6 +76,7 @@ function UserShowQuestion() {
   const [count, setCount] = useState("");
   const [questionIndex, setQuestionIndex] = useState(0);
   const navigate = useNavigate();
+  const dispatch = useDispatch()
 
   const questionShow = () => {
     try {
@@ -97,13 +101,14 @@ function UserShowQuestion() {
         setShow(res.data.data[questionIndex + 1]);
       });
       setQuestionIndex(questionIndex + 1);
+      dispatch(PushAnswer())
     } else {
       navigate("/userResult");
     }
   };
 
   const handlePrev = () => {
-    if (questionIndex < count.length) {
+    if (questionIndex > 0 && questionIndex < count.length) {
       axios.get("/api/user/getQuestion").then((res) => {
         setShow(res.data.data[questionIndex - 1]);
       });
@@ -162,23 +167,26 @@ function UserShowQuestion() {
                 </Grid>
                 <Grid sm={12} xs={12} md={6} lg={6} xl={4}>
                   <FormControlLabel
-                    value="options"
+                    value={false}
                     control={<Radio />}
                     label={show.option2}
+                    onChange={onSelect}
                   />
                 </Grid>
                 <Grid sm={12} xs={12} md={6} lg={6} xl={4}>
                   <FormControlLabel
-                    value="options"
+                    value={false}
                     control={<Radio />}
                     label={show.option3}
+                    onChange={onSelect}
                   />
                 </Grid>
                 <Grid sm={12} xs={12} md={6} lg={6} xl={4}>
                   <FormControlLabel
-                    value="options"
+                    value={false}
                     control={<Radio />}
                     label={show.option4}
+                    onChange={onSelect}
                   />
                 </Grid>
               </RadioGroup>

@@ -1,5 +1,4 @@
-import * as React from "react";
-import { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import Backdrop from "@mui/material/Backdrop";
 import Box from "@mui/material/Box";
@@ -13,7 +12,7 @@ import Grid from "@mui/material/Grid";
 import FormControl from "@mui/material/FormControl";
 import NativeSelect from "@mui/material/NativeSelect";
 import InputLabel from "@mui/material/InputLabel";
-import { useEffect } from "react";
+import ErrorMessage from "./ErrorMessage";
 
 const style = {
   position: "absolute",
@@ -61,6 +60,7 @@ export default function TransitionsModal() {
   const [categoryList, setCategoryList] = useState([]);
   const [type, setType] = useState("");
   const [error, setError] = useState(false);
+  const [errorMsg, setErrorMsg] = useState("");
 
   const handleChange1 = (event) => {
     event.preventDefault();
@@ -104,9 +104,10 @@ export default function TransitionsModal() {
         .then((res) => {
           setQuestion(res.data);
         });
-      // navigate("/admin");
+        handleClose()
     } catch (error) {
       console.log("error occurred", error);
+      setErrorMsg("Cannot use the existed question");
     }
   };
 
@@ -160,6 +161,7 @@ export default function TransitionsModal() {
             >
               Add Questions
             </Typography>
+            {errorMsg && <ErrorMessage>{errorMsg}</ErrorMessage>}
             <Grid style={{ textAlign: "center", marginLeft: "1rem" }}>
               <Grid item lg={12} style={{ display: "flex" }}>
                 <TextField

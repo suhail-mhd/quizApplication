@@ -23,7 +23,7 @@ function Cards() {
 
   useEffect(() => {
     quizShow();
-  }, []);
+  }, [quizShow]);
 
   return (
     <div>
