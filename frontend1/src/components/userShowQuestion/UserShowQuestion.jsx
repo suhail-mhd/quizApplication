@@ -13,8 +13,6 @@ import FormControl from "@mui/material/FormControl";
 import { useDispatch } from "react-redux";
 import "./UserShowQuestion.css";
 
-import { PushAnswer } from "../../hooks/setResult";
-
 const style = {
   position: "absolute",
   top: "50%",
@@ -81,7 +79,6 @@ function UserShowQuestion() {
   const [correct, setCorrect] = useState("");
   const [score, setScore] = useState(0);
   const navigate = useNavigate();
-  const dispatch = useDispatch();
 
   const questionShow = () => {
     try {
@@ -110,10 +107,8 @@ function UserShowQuestion() {
   };
   const onSelect2 = () => {
     if (show.option2 == correct.answer) {
-      // return "select"
       console.log("select");
     } else if (show.option2 != correct.answer) {
-      // return "wrong"
       console.log("wrong");
     }
     console.log(show.option2);
@@ -121,10 +116,8 @@ function UserShowQuestion() {
   };
   const onSelect3 = () => {
     if (show.option3 == correct.answer) {
-      // return "select"
       console.log("select");
     } else if (show.option3 != correct.answer) {
-      // return "wrong"
       console.log("wrong");
     }
     console.log(show.option3);
@@ -132,10 +125,8 @@ function UserShowQuestion() {
   };
   const onSelect4 = () => {
     if (show.option4 == correct.answer) {
-      // return "select"
       console.log("select");
     } else if (show.option4 != correct.answer) {
-      // return "wrong"
       console.log("wrong");
     }
     console.log(show.option4);
@@ -175,7 +166,6 @@ function UserShowQuestion() {
       });
       setQuestionIndex(questionIndex + 1);
       setError(false);
-      // dispatch(PushAnswer(1))
     } else if (!selected) {
       setError(true);
     } else {
@@ -210,9 +200,7 @@ function UserShowQuestion() {
         <Typography variant="p" component="h2" style={styleFour}>
           Question {questionIndex + 1} of {count.length}
         </Typography>
-        <div>
-          Score: {score}
-        </div>
+        <div>Score: {score}</div>
         <Typography
           id="transition-modal-title"
           variant="h5"

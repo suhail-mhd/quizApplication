@@ -1,6 +1,5 @@
-import React, { useEffect } from "react";
+import React from "react";
 import UserShowQuestion from "../../components/userShowQuestion/UserShowQuestion"
-import {useSelector} from 'react-redux'
 
 function useUserQuestions() {
   const myStyle = {
@@ -13,14 +12,7 @@ function useUserQuestions() {
     backgroundPosition: "center",
     marginTop:"-30px"
   };
-
-  const state = useSelector(state => state)
-
-  useEffect(() => {
-    // console.log(state);
-  }, [])
   
-
   return (
     <div style={myStyle}>
       {/* <UserSideBar /> */}
