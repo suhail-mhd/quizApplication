@@ -11,6 +11,7 @@ import RadioGroup from "@mui/material/RadioGroup";
 import FormControlLabel from "@mui/material/FormControlLabel";
 import FormControl from "@mui/material/FormControl";
 import { useDispatch } from "react-redux";
+import "./UserShowQuestion.css";
 
 import { PushAnswer } from "../../hooks/setResult";
 
@@ -62,46 +63,121 @@ const styleFour = {
   fontSize: "15px",
   backgroundColor: "#f4f4f4",
   padding: "5px",
-  width:"150px",
+  width: "150px",
   borderRadius: "10px",
-  marginTop:"-2rem",
-  textAlign:"center",
-  display:"flex",
-  justifyContent:"center",
-  marginLeft:"17rem"
+  marginTop: "-2rem",
+  textAlign: "center",
+  display: "flex",
+  justifyContent: "center",
+  marginLeft: "17rem",
 };
 
 function UserShowQuestion() {
   const [show, setShow] = useState([]);
   const [count, setCount] = useState("");
   const [questionIndex, setQuestionIndex] = useState(0);
+  const [selected, setSelected] = useState(false);
+  const [error, setError] = useState(false);
+  const [correct, setCorrect] = useState("");
+  const [score, setScore] = useState(0);
   const navigate = useNavigate();
-  const dispatch = useDispatch()
+  const dispatch = useDispatch();
 
   const questionShow = () => {
     try {
       axios.get("/api/user/getQuestion").then((res) => {
-        // console.log(res.data.data);
         setCount(res.data.data);
         setShow(res.data.data[questionIndex]);
+        setCorrect(res.data.data[questionIndex]);
       });
     } catch (error) {
       console.log(error);
     }
   };
 
-  const onSelect = () => {
-    // setCheck(true)
-    console.log("options change");
+  // check answer
+
+  const onSelect1 = () => {
+    if (show.option1 == correct.answer) {
+      // return "select"
+      console.log("select");
+    } else if (show.option1 != correct.answer) {
+      // return "wrong"
+      console.log("wrong");
+    }
+    console.log(show.option1);
+    setSelected(true);
+  };
+  const onSelect2 = () => {
+    if (show.option2 == correct.answer) {
+      // return "select"
+      console.log("select");
+    } else if (show.option2 != correct.answer) {
+      // return "wrong"
+      console.log("wrong");
+    }
+    console.log(show.option2);
+    setSelected(true);
+  };
+  const onSelect3 = () => {
+    if (show.option3 == correct.answer) {
+      // return "select"
+      console.log("select");
+    } else if (show.option3 != correct.answer) {
+      // return "wrong"
+      console.log("wrong");
+    }
+    console.log(show.option3);
+    setSelected(true);
+  };
+  const onSelect4 = () => {
+    if (show.option4 == correct.answer) {
+      // return "select"
+      console.log("select");
+    } else if (show.option4 != correct.answer) {
+      // return "wrong"
+      console.log("wrong");
+    }
+    console.log(show.option4);
+    setSelected(true);
   };
 
+  // check points
+
+  const handleCheck1 = () => {
+    if (show.option1 == correct.answer) {
+      setScore(score + 1);
+    }
+  };
+  const handleCheck2 = () => {
+    if (show.option2 == correct.answer) {
+      setScore(score + 1);
+    }
+  };
+  const handleCheck3 = () => {
+    if (show.option3 == correct.answer) {
+      setScore(score + 1);
+    }
+  };
+  const handleCheck4 = () => {
+    if (show.option4 == correct.answer) {
+      setScore(score + 1);
+    }
+  };
+
+  // next and prev button
+
   const handleNext = () => {
-    if (questionIndex < count.length - 1) {
+    if (selected && questionIndex < count.length - 1) {
       axios.get("/api/user/getQuestion").then((res) => {
         setShow(res.data.data[questionIndex + 1]);
+        setCorrect(res.data.data[questionIndex + 1]);
       });
       setQuestionIndex(questionIndex + 1);
-      dispatch(PushAnswer())
+      setError(false);
+      // dispatch(PushAnswer(1))
+    } else if (!selected) {
+      setError(true);
     } else {
       navigate("/userResult");
     }
@@ -115,8 +191,6 @@ function UserShowQuestion() {
       setQuestionIndex(questionIndex - 1);
     }
   };
-
-  const handleQuit = () => {};
 
   useEffect(() => {
     questionShow();
@@ -134,67 +208,80 @@ function UserShowQuestion() {
           - Questions -
         </Typography>
         <Typography variant="p" component="h2" style={styleFour}>
-        Question {questionIndex + 1} of {count.length}
+          Question {questionIndex + 1} of {count.length}
         </Typography>
-        {/* {show.length && show.map((data, i) => {
-        return( */}
-        <>
-          <Typography
-            id="transition-modal-title"
-            variant="h5"
-            component="h2"
-            style={{ marginLeft: 40, fontWeight: "bold", marginTop: 60 }}
+        <div>
+          Score: {score}
+        </div>
+        <Typography
+          id="transition-modal-title"
+          variant="h5"
+          component="h2"
+          style={{ marginLeft: 40, fontWeight: "bold", marginTop: 60 }}
+        >
+          {show.question}
+        </Typography>
+        {error ? (
+          <p
+            style={{
+              color: "red",
+              justifyContent: "center",
+              fontWeight: "bold",
+              display: "flex",
+              textAlign: "center",
+            }}
           >
-            {show.question}
-          </Typography>
-          <Grid
-            container
-            style={{ justifyContent: "center", marginTop: "2rem" }}
-          >
-            <FormControl>
-              <RadioGroup
-                row
-                aria-labelledby="demo-row-radio-buttons-group-label"
-                name="row-radio-buttons-group"
-              >
-                <Grid sm={12} xs={12} md={6} lg={6} xl={4}>
-                  <FormControlLabel
-                    value={false}
-                    control={<Radio />}
-                    label={show.option1}
-                    onChange={onSelect}
-                  />
-                </Grid>
-                <Grid sm={12} xs={12} md={6} lg={6} xl={4}>
-                  <FormControlLabel
-                    value={false}
-                    control={<Radio />}
-                    label={show.option2}
-                    onChange={onSelect}
-                  />
-                </Grid>
-                <Grid sm={12} xs={12} md={6} lg={6} xl={4}>
-                  <FormControlLabel
-                    value={false}
-                    control={<Radio />}
-                    label={show.option3}
-                    onChange={onSelect}
-                  />
-                </Grid>
-                <Grid sm={12} xs={12} md={6} lg={6} xl={4}>
-                  <FormControlLabel
-                    value={false}
-                    control={<Radio />}
-                    label={show.option4}
-                    onChange={onSelect}
-                  />
-                </Grid>
-              </RadioGroup>
-            </FormControl>
-          </Grid>
-        </>
-        {/* )
-       })} */}
+            Please select a chioce!!
+          </p>
+        ) : (
+          ""
+        )}
+        <Grid container style={{ justifyContent: "center", marginTop: "2rem" }}>
+          <FormControl>
+            <RadioGroup
+              row
+              aria-labelledby="demo-row-radio-buttons-group-label"
+              name="row-radio-buttons-group"
+            >
+              <Grid sm={12} xs={12} md={6} lg={6} xl={4}>
+                <FormControlLabel
+                  value={show.option1}
+                  control={<Radio />}
+                  label={show.option1}
+                  onChange={onSelect1}
+                  onClick={handleCheck1}
+                />
+              </Grid>
+              <Grid sm={12} xs={12} md={6} lg={6} xl={4}>
+                <FormControlLabel
+                  value={show.option2}
+                  control={<Radio />}
+                  label={show.option2}
+                  onChange={onSelect2}
+                  onClick={handleCheck2}
+                />
+              </Grid>
+              <Grid sm={12} xs={12} md={6} lg={6} xl={4}>
+                <FormControlLabel
+                  value={show.option3}
+                  control={<Radio />}
+                  label={show.option3}
+                  onChange={onSelect3}
+                  onClick={handleCheck3}
+                />
+              </Grid>
+              <Grid sm={12} xs={12} md={6} lg={6} xl={4}>
+                <FormControlLabel
+                  value={show.option4}
+                  control={<Radio />}
+                  label={show.option4}
+                  onChange={onSelect4}
+                  onClick={handleCheck4}
+                />
+              </Grid>
+            </RadioGroup>
+          </FormControl>
+        </Grid>
         <Box
           textAlign="right"
           style={{ marginRight: "2rem", marginTop: "5rem" }}
@@ -225,7 +312,6 @@ function UserShowQuestion() {
             value="submit"
             style={styleThree}
             href="/"
-            onClick={handleQuit}
           >
             Quit
           </Button>

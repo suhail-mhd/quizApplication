@@ -8,7 +8,6 @@ import Button from "@mui/material/Button";
 import Typography from "@mui/material/Typography";
 import { TextField } from "@mui/material";
 import axios from "axios";
-import { useNavigate } from "react-router-dom";
 import Grid from "@mui/material/Grid";
 import ErrorMessage from "./ErrorMessage";
 
@@ -50,7 +49,6 @@ export default function TransitionsModal() {
   const handleClose = () => setOpen(false);
   const [quiz, setQuiz] = useState("");
   const [error, setError] = useState(false);
-  const navigate = useNavigate();
   const [errorMsg, setErrorMsg] = useState("");
 
   const quizHandler = () => {

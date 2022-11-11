@@ -62,10 +62,10 @@ export default function TransitionsModal() {
   const [error, setError] = useState(false);
   const [errorMsg, setErrorMsg] = useState("");
 
-  const handleChange1 = (event) => {
-    event.preventDefault();
-    setAnswer(event.target.value);
-  };
+  // const handleChange1 = (event) => {
+  //   event.preventDefault();
+  //   setAnswer(event.target.value);
+  // };
   const handleChange2 = (event) => {
     event.preventDefault();
     setCategory(event.target.value);
@@ -289,6 +289,31 @@ export default function TransitionsModal() {
               </Grid>
 
               <Grid item lg={12} style={{ display: "flex" }}>
+                <TextField
+                  variant="standard"
+                  label="Answer"
+                  placeholder="Enter the answer"
+                  type="text"
+                  name="answer"
+                  style={{ marginBottom: 5 }}
+                  onChange={(e) => setAnswer(e.target.value)}
+                />
+                {error && answer.length <= 0 ? (
+                  <p
+                    style={{
+                      color: "red",
+                      textAlign: "center",
+                      fontWeight: "bold",
+                    }}
+                  >
+                    Answer is required
+                  </p>
+                ) : (
+                  ""
+                )}
+              </Grid>
+
+              {/* <Grid item lg={12} style={{ display: "flex" }}>
                 <FormControl variant="standard" sx={{ m: 1, minWidth: 200 }}>
                   <InputLabel htmlFor="demo-customized-select-native">
                     Answer
@@ -319,7 +344,7 @@ export default function TransitionsModal() {
                 ) : (
                   ""
                 )}
-              </Grid>
+              </Grid> */}
               <div style={{ display: "flex" }}>
                 <FormControl variant="standard" sx={{ m: 1, minWidth: 120 }}>
                   <InputLabel htmlFor="demo-customized-select-native">

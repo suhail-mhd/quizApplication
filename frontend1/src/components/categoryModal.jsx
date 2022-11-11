@@ -1,6 +1,5 @@
 import * as React from "react";
 import { useState } from "react";
-import { useNavigate } from "react-router-dom";
 import Backdrop from "@mui/material/Backdrop";
 import Box from "@mui/material/Box";
 import Modal from "@mui/material/Modal";
@@ -50,7 +49,6 @@ export default function TransitionsModal() {
   const handleClose = () => setOpen(false);
   const [category, setCategory] = useState("");
   const [error, setError] = useState(false);
-  const navigate = useNavigate();
   const [errorMsg, setErrorMsg] = useState("");
 
   const categoryHandler = () => {
