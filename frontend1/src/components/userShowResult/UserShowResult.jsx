@@ -1,6 +1,6 @@
 import React from "react";
 import { useState, useEffect } from "react";
-import {Link} from 'react-router-dom'
+import { Link } from "react-router-dom";
 import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
 import Typography from "@mui/material/Typography";
@@ -53,7 +53,8 @@ const styleThree = {
   marginLeft: "2rem",
 };
 
-function UserShowResult() {
+function UserShowResult({ score }) {
+  // console.log(score);
   return (
     <div>
       <Box sx={style}>
@@ -65,127 +66,58 @@ function UserShowResult() {
         >
           - Result -
         </Typography>
-        <div style={{margin:"60px"}}>
-          <div style={{ display: "flex", justifyContent: "space-between", marginBottom:20 }}>
+        <div style={{ margin: "60px", textAlign:"center" }}>
+          {/* <div
+            style={{
+              display: "flex",
+              justifyContent: "space-between",
+              marginBottom: 20,
+            }}
+          > */}
             <Typography
               id="transition-modal-title"
-              variant="h6"
+              variant="h4"
               component="h2"
-              style={{fontWeight: "bold"}}
+              style={{ fontWeight: "bold" }}
             >
-              Total Quiz Points:
+              Your Final Score:
             </Typography>
             <Typography
               id="transition-modal-title"
-              variant="h6"
+              variant="h4"
               component="h2"
-              style={{fontWeight: "bold"}}
+              style={{ fontWeight: "bold", marginTop:"1rem" }}
             >
-              44
+              {score}
             </Typography>
-          </div>
-          <div style={{ display: "flex", justifyContent: "space-between", marginBottom:20 }}>
-            <Typography
-              id="transition-modal-title"
-              variant="h6"
-              component="h2"
-              style={{fontWeight: "bold"}}
-            >
-              Total Questions:
-            </Typography>
-            <Typography
-              id="transition-modal-title"
-              variant="h6"
-              component="h2"
-              style={{fontWeight: "bold"}}
-            >
-              3
-            </Typography>
-          </div>
-          <div style={{ display: "flex", justifyContent: "space-between", marginBottom:20 }}>
-            <Typography
-              id="transition-modal-title"
-              variant="h6"
-              component="h2"
-              style={{fontWeight: "bold"}}
-            >
-              Total Attempts:
-            </Typography>
-            <Typography
-              id="transition-modal-title"
-              variant="h6"
-              component="h2"
-              style={{fontWeight: "bold"}}
-            >
-              2
-            </Typography>
-          </div>
-          <div style={{ display: "flex", justifyContent: "space-between", marginBottom:20 }}>
-            <Typography
-              id="transition-modal-title"
-              variant="h6"
-              component="h2"
-              style={{fontWeight: "bold"}}
-            >
-              Total Earn Points:
-            </Typography>
-            <Typography
-              id="transition-modal-title"
-              variant="h6"
-              component="h2"
-              style={{fontWeight: "bold"}}
-            >
-              34
-            </Typography>
-          </div>
-          <div
-            style={{ display: "flex", justifyContent: "space-between", marginBottom:20 }}
-          >
-            <Typography
-              id="transition-modal-title"
-              variant="h6"
-              component="h2"
-              style={{fontWeight: "bold"}}
-            >
-              Total Result:
-            </Typography>
-            <Typography
-              id="transition-modal-title"
-              variant="h6"
-              component="h2"
-              style={{fontWeight: "bold"}}
-            >
-              Passed
-            </Typography>
-          </div>
+          {/* </div> */}
         </div>
         <Box
           textAlign="right"
-          style={{ marginRight: "2rem", marginTop: "5rem" }}
+          style={{ marginRight: "2rem", marginTop: "8rem" }}
         >
-          <Link to={'/userQuestions'} style={{textDecoration:"none"}}>
-         
-          <Button
-            variant="contained"
-            type="submit"
-            value="submit"
-            style={styleTwo}
-            // onClick={quizHandler}
-          >
-            Restart
-          </Button>
+          <Link to={"/userQuestions"} style={{ textDecoration: "none" }}>
+            <Button
+              variant="contained"
+              type="submit"
+              value="submit"
+              style={styleTwo}
+              // onClick={quizHandler}
+            >
+              Restart
+            </Button>
           </Link>
 
-          <Link to={'/'} style={{textDecoration:"none"}}>
-          <Button
-            variant="contained"
-            type="submit"
-            value="submit"
-            style={styleTwo}
-            // onClick={quizHandler}
-          >
-            Finish
-          </Button>
+          <Link to={"/"} style={{ textDecoration: "none" }}>
+            <Button
+              variant="contained"
+              type="submit"
+              value="submit"
+              style={styleTwo}
+              // onClick={quizHandler}
+            >
+              Finish
+            </Button>
           </Link>
         </Box>
       </Box>

@@ -1,5 +1,7 @@
 import React from "react";
 import { useState, useEffect } from "react";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
 import Typography from "@mui/material/Typography";
@@ -10,8 +12,8 @@ import Radio from "@mui/material/Radio";
 import RadioGroup from "@mui/material/RadioGroup";
 import FormControlLabel from "@mui/material/FormControlLabel";
 import FormControl from "@mui/material/FormControl";
-import { useDispatch } from "react-redux";
 import "./UserShowQuestion.css";
+import UserShowResult from "../userShowResult/UserShowResult";
 
 const style = {
   position: "absolute",
@@ -96,44 +98,57 @@ function UserShowQuestion() {
 
   const onSelect1 = () => {
     if (show.option1 == correct.answer) {
-      // return "select"
-      console.log("select");
+      toast.success("Correct Answer !", {
+        position: toast.POSITION.TOP_RIGHT,
+      });
     } else if (show.option1 != correct.answer) {
-      // return "wrong"
-      console.log("wrong");
+      toast.error("Wrong Answer!", {
+        position: toast.POSITION.TOP_RIGHT,
+      });
     }
-    console.log(show.option1);
-    setSelected(true);
-  };
-  const onSelect2 = () => {
-    if (show.option2 == correct.answer) {
-      console.log("select");
-    } else if (show.option2 != correct.answer) {
-      console.log("wrong");
-    }
-    console.log(show.option2);
-    setSelected(true);
-  };
-  const onSelect3 = () => {
-    if (show.option3 == correct.answer) {
-      console.log("select");
-    } else if (show.option3 != correct.answer) {
-      console.log("wrong");
-    }
-    console.log(show.option3);
-    setSelected(true);
-  };
-  const onSelect4 = () => {
-    if (show.option4 == correct.answer) {
-      console.log("select");
-    } else if (show.option4 != correct.answer) {
-      console.log("wrong");
-    }
-    console.log(show.option4);
     setSelected(true);
   };
 
-  // check points
+  const onSelect2 = () => {
+    if (show.option2 == correct.answer) {
+      toast.success("Correct Answer !", {
+        position: toast.POSITION.TOP_RIGHT,
+      });
+    } else if (show.option2 != correct.answer) {
+      toast.error("Wrong Answer!", {
+        position: toast.POSITION.TOP_RIGHT,
+      });
+    }
+    setSelected(true);
+  };
+
+  const onSelect3 = () => {
+    if (show.option3 == correct.answer) {
+      toast.success("Correct Answer !", {
+        position: toast.POSITION.TOP_RIGHT,
+      });
+    } else if (show.option3 != correct.answer) {
+      toast.error("Wrong Answer!", {
+        position: toast.POSITION.TOP_RIGHT,
+      });
+    }
+    setSelected(true);
+  };
+  
+  const onSelect4 = () => {
+    if (show.option4 == correct.answer) {
+      toast.success("Correct Answer !", {
+        position: toast.POSITION.TOP_RIGHT,
+      });
+    } else if (show.option4 != correct.answer) {
+      toast.error("Wrong Answer!", {
+        position: toast.POSITION.TOP_RIGHT,
+      });
+    }
+    setSelected(true);
+  };
+
+  // set count
 
   const handleCheck1 = () => {
     if (show.option1 == correct.answer) {
@@ -170,6 +185,8 @@ function UserShowQuestion() {
       setError(true);
     } else {
       navigate("/userResult");
+      <UserShowResult score={score} />;
+      console.log(score);
     }
   };
 
@@ -200,7 +217,11 @@ function UserShowQuestion() {
         <Typography variant="p" component="h2" style={styleFour}>
           Question {questionIndex + 1} of {count.length}
         </Typography>
-        <div>Score: {score}</div>
+        <div
+          style={{ float: "right", marginRight: "20px", fontWeight: "bold" }}
+        >
+          Score: {score}
+        </div>
         <Typography
           id="transition-modal-title"
           variant="h5"
@@ -238,6 +259,7 @@ function UserShowQuestion() {
                   label={show.option1}
                   onChange={onSelect1}
                   onClick={handleCheck1}
+                  // disabled={selected}
                 />
               </Grid>
               <Grid sm={12} xs={12} md={6} lg={6} xl={4}>
@@ -247,6 +269,7 @@ function UserShowQuestion() {
                   label={show.option2}
                   onChange={onSelect2}
                   onClick={handleCheck2}
+                  // disabled={selected}
                 />
               </Grid>
               <Grid sm={12} xs={12} md={6} lg={6} xl={4}>
@@ -256,6 +279,7 @@ function UserShowQuestion() {
                   label={show.option3}
                   onChange={onSelect3}
                   onClick={handleCheck3}
+                  // disabled={selected}
                 />
               </Grid>
               <Grid sm={12} xs={12} md={6} lg={6} xl={4}>
@@ -265,6 +289,7 @@ function UserShowQuestion() {
                   label={show.option4}
                   onChange={onSelect4}
                   onClick={handleCheck4}
+                  // disabled={selected}
                 />
               </Grid>
             </RadioGroup>
@@ -305,6 +330,7 @@ function UserShowQuestion() {
           </Button>
         </Box>
       </Box>
+      <ToastContainer />
     </div>
   );
 }
