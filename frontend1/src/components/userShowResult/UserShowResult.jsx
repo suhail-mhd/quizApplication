@@ -53,7 +53,7 @@ const styleThree = {
   marginLeft: "2rem",
 };
 
-function UserShowResult({ score }) {
+function UserShowResult({score}) {
   // console.log(score);
   return (
     <div>
@@ -67,13 +67,61 @@ function UserShowResult({ score }) {
           - Result -
         </Typography>
         <div style={{ margin: "60px", textAlign:"center" }}>
-          {/* <div
+          <div
             style={{
               display: "flex",
               justifyContent: "space-between",
               marginBottom: 20,
             }}
-          > */}
+          >
+            <Typography
+              id="transition-modal-title"
+              variant="h4"
+              component="h2"
+              style={{ fontWeight: "bold" }}
+            >
+              Total Questions:
+            </Typography>
+            <Typography
+              id="transition-modal-title"
+              variant="h4"
+              component="h2"
+              style={{ fontWeight: "bold", marginTop:"1rem" }}
+            >
+              5
+            </Typography>
+          </div>
+          <div
+            style={{
+              display: "flex",
+              justifyContent: "space-between",
+              marginBottom: 20,
+            }}
+          >
+            <Typography
+              id="transition-modal-title"
+              variant="h4"
+              component="h2"
+              style={{ fontWeight: "bold" }}
+            >
+              Total Attempt:
+            </Typography>
+            <Typography
+              id="transition-modal-title"
+              variant="h4"
+              component="h2"
+              style={{ fontWeight: "bold", marginTop:"1rem" }}
+            >
+              3
+            </Typography>
+          </div>
+          <div
+            style={{
+              display: "flex",
+              justifyContent: "space-between",
+              marginBottom: 20,
+            }}
+          >
             <Typography
               id="transition-modal-title"
               variant="h4"
@@ -90,7 +138,7 @@ function UserShowResult({ score }) {
             >
               {score}
             </Typography>
-          {/* </div> */}
+          </div>
         </div>
         <Box
           textAlign="right"
