@@ -14,8 +14,8 @@ import RadioGroup from "@mui/material/RadioGroup";
 import FormControlLabel from "@mui/material/FormControlLabel";
 import FormControl from "@mui/material/FormControl";
 import "./UserShowQuestion.css";
-import { useFetchQuestion, MoveNextQuestion, MovePrevQuestion } from "../../hooks/FetchQuestion";
-import { PushAnswer } from "../../hooks/setResult";
+import { useFetchQuestion } from "../../hooks/FetchQuestion";
+import { updateResult } from "../../hooks/setResult";
 
 const style = {
   position: "absolute",
@@ -49,6 +49,7 @@ function UserShowQuestion({onChecked}) {
   const [error, setError] = useState(false);
   const [correct, setCorrect] = useState("");
   const [score, setScore] = useState(0);
+  const [checked, setChecked] = useState(undefined)
   const navigate = useNavigate();
   const dispatch = useDispatch()
 
@@ -60,16 +61,11 @@ function UserShowQuestion({onChecked}) {
 
   const questions = useSelector(state => state.questions.queue[state.questions.trace])
 
-  const state = useSelector(state => state)
-  const {queue, trace} = useSelector(state => state.questions)
+  const {trace} = useSelector(state => state.questions)
 
   useEffect(() => {
-    // console.log(state);
-    // console.log(questions);
-    // console.log(isLoading);
-    // console.log(apiData);
-    // console.log(serverError);
-  })
+    dispatch(updateResult({trace, checked}))
+  }, [checked])
   
 
   const questionShow = () => {
@@ -88,21 +84,25 @@ function UserShowQuestion({onChecked}) {
 
   const onSelect1 = () => {
     onChecked(questions?.option1);
+    setChecked(questions?.option1);
     setSelected(true);
   };
 
   const onSelect2 = () => {
     onChecked(questions?.option2);
+    setChecked(questions?.option2);
     setSelected(true);
   };
 
   const onSelect3 = () => {
     onChecked(questions?.option3);
+    setChecked(questions?.option3);
     setSelected(true);
   };
   
   const onSelect4 = () => {
     onChecked(questions?.option4);
+    setChecked(questions?.option4);
     setSelected(true);
   };
 
@@ -132,6 +132,8 @@ function UserShowQuestion({onChecked}) {
   useEffect(() => {
     questionShow();
   }, []);
+
+  
 
   if(isLoading) return <h4 className="text-light">isLoading</h4>
   if(serverError) return <h4 className="text-light">{serverError || "Unknown Error"}</h4>

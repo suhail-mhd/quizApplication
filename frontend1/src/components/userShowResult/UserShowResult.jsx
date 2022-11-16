@@ -1,10 +1,13 @@
 import React from "react";
 import { useState, useEffect } from "react";
+import { useSelector, useDispatch } from "react-redux";
 import { Link } from "react-router-dom";
 import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
 import Typography from "@mui/material/Typography";
 import axios from "axios";
+import { resetAllAction } from "../../redux/question_reducer";
+import { resetResultAction } from "../../redux/result_reducer";
 
 const style = {
   position: "absolute",
@@ -12,7 +15,7 @@ const style = {
   left: "50%",
   transform: "translate(-50%, -50%)",
   width: 700,
-  height: 650,
+  height: 655,
   bgcolor: "background.paper",
   border: "2px solid #000",
   borderRadius: "10px",
@@ -53,8 +56,15 @@ const styleThree = {
   marginLeft: "2rem",
 };
 
-function UserShowResult({score}) {
-  // console.log(score);
+function UserShowResult() {
+
+  const dispatch = useDispatch()
+
+  const resetHandler = () => {
+    dispatch(resetAllAction())
+    dispatch(resetResultAction ())
+  }
+  
   return (
     <div>
       <Box sx={style}>
@@ -76,15 +86,15 @@ function UserShowResult({score}) {
           >
             <Typography
               id="transition-modal-title"
-              variant="h4"
+              variant="h6"
               component="h2"
               style={{ fontWeight: "bold" }}
             >
-              Total Questions:
+              Total Quiz Point:
             </Typography>
             <Typography
               id="transition-modal-title"
-              variant="h4"
+              variant="h6"
               component="h2"
               style={{ fontWeight: "bold", marginTop:"1rem" }}
             >
@@ -100,15 +110,15 @@ function UserShowResult({score}) {
           >
             <Typography
               id="transition-modal-title"
-              variant="h4"
+              variant="h6"
               component="h2"
               style={{ fontWeight: "bold" }}
             >
-              Total Attempt:
+              Total Questions:
             </Typography>
             <Typography
               id="transition-modal-title"
-              variant="h4"
+              variant="h6"
               component="h2"
               style={{ fontWeight: "bold", marginTop:"1rem" }}
             >
@@ -124,25 +134,73 @@ function UserShowResult({score}) {
           >
             <Typography
               id="transition-modal-title"
-              variant="h4"
+              variant="h6"
               component="h2"
               style={{ fontWeight: "bold" }}
             >
-              Your Final Score:
+              Total Attempts:
             </Typography>
             <Typography
               id="transition-modal-title"
-              variant="h4"
+              variant="h6"
               component="h2"
               style={{ fontWeight: "bold", marginTop:"1rem" }}
             >
-              {score}
+              3
+            </Typography>
+          </div>
+          <div
+            style={{
+              display: "flex",
+              justifyContent: "space-between",
+              marginBottom: 20,
+            }}
+          >
+            <Typography
+              id="transition-modal-title"
+              variant="h6"
+              component="h2"
+              style={{ fontWeight: "bold" }}
+            >
+              Total Earn Points:
+            </Typography>
+            <Typography
+              id="transition-modal-title"
+              variant="h6"
+              component="h2"
+              style={{ fontWeight: "bold", marginTop:"1rem" }}
+            >
+              3
+            </Typography>
+          </div>
+          <div
+            style={{
+              display: "flex",
+              justifyContent: "space-between",
+              marginBottom: 20,
+            }}
+          >
+            <Typography
+              id="transition-modal-title"
+              variant="h6"
+              component="h2"
+              style={{ fontWeight: "bold" }}
+            >
+              Quiz Result:
+            </Typography>
+            <Typography
+              id="transition-modal-title"
+              variant="h6"
+              component="h2"
+              style={{ fontWeight: "bold", marginTop:"1rem" }}
+            >
+              3
             </Typography>
           </div>
         </div>
         <Box
           textAlign="right"
-          style={{ marginRight: "2rem", marginTop: "8rem" }}
+          style={{ marginRight: "2rem" }}
         >
           <Link to={"/userQuestions"} style={{ textDecoration: "none" }}>
             <Button
@@ -150,7 +208,7 @@ function UserShowResult({score}) {
               type="submit"
               value="submit"
               style={styleTwo}
-              // onClick={quizHandler}
+              onClick={resetHandler}
             >
               Restart
             </Button>

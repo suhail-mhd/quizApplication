@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
+import { useNavigate } from "react-router-dom";
 import UserShowQuestion from "../../components/userShowQuestion/UserShowQuestion";
 import Button from "@mui/material/Button";
 import Box from "@mui/material/Box";
@@ -7,6 +8,7 @@ import Typography from "@mui/material/Typography";
 import { MoveNextQuestion, MovePrevQuestion } from "../../hooks/FetchQuestion";
 import { PushAnswer } from "../../hooks/setResult";
 import axios from "axios";
+import { resultReducer } from "../../redux/result_reducer";
 
 const styleTwo = {
   backgroundColor: "#001253",
@@ -58,8 +60,12 @@ function useUserQuestions() {
   const [count, setCount] = useState("");
   const [check, setChecked] = useState(undefined)
   const dispatch = useDispatch();
+  const navigate = useNavigate()
 
   const { queue, trace } = useSelector((state) => state.questions);
+
+  const result = useSelector(state => state.result.result)
+
 
   const showCount = () => {
     try {
@@ -75,6 +81,10 @@ function useUserQuestions() {
     showCount();
   }, []);
 
+  useEffect(() => {
+    console.log(result);
+  });
+
   const onChecked = (check) => {
     console.log(check);
     setChecked(check)
@@ -87,7 +97,10 @@ function useUserQuestions() {
       dispatch(MoveNextQuestion());
       setQuestionIndex(questionIndex + 1);
 
-      dispatch(PushAnswer(check));
+      if(result.length <= trace) {
+        dispatch(PushAnswer(check));
+      }
+      
     }
   };
 
@@ -97,6 +110,10 @@ function useUserQuestions() {
       setQuestionIndex(questionIndex - 1);
     }
   };
+
+  if(result.length && result.length >= queue.length) {
+    return navigate('/userResult')
+  }
 
   return (
     <div style={myStyle}>
@@ -117,7 +134,7 @@ function useUserQuestions() {
       </Typography>
       <Box style={{marginTop:"32rem"}}>
       <Box textAlign="right" style={{ marginRight: "27rem", marginTop: "5rem" }}>
-        <Button
+        {trace > 0 ? <Button
           variant="contained"
           type="submit"
           value="submit"
@@ -125,7 +142,7 @@ function useUserQuestions() {
           onClick={handlePrev}
         >
           Prev
-        </Button>
+        </Button>:""}
         <Button
           variant="contained"
           type="submit"
