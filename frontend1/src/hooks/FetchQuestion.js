@@ -18,12 +18,13 @@ export const useFetchQuestion = () => {
       try {
         await axios.get("/api/user/getQuestion").then((res) => {
             let question = res.data.data
-            // console.log(question);
+            let answers = question.map((data) => data.answer)
+            // console.log(answers,"......");
             if (question.length > 0) {
                 setGetData(prev => ({ ...prev, isLoading: false }));
-                setGetData(prev => ({ ...prev, apiData: question }));
+                setGetData(prev => ({ ...prev, apiData: question}));
       
-                dispatch(Action.startExamAction(question))
+                dispatch(Action.startExamAction({question, answers}))
               }else {
                   throw new Error('No Question Available')
               }

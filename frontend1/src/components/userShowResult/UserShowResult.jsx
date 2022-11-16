@@ -8,6 +8,7 @@ import Typography from "@mui/material/Typography";
 import axios from "axios";
 import { resetAllAction } from "../../redux/question_reducer";
 import { resetResultAction } from "../../redux/result_reducer";
+import { attempt_Number, earnPoints_Number, flagResult } from "../../helper/helper";
 
 const style = {
   position: "absolute",
@@ -59,6 +60,12 @@ const styleThree = {
 function UserShowResult() {
 
   const dispatch = useDispatch()
+  const {questions: {queue, answers}, result: {result}} = useSelector(state => state)
+  
+  const totalPoints = queue.length * 10
+  const attempts = attempt_Number(result)
+  const earnPoints = earnPoints_Number(result, answers, 10)
+  const flag = flagResult(totalPoints, earnPoints)
 
   const resetHandler = () => {
     dispatch(resetAllAction())
@@ -98,7 +105,7 @@ function UserShowResult() {
               component="h2"
               style={{ fontWeight: "bold", marginTop:"1rem" }}
             >
-              5
+              {totalPoints}
             </Typography>
           </div>
           <div
@@ -122,7 +129,7 @@ function UserShowResult() {
               component="h2"
               style={{ fontWeight: "bold", marginTop:"1rem" }}
             >
-              3
+              {queue.length}
             </Typography>
           </div>
           <div
@@ -146,7 +153,7 @@ function UserShowResult() {
               component="h2"
               style={{ fontWeight: "bold", marginTop:"1rem" }}
             >
-              3
+              {attempts}
             </Typography>
           </div>
           <div
@@ -170,7 +177,7 @@ function UserShowResult() {
               component="h2"
               style={{ fontWeight: "bold", marginTop:"1rem" }}
             >
-              3
+              {earnPoints}
             </Typography>
           </div>
           <div
@@ -192,9 +199,9 @@ function UserShowResult() {
               id="transition-modal-title"
               variant="h6"
               component="h2"
-              style={{ fontWeight: "bold", marginTop:"1rem" }}
+              style={{ fontWeight: "bold", marginTop:"1rem", color:`${flag ? "green" : "Red"}`}}
             >
-              3
+              {flag ? "Passed" : "Failed"}
             </Typography>
           </div>
         </div>

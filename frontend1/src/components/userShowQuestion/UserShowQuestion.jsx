@@ -62,6 +62,7 @@ function UserShowQuestion({onChecked}) {
   const questions = useSelector(state => state.questions.queue[state.questions.trace])
 
   const {trace} = useSelector(state => state.questions)
+  // useSelector(state => console.log(state))
 
   useEffect(() => {
     dispatch(updateResult({trace, checked}))

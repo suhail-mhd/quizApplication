@@ -81,10 +81,6 @@ function useUserQuestions() {
     showCount();
   }, []);
 
-  useEffect(() => {
-    console.log(result);
-  });
-
   const onChecked = (check) => {
     console.log(check);
     setChecked(check)
@@ -102,6 +98,8 @@ function useUserQuestions() {
       }
       
     }
+
+    setChecked(undefined)
   };
 
   const handlePrev = () => {
