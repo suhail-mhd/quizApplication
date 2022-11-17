@@ -1,6 +1,6 @@
 import React from "react";
 import { useState, useEffect } from "react";
-import {useSelector, useDispatch} from 'react-redux'
+import { useSelector, useDispatch } from "react-redux";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import Box from "@mui/material/Box";
@@ -41,7 +41,7 @@ const styleOne = {
   fontWeight: "bold",
 };
 
-function UserShowQuestion({onChecked}) {
+function UserShowQuestion({ onChecked }) {
   const [show, setShow] = useState([]);
   const [count, setCount] = useState("");
   const [questionIndex, setQuestionIndex] = useState(0);
@@ -49,25 +49,22 @@ function UserShowQuestion({onChecked}) {
   const [error, setError] = useState(false);
   const [correct, setCorrect] = useState("");
   const [score, setScore] = useState(0);
-  const [checked, setChecked] = useState(undefined)
+  const [checked, setChecked] = useState(undefined);
   const navigate = useNavigate();
-  const dispatch = useDispatch()
+  const dispatch = useDispatch();
 
-  const [{
-    isLoading,
-    apiData,
-    serverError
-  }] = useFetchQuestion()
+  const [{ isLoading, apiData, serverError }] = useFetchQuestion();
 
-  const questions = useSelector(state => state.questions.queue[state.questions.trace])
+  const questions = useSelector(
+    (state) => state.questions.queue[state.questions.trace]
+  );
 
-  const {trace} = useSelector(state => state.questions)
+  const { trace } = useSelector((state) => state.questions);
   // useSelector(state => console.log(state))
 
   useEffect(() => {
-    dispatch(updateResult({trace, checked}))
-  }, [checked])
-  
+    dispatch(updateResult({ trace, checked }));
+  }, [checked]);
 
   const questionShow = () => {
     try {
@@ -100,7 +97,7 @@ function UserShowQuestion({onChecked}) {
     setChecked(questions?.option3);
     setSelected(true);
   };
-  
+
   const onSelect4 = () => {
     onChecked(questions?.option4);
     setChecked(questions?.option4);
@@ -134,10 +131,9 @@ function UserShowQuestion({onChecked}) {
     questionShow();
   }, []);
 
-  
-
-  if(isLoading) return <h4 className="text-light">isLoading</h4>
-  if(serverError) return <h4 className="text-light">{serverError || "Unknown Error"}</h4>
+  if (isLoading) return <h4 className="text-light">isLoading</h4>;
+  if (serverError)
+    return <h4 className="text-light">{serverError || "Unknown Error"}</h4>;
 
   return (
     <div>
@@ -150,14 +146,6 @@ function UserShowQuestion({onChecked}) {
         >
           - Questions -
         </Typography>
-        {/* <Typography variant="p" component="h2" style={styleFour}>
-          Question {questionIndex + 1} of {count.length}
-        </Typography> */}
-        <div
-          style={{ float: "right", marginRight: "20px", fontWeight: "bold" }}
-        >
-          Score: {score}
-        </div>
         <Typography
           id="transition-modal-title"
           variant="h5"

@@ -8,7 +8,6 @@ import Typography from "@mui/material/Typography";
 import { MoveNextQuestion, MovePrevQuestion } from "../../hooks/FetchQuestion";
 import { PushAnswer } from "../../hooks/setResult";
 import axios from "axios";
-import { resultReducer } from "../../redux/result_reducer";
 
 const styleTwo = {
   backgroundColor: "#001253",

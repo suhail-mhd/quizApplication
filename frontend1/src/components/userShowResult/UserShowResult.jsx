@@ -8,7 +8,12 @@ import Typography from "@mui/material/Typography";
 import axios from "axios";
 import { resetAllAction } from "../../redux/question_reducer";
 import { resetResultAction } from "../../redux/result_reducer";
-import { attempt_Number, earnPoints_Number, flagResult } from "../../helper/helper";
+import {
+  attempt_Number,
+  earnPoints_Number,
+  flagResult,
+} from "../../helper/helper";
+import { usePublishResult } from "../../hooks/setResult";
 
 const style = {
   position: "absolute",
@@ -58,20 +63,29 @@ const styleThree = {
 };
 
 function UserShowResult() {
+  const dispatch = useDispatch();
+  const {
+    questions: { queue, answers },
+    result: { result },
+  } = useSelector((state) => state);
 
-  const dispatch = useDispatch()
-  const {questions: {queue, answers}, result: {result}} = useSelector(state => state)
-  
-  const totalPoints = queue.length * 10
-  const attempts = attempt_Number(result)
-  const earnPoints = earnPoints_Number(result, answers, 10)
-  const flag = flagResult(totalPoints, earnPoints)
+  const totalPoints = queue.length * 10;
+  const attempts = attempt_Number(result);
+  const earnPoints = earnPoints_Number(result, answers, 10);
+  const flag = flagResult(totalPoints, earnPoints);
+
+  usePublishResult({
+    result,
+    attempts,
+    points: earnPoints,
+    achieved: flag ? "Passed" : "Failed",
+  });
 
   const resetHandler = () => {
-    dispatch(resetAllAction())
-    dispatch(resetResultAction ())
-  }
-  
+    dispatch(resetAllAction());
+    dispatch(resetResultAction());
+  };
+
   return (
     <div>
       <Box sx={style}>
@@ -83,7 +97,7 @@ function UserShowResult() {
         >
           - Result -
         </Typography>
-        <div style={{ margin: "60px", textAlign:"center" }}>
+        <div style={{ margin: "60px", textAlign: "center" }}>
           <div
             style={{
               display: "flex",
@@ -103,7 +117,7 @@ function UserShowResult() {
               id="transition-modal-title"
               variant="h6"
               component="h2"
-              style={{ fontWeight: "bold", marginTop:"1rem" }}
+              style={{ fontWeight: "bold", marginTop: "1rem" }}
             >
               {totalPoints}
             </Typography>
@@ -127,7 +141,7 @@ function UserShowResult() {
               id="transition-modal-title"
               variant="h6"
               component="h2"
-              style={{ fontWeight: "bold", marginTop:"1rem" }}
+              style={{ fontWeight: "bold", marginTop: "1rem" }}
             >
               {queue.length}
             </Typography>
@@ -151,7 +165,7 @@ function UserShowResult() {
               id="transition-modal-title"
               variant="h6"
               component="h2"
-              style={{ fontWeight: "bold", marginTop:"1rem" }}
+              style={{ fontWeight: "bold", marginTop: "1rem" }}
             >
               {attempts}
             </Typography>
@@ -175,7 +189,7 @@ function UserShowResult() {
               id="transition-modal-title"
               variant="h6"
               component="h2"
-              style={{ fontWeight: "bold", marginTop:"1rem" }}
+              style={{ fontWeight: "bold", marginTop: "1rem" }}
             >
               {earnPoints}
             </Typography>
@@ -199,16 +213,17 @@ function UserShowResult() {
               id="transition-modal-title"
               variant="h6"
               component="h2"
-              style={{ fontWeight: "bold", marginTop:"1rem", color:`${flag ? "green" : "Red"}`}}
+              style={{
+                fontWeight: "bold",
+                marginTop: "1rem",
+                color: `${flag ? "green" : "Red"}`,
+              }}
             >
               {flag ? "Passed" : "Failed"}
             </Typography>
           </div>
         </div>
-        <Box
-          textAlign="right"
-          style={{ marginRight: "2rem" }}
-        >
+        <Box textAlign="right" style={{ marginRight: "2rem" }}>
           <Link to={"/userQuestions"} style={{ textDecoration: "none" }}>
             <Button
               variant="contained"
