@@ -12,8 +12,8 @@ router.route("/getQuestion").get(getQuestion);
 
 router.route("/getCategory").get(getCategory);
 
-router.route("/storeResult").post(storeResult)
+router.route("/storeResult").post(storeResult);
 
-router.route("/getResult").post(getResult)
+router.route("/getResult").get(getResult);
 
 module.exports = router;

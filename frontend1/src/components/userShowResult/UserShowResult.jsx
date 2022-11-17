@@ -1,11 +1,9 @@
 import React from "react";
-import { useState, useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { Link } from "react-router-dom";
 import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
 import Typography from "@mui/material/Typography";
-import axios from "axios";
 import { resetAllAction } from "../../redux/question_reducer";
 import { resetResultAction } from "../../redux/result_reducer";
 import {
