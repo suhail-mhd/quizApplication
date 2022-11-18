@@ -48,6 +48,12 @@ const storeResult = asyncHandler(async (req, res) => {
   }
 });
 
+const submitAnswer = asyncHandler(async (req, res) => {
+  const question = req.body.question;
+  const questions = await Question.find(question);
+  console.log(questions);
+});
+
 const getResult = asyncHandler(async (req, res) => {
   try {
     const data = await Result.find({});
@@ -59,4 +65,10 @@ const getResult = asyncHandler(async (req, res) => {
   }
 });
 
-module.exports = { getQuestion, getCategory, storeResult, getResult };
+module.exports = {
+  getQuestion,
+  getCategory,
+  storeResult,
+  getResult,
+  submitAnswer,
+};

@@ -21,7 +21,7 @@ const Sidebar = () => {
   };
   let menuItems = [
     {
-      name: "Eduhance",
+      name: "Enhance",
       iconName: "menu",
     },
     {
@@ -81,56 +81,55 @@ const Sidebar = () => {
         }
         return (
           <>
-           {/* <Link to={item.path}> */}
+            {/* <Link to={item.path}> */}
 
-          <div
-            className={`boxicon-container ${
-              expanded && "expanded-boxicon-container"
-            }`}
-            onMouseEnter={() => {
-              if (middle) {
-                setHovered(index);
-              }
-            }}
-            onMouseLeave={() => {
-              if (middle) {
-                setHovered(null);
-              }
-            }}
-            onClick={() => {
-              if (middle) {
-                setActive(index);
-              }
-              if (index === 0) {
-                setExpanded(!expanded);
-              }
-            }}
-            key={index}
-          >
-            
-            <box-icon
-              class={`${middle && "boxicon"} 
+            <div
+              className={`boxicon-container ${
+                expanded && "expanded-boxicon-container"
+              }`}
+              onMouseEnter={() => {
+                if (middle) {
+                  setHovered(index);
+                }
+              }}
+              onMouseLeave={() => {
+                if (middle) {
+                  setHovered(null);
+                }
+              }}
+              onClick={() => {
+                if (middle) {
+                  setActive(index);
+                }
+                if (index === 0) {
+                  setExpanded(!expanded);
+                }
+              }}
+              key={index}
+            >
+              <box-icon
+                class={`${middle && "boxicon"} 
               ${!middle && "first-and-last-trash-fix"}
               ${active === index && "active"}
               `}
-              size={changeSmall ? "sm" : "md"}
-              name={item.iconName}
-              type={item.type}
-              color={
-                hovered === index || active === index ? "white" : item.color
-              }
-              animation={active === index && animate ? "tada" : ""}
-              rotate={item.rotate}
-            ></box-icon>
-            <p
-              className={`description 
+                size={changeSmall ? "sm" : "md"}
+                name={item.iconName}
+                type={item.type}
+                color={
+                  hovered === index || active === index ? "white" : item.color
+                }
+                animation={active === index && animate ? "tada" : ""}
+                rotate={item.rotate}
+              ></box-icon>
+              <p
+                className={`description 
             ${expanded && "show-description"}
             ${active === index && "active-description"}`}
-            >
-              {item.name}
-            </p>
-          </div>
-           {/* </Link> */}
+              >
+                {item.name}
+              </p>
+            </div>
+            {/* </Link> */}
           </>
         );
       })}

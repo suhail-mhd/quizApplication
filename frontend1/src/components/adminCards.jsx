@@ -28,23 +28,27 @@ function Cards() {
   return (
     <div>
       <Grid container>
-      {show.length &&
-        show.map((data) => {
-          return (
-            <Link
-                  to="/adminQuestions"
-                  style={{ textDecoration: "none" }}
+        {show.length &&
+          show.map((data) => {
+            return (
+              <Link to="/adminQuestions" style={{ textDecoration: "none" }}>
+                <Grid
+                  sm={12}
+                  xs={12}
+                  md={6}
+                  lg={6}
+                  xl={4}
+                  style={{ marginTop: 100, marginLeft: 100, borderRadius: 20 }}
                 >
-              <Grid
-                sm={12} xs={12} md={6} lg={6} xl={4}
-                style={{ marginTop: 100, marginLeft: 100, borderRadius: 20 }}
-              >
                   <Card
                     sx={{ maxWidth: 345 }}
                     style={{
                       marginLeft: "30px",
                       marginTop: "10px",
                       width: 300,
+                      borderRadius: "20px",
+                      boxShadow:
+                        "0 10px 20px rgba(0,0,0,0.19), 0 6px 6px rgba(0,0,0,0.23)",
                     }}
                   >
                     <CardContent>
@@ -58,10 +62,10 @@ function Cards() {
                       </Typography>
                     </CardContent>
                   </Card>
-              </Grid>
-                </Link>
-          );
-        })}
+                </Grid>
+              </Link>
+            );
+          })}
       </Grid>
     </div>
   );

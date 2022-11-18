@@ -61,6 +61,7 @@ const styleThree = {
 };
 
 function UserShowResult() {
+
   const dispatch = useDispatch();
   const {
     questions: { queue, answers },

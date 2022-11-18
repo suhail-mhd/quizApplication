@@ -16,6 +16,7 @@ function UserHome() {
   const showCategory = () => {
     try {
       axios.get("/api/user/getCategory").then((res) => {
+        console.log(res.data.data[0].category);
         setCategory(res.data.data);
       });
     } catch (err) {
@@ -56,6 +57,7 @@ function UserHome() {
                       boxShadow:
                         "0 10px 20px rgba(0,0,0,0.19), 0 6px 6px rgba(0,0,0,0.23)",
                       marginBottom: "40px",
+                      borderRadius: "20px",
                     }}
                   >
                     <Box sx={{ display: "flex", flexDirection: "column" }}>
@@ -68,7 +70,7 @@ function UserHome() {
                           {data.category}
                         </Typography>
                         <Link
-                          to="/userQuestions"
+                          to={`/userQuestions/${data.category}`}
                           style={{ textDecoration: "none" }}
                         >
                           <CardActions>
