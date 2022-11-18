@@ -49,8 +49,15 @@ const storeResult = asyncHandler(async (req, res) => {
 });
 
 const submitAnswer = asyncHandler(async (req, res) => {
-  const question = req.body.question;
-  const questions = await Question.find(question);
+  const { question, option1, option2, option3, option4, answer } = req.body;
+  const questions = await Question.find({
+    question,
+    option1,
+    option2,
+    option3,
+    option4,
+    answer,
+  });
   console.log(questions);
 });
 

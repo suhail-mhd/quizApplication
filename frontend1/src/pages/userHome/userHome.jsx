@@ -10,13 +10,20 @@ import Grid from "@mui/material/Grid";
 import CardActions from "@mui/material/CardActions";
 import { Link } from "react-router-dom";
 
+const styleOne = {
+  width:"100px",
+  height:"100px",
+  position:"absolute",
+  marginLeft:"13rem",
+  marginTop:"-1rem"
+}
+
 function UserHome() {
   const [category, setCategory] = useState([]);
 
   const showCategory = () => {
     try {
       axios.get("/api/user/getCategory").then((res) => {
-        console.log(res.data.data[0].category);
         setCategory(res.data.data);
       });
     } catch (err) {
@@ -58,8 +65,10 @@ function UserHome() {
                         "0 10px 20px rgba(0,0,0,0.19), 0 6px 6px rgba(0,0,0,0.23)",
                       marginBottom: "40px",
                       borderRadius: "20px",
+                      position:"relative"
                     }}
                   >
+                    <img src="../../card_img.png" alt="card-img" style={styleOne} />
                     <Box sx={{ display: "flex", flexDirection: "column" }}>
                       <CardContent sx={{ flex: "1 0 auto" }}>
                         <Typography
