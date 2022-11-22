@@ -51,6 +51,16 @@ function UserHome() {
         </Button>
       </div>
       <div className="cardMove">
+      <Typography
+        variant="h4"
+        component="h6"
+        textAlign="center"
+        fontFamily="egoe UI"
+        fontWeight={"bold"}
+        style={{marginLeft:"-30rem", marginBottom:"2em"}}
+      >
+        - Categories -
+      </Typography>
         <Grid container>
           {category.length &&
             category.map((data) => {
@@ -79,7 +89,7 @@ function UserHome() {
                           {data.category}
                         </Typography>
                         <Link
-                          to={`/userQuestions/${data.category}`}
+                          to={"/userQuestions"}
                           style={{ textDecoration: "none" }}
                         >
                           <CardActions>

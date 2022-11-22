@@ -16,7 +16,7 @@ function App() {
         <Route path="/adminQuestions" element={<AdminQuestions />} />
         <Route path="/adminCategory" element={<AdminCategory />} />
         <Route path="/" element={<UserHome />} />
-        <Route path="/userQuestions/:category" element={<UserQuestions />} />
+        <Route path="/userQuestions" element={<UserQuestions />} />
         <Route path="/userResult" element={<UserResult />} />
       </Routes>
     </BrowserRouter>

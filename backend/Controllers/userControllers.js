@@ -1,4 +1,5 @@
 const asyncHandler = require("express-async-handler");
+const validationResult = require("express-validator");
 const Question = require("../Model/questionModel/questionModel");
 const Category = require("../Model/categoryModel/categoryModel");
 const Result = require("../Model/resultModel/resultModel");
@@ -49,16 +50,63 @@ const storeResult = asyncHandler(async (req, res) => {
 });
 
 const submitAnswer = asyncHandler(async (req, res) => {
-  const { question, option1, option2, option3, option4, answer } = req.body;
-  const questions = await Question.find({
-    question,
-    option1,
-    option2,
-    option3,
-    option4,
-    answer,
+  let { questions } = req.body;
+
+  questions = [
+    {
+      _id: "636a4e77cb72121c98f30478",
+      selectedOption: "let",
+    },
+    {
+      _id: "63771781331069f3c6c0795a",
+      selectedOption: "Virtual Dom",
+    },
+  ];
+
+  //  get questionId //
+
+  function selectFewerProps(show) {
+    const { _id } = show;
+    return _id;
+  }
+
+  const _id = questions.map(selectFewerProps);
+
+  // get user selected option //
+
+  function pick(option) {
+    const { selectedOption } = option;
+    return selectedOption;
+  }
+
+  const userOption = questions.map(pick);
+  console.log(userOption);
+
+  // find data by questionId //
+
+  const data = await Question.find({ _id: _id });
+
+  // get answer from data //
+
+  function selected(sel) {
+    const { answer } = sel;
+    return answer;
+  }
+
+  const check = data.map(selected);
+  console.log(check);
+
+  // check the answer //
+
+  let score = 0;
+  for (let i = 0; i < userOption.length; i++) {
+    if (check[i] == userOption[i]) {
+      score = score + 10;
+    }
+  }
+  res.json({
+    score,
   });
-  console.log(questions);
 });
 
 const getResult = asyncHandler(async (req, res) => {
