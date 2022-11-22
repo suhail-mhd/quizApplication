@@ -54,12 +54,8 @@ const submitAnswer = asyncHandler(async (req, res) => {
 
   questions = [
     {
-      _id: "636a4e77cb72121c98f30478",
-      selectedOption: "let",
-    },
-    {
-      _id: "63771781331069f3c6c0795a",
-      selectedOption: "Virtual Dom",
+      _id: "",
+      selectedOption: "",
     },
   ];
 
@@ -80,7 +76,6 @@ const submitAnswer = asyncHandler(async (req, res) => {
   }
 
   const userOption = questions.map(pick);
-  console.log(userOption);
 
   // find data by questionId //
 
@@ -94,7 +89,6 @@ const submitAnswer = asyncHandler(async (req, res) => {
   }
 
   const check = data.map(selected);
-  console.log(check);
 
   // check the answer //
 
