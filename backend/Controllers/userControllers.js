@@ -74,6 +74,15 @@ const submitAnswer = asyncHandler(async (req, res) => {
 
   const data = await Question.find({ _id: _id });
 
+  // get total questions //
+
+  const questionsNumber = await Question.find({});
+  const totalQuestions = questionsNumber.length;
+
+  // total quiz point
+
+  const totalQuizPoints = totalQuestions * 10;
+
   // get answer from data //
 
   function selected(sel) {
@@ -91,8 +100,16 @@ const submitAnswer = asyncHandler(async (req, res) => {
       score = score + 10;
     }
   }
+
+  // flag //
+
+  const flag = (totalQuizPoints * 50) / 100 < score;
+
   res.json({
+    totalQuestions,
+    totalQuizPoints,
     score,
+    flag,
   });
 });
 

@@ -6,7 +6,6 @@ import Button from "@mui/material/Button";
 import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
 import { MoveNextQuestion, MovePrevQuestion } from "../../hooks/FetchQuestion";
-import { PushAnswer } from "../../hooks/setResult";
 import axios from "axios";
 
 const styleTwo = {
@@ -59,12 +58,11 @@ function useUserQuestions() {
   const [count, setCount] = useState("");
   const [check, setChecked] = useState(undefined);
   const [questions, setQuestions] = useState([]);
+  // const [score, setScore] = useState(0)
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
   const { queue, trace } = useSelector((state) => state.questions);
-
-  const result = useSelector((state) => state.result.result);
 
   const question = useSelector(
     (state) => state.questions.queue[state.questions.trace]
@@ -89,7 +87,6 @@ function useUserQuestions() {
   const onChecked = (check) => {
     setChecked(check);
     setQuestions([...questions, { _id, check }]);
-    console.log(questions);
   };
 
   // next and prev button
@@ -111,7 +108,7 @@ function useUserQuestions() {
   const handleSubmit = () => {
     try {
       axios
-        .post("http://localhost:5000/api/user/submitAnswer", {
+        .post("/api/user/submitAnswer", {
           questions,
         })
         .then((res) => {

@@ -7,7 +7,6 @@ import Typography from "@mui/material/Typography";
 import { resetAllAction } from "../../redux/question_reducer";
 import { resetResultAction } from "../../redux/result_reducer";
 import {
-  attempt_Number,
   earnPoints_Number,
   flagResult,
 } from "../../helper/helper";
@@ -69,7 +68,6 @@ function UserShowResult() {
   } = useSelector((state) => state);
 
   const totalPoints = queue.length * 10;
-  const attempts = attempt_Number(result);
   const earnPoints = earnPoints_Number(result, answers, 10);
   const flag = flagResult(totalPoints, earnPoints);
 
@@ -97,30 +95,7 @@ function UserShowResult() {
           - Result -
         </Typography>
         <div style={{ margin: "60px", textAlign: "center" }}>
-          <div
-            style={{
-              display: "flex",
-              justifyContent: "space-between",
-              marginBottom: 20,
-            }}
-          >
-            <Typography
-              id="transition-modal-title"
-              variant="h6"
-              component="h2"
-              style={{ fontWeight: "bold" }}
-            >
-              Total Quiz Point:
-            </Typography>
-            <Typography
-              id="transition-modal-title"
-              variant="h6"
-              component="h2"
-              style={{ fontWeight: "bold", marginTop: "1rem" }}
-            >
-              {totalPoints}
-            </Typography>
-          </div>
+         
           <div
             style={{
               display: "flex",
@@ -158,7 +133,7 @@ function UserShowResult() {
               component="h2"
               style={{ fontWeight: "bold" }}
             >
-              Total Attempts:
+              Total Quiz Point:
             </Typography>
             <Typography
               id="transition-modal-title"
@@ -166,7 +141,7 @@ function UserShowResult() {
               component="h2"
               style={{ fontWeight: "bold", marginTop: "1rem" }}
             >
-              {attempts}
+              {totalPoints}
             </Typography>
           </div>
           <div
