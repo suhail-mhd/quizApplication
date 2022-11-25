@@ -52,13 +52,6 @@ const storeResult = asyncHandler(async (req, res) => {
 const submitAnswer = asyncHandler(async (req, res) => {
   let { questions } = req.body;
 
-  questions = [
-    {
-      _id: "",
-      selectedOption: "",
-    },
-  ];
-
   //  get questionId //
 
   function selectFewerProps(show) {
@@ -71,8 +64,8 @@ const submitAnswer = asyncHandler(async (req, res) => {
   // get user selected option //
 
   function pick(option) {
-    const { selectedOption } = option;
-    return selectedOption;
+    const { check } = option;
+    return check;
   }
 
   const userOption = questions.map(pick);

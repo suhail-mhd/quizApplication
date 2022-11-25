@@ -73,12 +73,12 @@ function UserShowResult() {
   const earnPoints = earnPoints_Number(result, answers, 10);
   const flag = flagResult(totalPoints, earnPoints);
 
-  usePublishResult({
-    result,
-    attempts,
-    points: earnPoints,
-    achieved: flag ? "Passed" : "Failed",
-  });
+  // usePublishResult({
+  //   result,
+  //   attempts,
+  //   points: earnPoints,
+  //   achieved: flag ? "Passed" : "Failed",
+  // });
 
   const resetHandler = () => {
     dispatch(resetAllAction());

@@ -57,14 +57,20 @@ function useUserQuestions() {
 
   const [questionIndex, setQuestionIndex] = useState(0);
   const [count, setCount] = useState("");
-  const [check, setChecked] = useState(undefined)
+  const [check, setChecked] = useState(undefined);
+  const [questions, setQuestions] = useState([]);
   const dispatch = useDispatch();
-  const navigate = useNavigate()
+  const navigate = useNavigate();
 
   const { queue, trace } = useSelector((state) => state.questions);
 
-  const result = useSelector(state => state.result.result)
+  const result = useSelector((state) => state.result.result);
 
+  const question = useSelector(
+    (state) => state.questions.queue[state.questions.trace]
+  );
+
+  const _id = question?._id;
 
   const showCount = () => {
     try {
@@ -81,9 +87,10 @@ function useUserQuestions() {
   }, []);
 
   const onChecked = (check) => {
-    console.log(check);
-    setChecked(check)
-  }
+    setChecked(check);
+    setQuestions([...questions, { _id, check }]);
+    console.log(questions);
+  };
 
   // next and prev button
 
@@ -91,14 +98,7 @@ function useUserQuestions() {
     if (trace < queue.length) {
       dispatch(MoveNextQuestion());
       setQuestionIndex(questionIndex + 1);
-
-      if(result.length <= trace) {
-        dispatch(PushAnswer(check));
-      }
-      
     }
-
-    setChecked(undefined)
   };
 
   const handlePrev = () => {
@@ -108,13 +108,24 @@ function useUserQuestions() {
     }
   };
 
-  if(result.length && result.length >= queue.length) {
-    return navigate('/userResult')
-  }
+  const handleSubmit = () => {
+    try {
+      axios
+        .post("http://localhost:5000/api/user/submitAnswer", {
+          questions,
+        })
+        .then((res) => {
+          console.log(res.data.score);
+          // setScore(res.data.score);
+        });
+      navigate("/userResult");
+    } catch (error) {
+      console.log(error);
+    }
+  };
 
   return (
     <div style={myStyle}>
-      {/* <UserSideBar /> */}
       <p
         style={{
           fontSize: "30px",
@@ -129,38 +140,58 @@ function useUserQuestions() {
       <Typography variant="p" component="h2" style={styleFour}>
         Question {questionIndex + 1} of {count.length}
       </Typography>
-      <Box style={{marginTop:"32rem"}}>
-      <Box textAlign="right" style={{ marginRight: "27rem", marginTop: "5rem" }}>
-        {trace > 0 ? <Button
-          variant="contained"
-          type="submit"
-          value="submit"
-          style={styleTwo}
-          onClick={handlePrev}
+      <Box style={{ marginTop: "32rem" }}>
+        <Box
+          textAlign="right"
+          style={{ marginRight: "27rem", marginTop: "5rem" }}
         >
-          Prev
-        </Button>:""}
-        <Button
-          variant="contained"
-          type="submit"
-          value="submit"
-          style={styleTwo}
-          onClick={handleNext}
-        >
-          Next
-        </Button>
-      </Box>
-      <Box style={{ marginLeft: "27rem" }}>
-        <Button
-          variant="contained"
-          type="submit"
-          value="submit"
-          style={styleThree}
-          href="/"
-        >
-          Quit
-        </Button>
-      </Box>
+          {trace > 0 ? (
+            <Button
+              variant="contained"
+              type="submit"
+              value="submit"
+              style={styleTwo}
+              onClick={handlePrev}
+            >
+              Prev
+            </Button>
+          ) : (
+            ""
+          )}
+
+          {trace >= queue.length - 1 ? (
+            <Button
+              variant="contained"
+              type="submit"
+              value="submit"
+              style={styleTwo}
+              onClick={handleSubmit}
+            >
+              Submit
+            </Button>
+          ) : (
+            <Button
+              variant="contained"
+              type="submit"
+              value="submit"
+              style={styleTwo}
+              onClick={handleNext}
+            >
+              Next
+            </Button>
+          )}
+        </Box>
+        <Box style={{ marginLeft: "27rem" }}>
+          <Button
+            variant="contained"
+            type="submit"
+            value="submit"
+            style={styleThree}
+            href="/"
+          >
+            Quit
+          </Button>
+        </Box>
       </Box>
     </div>
   );
