@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useContext } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import UserShowQuestion from "../../components/userShowQuestion/UserShowQuestion";
@@ -7,6 +7,7 @@ import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
 import { MoveNextQuestion, MovePrevQuestion } from "../../hooks/FetchQuestion";
 import axios from "axios";
+import { resultContext } from "../../contextApi/resultContext";
 
 const styleTwo = {
   backgroundColor: "#001253",
@@ -58,9 +59,9 @@ function useUserQuestions() {
   const [count, setCount] = useState("");
   const [check, setChecked] = useState(undefined);
   const [questions, setQuestions] = useState([]);
-  // const [score, setScore] = useState(0)
   const dispatch = useDispatch();
   const navigate = useNavigate();
+  const { setResult } = useContext(resultContext);
 
   const { queue, trace } = useSelector((state) => state.questions);
 
@@ -112,10 +113,10 @@ function useUserQuestions() {
           questions,
         })
         .then((res) => {
-          console.log(res.data.score);
-          // setScore(res.data.score);
+          setResult(res.data);
         });
       navigate("/userResult");
+      // setShowResult(true)
     } catch (error) {
       console.log(error);
     }

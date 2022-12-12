@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useContext } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { Link } from "react-router-dom";
 import Box from "@mui/material/Box";
@@ -6,11 +6,9 @@ import Button from "@mui/material/Button";
 import Typography from "@mui/material/Typography";
 import { resetAllAction } from "../../redux/question_reducer";
 import { resetResultAction } from "../../redux/result_reducer";
-import {
-  earnPoints_Number,
-  flagResult,
-} from "../../helper/helper";
+import { earnPoints_Number, flagResult } from "../../helper/helper";
 import { usePublishResult } from "../../hooks/setResult";
+import { resultContext } from "../../contextApi/resultContext";
 
 const style = {
   position: "absolute",
@@ -60,16 +58,16 @@ const styleThree = {
 };
 
 function UserShowResult() {
-
   const dispatch = useDispatch();
-  const {
-    questions: { queue, answers },
-    result: { result },
-  } = useSelector((state) => state);
+  const { result } = useContext(resultContext);
+  // const {
+  //   questions: { queue, answers },
+  //   result: { result },
+  // } = useSelector((state) => state);
 
-  const totalPoints = queue.length * 10;
-  const earnPoints = earnPoints_Number(result, answers, 10);
-  const flag = flagResult(totalPoints, earnPoints);
+  // const totalPoints = queue.length * 10;
+  // const earnPoints = earnPoints_Number(result, answers, 10);
+  // const flag = flagResult(totalPoints, earnPoints);
 
   // usePublishResult({
   //   result,
@@ -95,7 +93,6 @@ function UserShowResult() {
           - Result -
         </Typography>
         <div style={{ margin: "60px", textAlign: "center" }}>
-         
           <div
             style={{
               display: "flex",
@@ -117,7 +114,7 @@ function UserShowResult() {
               component="h2"
               style={{ fontWeight: "bold", marginTop: "1rem" }}
             >
-              {queue.length}
+              {result.totalQuestions}
             </Typography>
           </div>
           <div
@@ -141,7 +138,7 @@ function UserShowResult() {
               component="h2"
               style={{ fontWeight: "bold", marginTop: "1rem" }}
             >
-              {totalPoints}
+              {result.totalQuizPoints}
             </Typography>
           </div>
           <div
@@ -165,7 +162,7 @@ function UserShowResult() {
               component="h2"
               style={{ fontWeight: "bold", marginTop: "1rem" }}
             >
-              {earnPoints}
+              {result.score}
             </Typography>
           </div>
           <div
@@ -190,10 +187,10 @@ function UserShowResult() {
               style={{
                 fontWeight: "bold",
                 marginTop: "1rem",
-                color: `${flag ? "green" : "Red"}`,
+                color: `${result.flag ? "green" : "Red"}`,
               }}
             >
-              {flag ? "Passed" : "Failed"}
+              {result.flag ? "Passed" : "Failed"}
             </Typography>
           </div>
         </div>
