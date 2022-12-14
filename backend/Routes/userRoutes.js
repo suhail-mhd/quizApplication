@@ -4,19 +4,16 @@ const router = express.Router();
 const {
   getQuestion,
   getCategory,
-  storeResult,
-  getResult,
-  submitAnswer
+  submitAnswer,
+  catNav,
 } = require("../Controllers/userControllers");
 
 router.route("/getQuestion").get(getQuestion);
 
 router.route("/getCategory").get(getCategory);
 
-router.route("/storeResult").post(storeResult);
-
-router.route("/getResult").get(getResult);
-
 router.route("/submitAnswer").post(submitAnswer);
+
+router.route("/catNav").post(catNav);
 
 module.exports = router;

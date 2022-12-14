@@ -1,4 +1,5 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useContext } from "react";
+import { useNavigate } from "react-router-dom";
 import UserSideBar from "../../components/userSideBar/userSideBar";
 import Card from "@mui/material/Card";
 import CardContent from "@mui/material/CardContent";
@@ -9,17 +10,20 @@ import "./userHome.css";
 import Grid from "@mui/material/Grid";
 import CardActions from "@mui/material/CardActions";
 import { Link } from "react-router-dom";
+import { questionContext } from "../../contextApi/questionContext";
 
 const styleOne = {
-  width:"100px",
-  height:"100px",
-  position:"absolute",
-  marginLeft:"13rem",
-  marginTop:"-1rem"
-}
+  width: "100px",
+  height: "100px",
+  position: "absolute",
+  marginLeft: "13rem",
+  marginTop: "-1rem",
+};
 
 function UserHome() {
   const [category, setCategory] = useState([]);
+  const {setGetQuestion} = useContext(questionContext)
+  const navigate = useNavigate();
 
   const showCategory = () => {
     try {
@@ -31,9 +35,20 @@ function UserHome() {
     }
   };
 
+  const toQuestions = (category) => {
+    try {
+      axios.post("/api/user/catNav", { category }).then((res) => {
+        setGetQuestion(res.data.qCat)
+      });
+      navigate('/userQuestions')
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   useEffect(() => {
     showCategory();
-  }, []);
+  }, [showCategory]);
 
   return (
     <div>
@@ -51,16 +66,16 @@ function UserHome() {
         </Button>
       </div>
       <div className="cardMove">
-      <Typography
-        variant="h4"
-        component="h6"
-        textAlign="center"
-        fontFamily="egoe UI"
-        fontWeight={"bold"}
-        style={{marginLeft:"-30rem", marginBottom:"2em"}}
-      >
-        - Categories -
-      </Typography>
+        <Typography
+          variant="h4"
+          component="h6"
+          textAlign="center"
+          fontFamily="egoe UI"
+          fontWeight={"bold"}
+          style={{ marginLeft: "-30rem", marginBottom: "2em" }}
+        >
+          - Categories -
+        </Typography>
         <Grid container>
           {category.length &&
             category.map((data) => {
@@ -75,10 +90,14 @@ function UserHome() {
                         "0 10px 20px rgba(0,0,0,0.19), 0 6px 6px rgba(0,0,0,0.23)",
                       marginBottom: "40px",
                       borderRadius: "20px",
-                      position:"relative"
+                      position: "relative",
                     }}
                   >
-                    <img src="../../card_img.png" alt="card-img" style={styleOne} />
+                    <img
+                      src="../../card_img.png"
+                      alt="card-img"
+                      style={styleOne}
+                    />
                     <Box sx={{ display: "flex", flexDirection: "column" }}>
                       <CardContent sx={{ flex: "1 0 auto" }}>
                         <Typography
@@ -88,14 +107,19 @@ function UserHome() {
                         >
                           {data.category}
                         </Typography>
-                        <Link
+                        {/* <Link
                           to={"/userQuestions"}
                           style={{ textDecoration: "none" }}
-                        >
-                          <CardActions>
-                            <Button size="small">Move to Questions</Button>
-                          </CardActions>
-                        </Link>
+                        > */}
+                        <CardActions>
+                          <Button
+                            onClick={() => toQuestions(data.category)}
+                            size="small"
+                          >
+                            Move to Questions
+                          </Button>
+                        </CardActions>
+                        {/* </Link> */}
                       </CardContent>
                     </Box>
                   </Card>

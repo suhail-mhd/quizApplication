@@ -1,5 +1,5 @@
 import React from "react";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useContext } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { ToastContainer, toast } from "react-toastify";
@@ -16,6 +16,7 @@ import FormControl from "@mui/material/FormControl";
 import "./UserShowQuestion.css";
 import { useFetchQuestion } from "../../hooks/FetchQuestion";
 import { updateResult } from "../../hooks/setResult";
+import { questionContext } from "../../contextApi/questionContext";
 
 const style = {
   position: "absolute",
@@ -41,42 +42,44 @@ const styleOne = {
   fontWeight: "bold",
 };
 
-function UserShowQuestion({ onChecked }) {
-  const [show, setShow] = useState([]);
-  const [count, setCount] = useState("");
+const qStyle = {
+  marginLeft: 40,
+  fontWeight: "bold",
+  marginTop: 60,
+};
+
+const errorStyle = {
+  color: "red",
+  justifyContent: "center",
+  fontWeight: "bold",
+  display: "flex",
+  textAlign: "center",
+  fontSize: "18px",
+  marginTop: "2rem",
+};
+
+function UserShowQuestion({ onChecked, error }) {
+  // const [show, setShow] = useState([]);
+  // const [count, setCount] = useState("");
   const [questionIndex, setQuestionIndex] = useState(0);
   const [selected, setSelected] = useState(false);
-  const [error, setError] = useState(false);
-  const [correct, setCorrect] = useState("");
-  const [score, setScore] = useState(0);
+  // const [correct, setCorrect] = useState("");
+  // const [score, setScore] = useState(0);
   const [checked, setChecked] = useState(undefined);
   const navigate = useNavigate();
   const dispatch = useDispatch();
+  const { getQuestion } = useContext(questionContext);
 
   const [{ isLoading, apiData, serverError }] = useFetchQuestion();
+  const { trace } = useSelector((state) => state.questions);
 
   const questions = useSelector(
-    (state) => state.questions.queue[state.questions.trace]
+    (state) => state.questions.queue[0]?.getQuestion[trace]
   );
-
-  const { trace } = useSelector((state) => state.questions);
-  // useSelector(state => console.log(state))
 
   useEffect(() => {
     dispatch(updateResult({ trace, checked }));
   }, [checked]);
-
-  const questionShow = () => {
-    try {
-      axios.get("/api/user/getQuestion").then((res) => {
-        setCount(res.data.data);
-        setShow(res.data.data[questionIndex]);
-        setCorrect(res.data.data[questionIndex]);
-      });
-    } catch (error) {
-      console.log(error);
-    }
-  };
 
   // check answer
 
@@ -104,33 +107,6 @@ function UserShowQuestion({ onChecked }) {
     setSelected(true);
   };
 
-  // set count
-
-  const handleCheck1 = () => {
-    if (show.option1 == correct.answer) {
-      setScore(score + 1);
-    }
-  };
-  const handleCheck2 = () => {
-    if (show.option2 == correct.answer) {
-      setScore(score + 1);
-    }
-  };
-  const handleCheck3 = () => {
-    if (show.option3 == correct.answer) {
-      setScore(score + 1);
-    }
-  };
-  const handleCheck4 = () => {
-    if (show.option4 == correct.answer) {
-      setScore(score + 1);
-    }
-  };
-
-  useEffect(() => {
-    questionShow();
-  }, []);
-
   if (isLoading) return <h4 className="text-light">isLoading</h4>;
   if (serverError)
     return <h4 className="text-light">{serverError || "Unknown Error"}</h4>;
@@ -146,75 +122,64 @@ function UserShowQuestion({ onChecked }) {
         >
           - Questions -
         </Typography>
-        <Typography
-          id="transition-modal-title"
-          variant="h5"
-          component="h2"
-          style={{ marginLeft: 40, fontWeight: "bold", marginTop: 60 }}
-        >
-          {questions?.question}
-        </Typography>
-        {error ? (
-          <p
-            style={{
-              color: "red",
-              justifyContent: "center",
-              fontWeight: "bold",
-              display: "flex",
-              textAlign: "center",
-            }}
+
+        <div>
+          <Typography
+            id="transition-modal-title"
+            variant="h5"
+            component="h2"
+            style={qStyle}
           >
-            Please select a choice!!
-          </p>
-        ) : (
-          ""
-        )}
-        <Grid container style={{ justifyContent: "center", marginTop: "2rem" }}>
-          <FormControl>
-            <RadioGroup
-              row
-              aria-labelledby="demo-row-radio-buttons-group-label"
-              name="row-radio-buttons-group"
-            >
-              <Grid sm={12} xs={12} md={6} lg={6} xl={4}>
-                <FormControlLabel
-                  value={questions?.option1}
-                  control={<Radio />}
-                  label={questions?.option1}
-                  onChange={onSelect1}
-                  onClick={handleCheck1}
-                />
-              </Grid>
-              <Grid sm={12} xs={12} md={6} lg={6} xl={4}>
-                <FormControlLabel
-                  value={questions?.option2}
-                  control={<Radio />}
-                  label={questions?.option2}
-                  onChange={onSelect2}
-                  onClick={handleCheck2}
-                />
-              </Grid>
-              <Grid sm={12} xs={12} md={6} lg={6} xl={4}>
-                <FormControlLabel
-                  value={questions?.option3}
-                  control={<Radio />}
-                  label={questions?.option3}
-                  onChange={onSelect3}
-                  onClick={handleCheck3}
-                />
-              </Grid>
-              <Grid sm={12} xs={12} md={6} lg={6} xl={4}>
-                <FormControlLabel
-                  value={questions?.option4}
-                  control={<Radio />}
-                  label={questions?.option4}
-                  onChange={onSelect4}
-                  onClick={handleCheck4}
-                />
-              </Grid>
-            </RadioGroup>
-          </FormControl>
-        </Grid>
+            {questions?.question}
+          </Typography>
+
+          <Grid
+            container
+            style={{ justifyContent: "center", marginTop: "2rem" }}
+          >
+            <FormControl>
+              <RadioGroup
+                row
+                aria-labelledby="demo-row-radio-buttons-group-label"
+                name="row-radio-buttons-group"
+              >
+                <Grid sm={12} xs={12} md={6} lg={6} xl={4}>
+                  <FormControlLabel
+                    value={questions?.option1}
+                    control={<Radio />}
+                    label={questions?.option1}
+                    onChange={onSelect1}
+                  />
+                </Grid>
+                <Grid sm={12} xs={12} md={6} lg={6} xl={4}>
+                  <FormControlLabel
+                    value={questions?.option2}
+                    control={<Radio />}
+                    label={questions?.option2}
+                    onChange={onSelect2}
+                  />
+                </Grid>
+                <Grid sm={12} xs={12} md={6} lg={6} xl={4}>
+                  <FormControlLabel
+                    value={questions?.option3}
+                    control={<Radio />}
+                    label={questions?.option3}
+                    onChange={onSelect3}
+                  />
+                </Grid>
+                <Grid sm={12} xs={12} md={6} lg={6} xl={4}>
+                  <FormControlLabel
+                    value={questions?.option4}
+                    control={<Radio />}
+                    label={questions?.option4}
+                    onChange={onSelect4}
+                  />
+                </Grid>
+              </RadioGroup>
+            </FormControl>
+          </Grid>
+        </div>
+        {error ? <p style={errorStyle}>Please select a choice!!</p> : ""}
       </Box>
       <ToastContainer />
     </div>

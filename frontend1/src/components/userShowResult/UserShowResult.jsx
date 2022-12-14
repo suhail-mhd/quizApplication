@@ -1,13 +1,11 @@
 import React, { useContext } from "react";
-import { useSelector, useDispatch } from "react-redux";
+import { useDispatch } from "react-redux";
 import { Link } from "react-router-dom";
 import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
 import Typography from "@mui/material/Typography";
 import { resetAllAction } from "../../redux/question_reducer";
 import { resetResultAction } from "../../redux/result_reducer";
-import { earnPoints_Number, flagResult } from "../../helper/helper";
-import { usePublishResult } from "../../hooks/setResult";
 import { resultContext } from "../../contextApi/resultContext";
 
 const style = {
@@ -44,37 +42,10 @@ const styleTwo = {
   paddingRight: "50px",
   margin: "0 5px",
 };
-const styleThree = {
-  backgroundColor: "#f4f4f4",
-  color: "#333",
-  borderRadius: "20px",
-  marginTop: 25,
-  paddingLeft: "50px",
-  paddingRight: "50px",
-  width: "50px",
-  marginTop: "-50px",
-  fontWeight: "bold",
-  marginLeft: "2rem",
-};
 
 function UserShowResult() {
   const dispatch = useDispatch();
   const { result } = useContext(resultContext);
-  // const {
-  //   questions: { queue, answers },
-  //   result: { result },
-  // } = useSelector((state) => state);
-
-  // const totalPoints = queue.length * 10;
-  // const earnPoints = earnPoints_Number(result, answers, 10);
-  // const flag = flagResult(totalPoints, earnPoints);
-
-  // usePublishResult({
-  //   result,
-  //   attempts,
-  //   points: earnPoints,
-  //   achieved: flag ? "Passed" : "Failed",
-  // });
 
   const resetHandler = () => {
     dispatch(resetAllAction());

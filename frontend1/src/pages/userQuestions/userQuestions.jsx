@@ -8,6 +8,7 @@ import Typography from "@mui/material/Typography";
 import { MoveNextQuestion, MovePrevQuestion } from "../../hooks/FetchQuestion";
 import axios from "axios";
 import { resultContext } from "../../contextApi/resultContext";
+import { questionContext } from "../../contextApi/questionContext";
 
 const styleTwo = {
   backgroundColor: "#001253",
@@ -59,43 +60,37 @@ function useUserQuestions() {
   const [count, setCount] = useState("");
   const [check, setChecked] = useState(undefined);
   const [questions, setQuestions] = useState([]);
+  const [error, setError] = useState(false);
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const { setResult } = useContext(resultContext);
+  const { getQuestion } = useContext(questionContext);
 
   const { queue, trace } = useSelector((state) => state.questions);
 
   const question = useSelector(
-    (state) => state.questions.queue[state.questions.trace]
+    (state) => state.questions.queue[0]?.getQuestion[trace]
   );
 
   const _id = question?._id;
-
-  const showCount = () => {
-    try {
-      axios.get("/api/user/getQuestion").then((res) => {
-        setCount(res.data.data);
-      });
-    } catch (error) {
-      console.log(error);
-    }
-  };
-
-  useEffect(() => {
-    showCount();
-  }, []);
+  const category = question?.category
 
   const onChecked = (check) => {
+    setError(false)
     setChecked(check);
-    setQuestions([...questions, { _id, check }]);
+    setQuestions([...questions, { _id, check, category }]);
+    console.log(questions);
   };
 
   // next and prev button
 
   const handleNext = () => {
-    if (trace < queue.length) {
+    if (questionIndex < getQuestion.length && check) {
       dispatch(MoveNextQuestion());
       setQuestionIndex(questionIndex + 1);
+      
+    }else {
+      setError(true)
     }
   };
 
@@ -116,11 +111,14 @@ function useUserQuestions() {
           setResult(res.data);
         });
       navigate("/userResult");
-      // setShowResult(true)
     } catch (error) {
       console.log(error);
     }
   };
+
+  const handleQuit = () => {
+    navigate('/')
+  }
 
   return (
     <div style={myStyle}>
@@ -134,16 +132,17 @@ function useUserQuestions() {
       >
         Quiz Master
       </p>
-      <UserShowQuestion onChecked={onChecked} />
+      <UserShowQuestion onChecked={onChecked} error={error}/>
       <Typography variant="p" component="h2" style={styleFour}>
-        Question {questionIndex + 1} of {count.length}
+        Question {questionIndex + 1} of {getQuestion.length}
       </Typography>
+      
       <Box style={{ marginTop: "32rem" }}>
         <Box
           textAlign="right"
           style={{ marginRight: "27rem", marginTop: "5rem" }}
         >
-          {trace > 0 ? (
+          {questionIndex > 0 ? (
             <Button
               variant="contained"
               type="submit"
@@ -157,7 +156,7 @@ function useUserQuestions() {
             ""
           )}
 
-          {trace >= queue.length - 1 ? (
+          {questionIndex >= getQuestion.length - 1 ? (
             <Button
               variant="contained"
               type="submit"
@@ -185,7 +184,7 @@ function useUserQuestions() {
             type="submit"
             value="submit"
             style={styleThree}
-            href="/"
+            onClick={handleQuit}
           >
             Quit
           </Button>

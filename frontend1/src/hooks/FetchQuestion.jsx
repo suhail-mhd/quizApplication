@@ -1,11 +1,13 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useContext } from "react";
 import { useDispatch } from "react-redux";
 import axios from "axios";
+import { questionContext } from "../contextApi/questionContext";
 
 import * as Action from "../redux/question_reducer";
 
 export const useFetchQuestion = () => {
   const dispatch = useDispatch();
+  const {getQuestion} = useContext(questionContext)
   const [getData, setGetData] = useState({
     isLoading: false,
     apiData: [],
@@ -16,9 +18,9 @@ export const useFetchQuestion = () => {
     setGetData((prev) => ({ ...prev, isLoading: true }));
     (async () => {
       try {
-        await axios.get("/api/user/getQuestion").then((res) => {
-          let question = res.data.data;
-          let answers = question.map((data) => data.answer);
+        // await axios.get("/api/user/getQuestion").then((res) => {
+          let question = [{getQuestion}];
+          let answers = question[0].getQuestion.map((data) => data.answer);
           if (question.length > 0) {
             setGetData((prev) => ({ ...prev, isLoading: false }));
             setGetData((prev) => ({ ...prev, apiData: question }));
@@ -27,7 +29,7 @@ export const useFetchQuestion = () => {
           } else {
             throw new Error("No Question Available");
           }
-        });
+        // });
       } catch (error) {
         setGetData((prev) => ({ ...prev, isLoading: false }));
         setGetData((prev) => ({ ...prev, serverError: error }));

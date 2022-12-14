@@ -2,7 +2,6 @@ const asyncHandler = require("express-async-handler");
 const validationResult = require("express-validator");
 const Question = require("../Model/questionModel/questionModel");
 const Category = require("../Model/categoryModel/categoryModel");
-const Result = require("../Model/resultModel/resultModel");
 
 const getQuestion = asyncHandler(async (req, res) => {
   try {
@@ -21,29 +20,6 @@ const getCategory = asyncHandler(async (req, res) => {
     res.json({
       data,
     });
-  } catch (error) {
-    console.log(error);
-  }
-});
-
-const storeResult = asyncHandler(async (req, res) => {
-  try {
-    const { result, attempts, points, achieved } = req.body;
-    if (!result) throw new Error("Result No Provided");
-
-    const data = await Result.create({ result, attempts, points, achieved });
-
-    if (data) {
-      res.status(200).json({
-        id: data._id,
-        result: data.result,
-        attempts: data.attempts,
-        points: data.points,
-        achieved: data.achieved,
-      });
-    } else {
-      console.log("not good");
-    }
   } catch (error) {
     console.log(error);
   }
@@ -70,13 +46,22 @@ const submitAnswer = asyncHandler(async (req, res) => {
 
   const userOption = questions.map(pick);
 
+  // get category //
+
+  function cat(categories) {
+    const { category } = categories;
+    return category;
+  }
+
+  const category = questions.map(cat);
+
   // find data by questionId //
 
   const data = await Question.find({ _id: _id });
 
   // get total questions //
 
-  const questionsNumber = await Question.find({});
+  const questionsNumber = await Question.find({category});
   const totalQuestions = questionsNumber.length;
 
   // total quiz point
@@ -113,11 +98,12 @@ const submitAnswer = asyncHandler(async (req, res) => {
   });
 });
 
-const getResult = asyncHandler(async (req, res) => {
+const catNav = asyncHandler(async (req, res) => {
+  const { category } = req.body;
   try {
-    const data = await Result.find({});
+    const qCat = await Question.find({ category });
     res.json({
-      data,
+      qCat,
     });
   } catch (error) {
     console.log(error);
@@ -127,7 +113,6 @@ const getResult = asyncHandler(async (req, res) => {
 module.exports = {
   getQuestion,
   getCategory,
-  storeResult,
-  getResult,
   submitAnswer,
+  catNav,
 };
