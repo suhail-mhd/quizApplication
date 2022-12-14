@@ -59,12 +59,7 @@ const errorStyle = {
 };
 
 function UserShowQuestion({ onChecked, error }) {
-  // const [show, setShow] = useState([]);
-  // const [count, setCount] = useState("");
-  const [questionIndex, setQuestionIndex] = useState(0);
   const [selected, setSelected] = useState(false);
-  // const [correct, setCorrect] = useState("");
-  // const [score, setScore] = useState(0);
   const [checked, setChecked] = useState(undefined);
   const navigate = useNavigate();
   const dispatch = useDispatch();

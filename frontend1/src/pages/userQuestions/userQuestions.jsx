@@ -79,7 +79,6 @@ function useUserQuestions() {
     setError(false)
     setChecked(check);
     setQuestions([...questions, { _id, check, category }]);
-    console.log(questions);
   };
 
   // next and prev button
