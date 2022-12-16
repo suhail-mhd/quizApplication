@@ -15,6 +15,9 @@ import Button from "@mui/material/Button";
 import Modal from "@mui/material/Modal";
 import Grid from "@mui/material/Grid";
 import { TextField } from "@mui/material";
+import FormControl from "@mui/material/FormControl";
+import NativeSelect from "@mui/material/NativeSelect";
+import InputLabel from "@mui/material/InputLabel";
 import axios from "axios";
 
 const style = {
@@ -56,6 +59,7 @@ function AdminQuestions() {
   const [option4, setOption4] = useState("");
   const [answer, setAnswer] = useState("");
   const [category, setCategory] = useState("");
+  const [categoryList, setCategoryList] = useState([]);
   const [type, setType] = useState("");
 
   const questionShow = () => {
@@ -143,8 +147,19 @@ function AdminQuestions() {
     }
   };
 
+  const getCategory = () => {
+    try {
+      axios.get("/api/user/getCategory").then((res) => {
+        setCategoryList(res.data.data);
+      });
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
   useEffect(() => {
     questionShow();
+    getCategory()
   }, [questionShow, render]);
 
   return (
@@ -211,6 +226,7 @@ function AdminQuestions() {
                   <br />
 
                   <TextField
+                  variant="standard"
                     label="Question"
                     placeholder="Edit Question"
                     type="text"
@@ -224,6 +240,7 @@ function AdminQuestions() {
                 <Grid item md={6} xs={12} lg={6} marginTop={2}>
                   <br />
                   <TextField
+                  variant="standard"
                     label="Option 1"
                     placeholder="Edit Option 1"
                     type="text"
@@ -236,6 +253,7 @@ function AdminQuestions() {
                 <Grid item md={6} xs={12} lg={6} marginTop={2}>
                   <br />
                   <TextField
+                  variant="standard"
                     label="Option 2"
                     placeholder="Edit Option 2"
                     type="text"
@@ -248,6 +266,7 @@ function AdminQuestions() {
                 <Grid item md={6} xs={12} lg={6} marginTop={2}>
                   <br />
                   <TextField
+                  variant="standard"
                     label="Option 3"
                     placeholder="Edit Option 3"
                     type="text"
@@ -260,6 +279,7 @@ function AdminQuestions() {
                 <Grid item md={6} xs={12} lg={6} marginTop={2}>
                   <br />
                   <TextField
+                  variant="standard"
                     label="Option 4"
                     placeholder="Edit Option 4"
                     type="text"
@@ -272,6 +292,7 @@ function AdminQuestions() {
                 <Grid item md={6} xs={12} lg={6} marginTop={2}>
                   <br />
                   <TextField
+                  variant="standard"
                     label="Answer"
                     placeholder="Edit Answer"
                     type="text"
@@ -283,26 +304,66 @@ function AdminQuestions() {
 
                 <Grid item md={6} xs={12} lg={6} marginTop={2}>
                   <br />
-                  <TextField
+                  {/* <TextField
+                  variant="standard"
                     label="Category"
                     placeholder="Edit category"
                     type="text"
                     name="category"
                     value={category}
                     onChange={(e) => setCategory(e.target.value)}
-                  />
+                  /> */}
+                  <FormControl variant="standard" sx={{ m: 1, minWidth: 120 }}>
+                  <InputLabel htmlFor="demo-customized-select-native">
+                    Category
+                  </InputLabel>
+
+                  <NativeSelect
+                    id="demo-customized-select-native"
+                    value={category}
+                    onChange={(e) => setCategory(e.target.value)}
+                    label="category"
+                  >
+                    <option aria-label="None" value="" />
+                    {categoryList.length &&
+                      categoryList.map((data) => {
+                        return (
+                          <option value={data.category} key={data.id}>
+                            {data.category}
+                          </option>
+                        );
+                      })}
+                  </NativeSelect>
+                </FormControl>
                 </Grid>
 
                 <Grid item md={6} xs={12} lg={6} marginTop={2}>
                   <br />
-                  <TextField
+                  {/* <TextField
+                  variant="standard"
                     label="Type"
                     placeholder="Edit Type"
                     type="text"
                     name="type"
                     value={type}
                     onChange={(e) => setType(e.target.value)}
-                  />
+                  /> */}
+                  <FormControl variant="standard" sx={{ m: 1, minWidth: 120 }}>
+                  <InputLabel htmlFor="demo-customized-select-native">
+                    Type
+                  </InputLabel>
+                  <NativeSelect
+                    id="demo-customized-select-native"
+                    value={type}
+                    onChange={(e) => setType(e.target.value)}
+                    label="type"
+                  >
+                    <option aria-label="None" value="" />
+                    <option>Software</option>
+                    <option>GK</option>
+                    <option>Other</option>
+                  </NativeSelect>
+                </FormControl>
                 </Grid>
               </Grid>
 
