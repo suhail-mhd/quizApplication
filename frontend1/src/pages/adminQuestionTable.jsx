@@ -46,6 +46,19 @@ const styleOne = {
   p: 4,
 };
 
+const styleTwo = {
+  position:"relative",
+  backgroundColor: "#001253",
+  color: "#f4f4f4",
+  borderTopRightRadius: "10px",
+  borderTopLeftRadius: "10px",
+  padding: "50px",
+  textAlign: "center",
+  marginTop:"-2rem",
+  width: 364,
+  marginLeft:"-2rem"
+};
+
 function AdminQuestions() {
   const [question, setQuestion] = useState([]);
   const [deleteId, setDeleteId] = useState();
@@ -92,7 +105,7 @@ function AdminQuestions() {
   //deleting data
   const DeleteQuestion = async () => {
     try {
-      await axios.post("http://localhost:5000/api/admin/deleteQuestion", {
+      await axios.post("/api/admin/deleteQuestion", {
         deleteId,
       });
 
@@ -217,7 +230,7 @@ function AdminQuestions() {
         <Box sx={styleOne}>
           <form onSubmit={formSubmit} encType="multipart/form-data">
             <Box>
-              <Typography gutterBottom variant="h6" component="div">
+              <Typography gutterBottom variant="h6" component="div" style={styleTwo}>
                 Update Field
               </Typography>
 
@@ -304,15 +317,6 @@ function AdminQuestions() {
 
                 <Grid item md={6} xs={12} lg={6} marginTop={2}>
                   <br />
-                  {/* <TextField
-                  variant="standard"
-                    label="Category"
-                    placeholder="Edit category"
-                    type="text"
-                    name="category"
-                    value={category}
-                    onChange={(e) => setCategory(e.target.value)}
-                  /> */}
                   <FormControl variant="standard" sx={{ m: 1, minWidth: 120 }}>
                   <InputLabel htmlFor="demo-customized-select-native">
                     Category
@@ -339,15 +343,6 @@ function AdminQuestions() {
 
                 <Grid item md={6} xs={12} lg={6} marginTop={2}>
                   <br />
-                  {/* <TextField
-                  variant="standard"
-                    label="Type"
-                    placeholder="Edit Type"
-                    type="text"
-                    name="type"
-                    value={type}
-                    onChange={(e) => setType(e.target.value)}
-                  /> */}
                   <FormControl variant="standard" sx={{ m: 1, minWidth: 120 }}>
                   <InputLabel htmlFor="demo-customized-select-native">
                     Type

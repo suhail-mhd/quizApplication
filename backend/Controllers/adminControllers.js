@@ -136,6 +136,15 @@ const deleteQuestion = asyncHandler(async (req, res) => {
   res.json({});
 });
 
+// delete question
+
+const deleteQuiz = asyncHandler(async (req, res) => {
+  const { deleteId } = req.body;
+  const dltQuiz = await Quiz.findById(deleteId);
+  await dltQuiz.delete();
+  res.json({});
+});
+
 // update question
 
 const getAllQuestionDetails = asyncHandler(async (req, res) => {
@@ -177,6 +186,39 @@ const updateQuestion = asyncHandler(async (req, res) => {
   res.status(200).json(questionData);
 });
 
+const getAllQuizDetails = asyncHandler(async (req, res) => {
+  const id = req.params.id;
+
+  try {
+    const allQuiz = await Quiz.findById(id);
+    res.json(allQuiz);
+  } catch (error) {
+    console.log(
+      "Something went wrong when we try to get all Question value",
+      error
+    );
+  }
+});
+
+const updateQuiz = asyncHandler(async (req, res) => {
+  const { id } = req.body;
+
+  // console.log(id);
+
+  const newQuizData = {
+    quiz: req.body.quiz,
+    
+  };
+
+  const QuizData = await Quiz.findByIdAndUpdate(id, newQuizData, {
+    new: true,
+    runValidators: true,
+    useFindAndModify: false,
+  });
+
+  res.status(200).json(QuizData);
+});
+
 module.exports = {
   addQuestion,
   getQuestion,
@@ -185,6 +227,9 @@ module.exports = {
   addCategory,
   getCategory,
   deleteQuestion,
+  deleteQuiz,
   getAllQuestionDetails,
+  getAllQuizDetails,
   updateQuestion,
+  updateQuiz
 };
