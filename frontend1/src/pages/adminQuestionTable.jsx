@@ -9,10 +9,54 @@ import TableContainer from "@mui/material/TableContainer";
 import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
 import Paper from "@mui/material/Paper";
+import DeleteIcon from "@mui/icons-material/Delete";
+import EditOutlinedIcon from "@mui/icons-material/EditOutlined";
+import Button from "@mui/material/Button";
+import Modal from "@mui/material/Modal";
+import Grid from "@mui/material/Grid";
+import { TextField } from "@mui/material";
 import axios from "axios";
+
+const style = {
+  position: "absolute",
+  top: "50%",
+  left: "50%",
+  transform: "translate(-50%, -50%)",
+  width: 400,
+  bgcolor: "background.paper",
+  border: "2px solid #000",
+  boxShadow: 24,
+  p: 4,
+};
+
+const styleOne = {
+  position: "absolute",
+  top: "50%",
+  left: "50%",
+  transform: "translate(-50%, -50%)",
+  width: 400,
+  height: 600,
+  bgcolor: "background.paper",
+  border: "2px solid #000",
+  borderRadius: "10px",
+  boxShadow: 24,
+  p: 4,
+};
 
 function AdminQuestions() {
   const [question, setQuestion] = useState([]);
+  const [deleteId, setDeleteId] = useState();
+  const [render, setRender] = useState(false);
+  const [updateId, setUpdateId] = useState();
+  const [id, setId] = useState();
+  const [questions, setQuestions] = useState("");
+  const [option1, setOption1] = useState("");
+  const [option2, setOption2] = useState("");
+  const [option3, setOption3] = useState("");
+  const [option4, setOption4] = useState("");
+  const [answer, setAnswer] = useState("");
+  const [category, setCategory] = useState("");
+  const [type, setType] = useState("");
 
   const questionShow = () => {
     try {
@@ -25,14 +69,253 @@ function AdminQuestions() {
     }
   };
 
+  // delete question handle
+  const [open, setOpen] = React.useState(false);
+  const handleOpen = () => setOpen(true);
+  const handleClose = () => setOpen(false);
+
+  // edit modal handle
+  const [openModal, setOpenModal] = React.useState(false);
+  const handleOpenEdit = () => setOpenModal(true);
+  const handleCloseEdit = () => setOpenModal(false);
+
+  const dltQst = (id) => {
+    console.log(id);
+    setDeleteId(id);
+    handleOpen();
+  };
+
+  //deleting data
+  const DeleteQuestion = async () => {
+    try {
+      await axios.post("http://localhost:5000/api/admin/deleteQuestion", {
+        deleteId,
+      });
+
+      handleClose();
+      setRender(true);
+    } catch (error) {
+      console.log("Something went wrong", error);
+    }
+  };
+
+  // edit data
+
+  const getQuestionDetails = async (id) => {
+    setUpdateId(id);
+    handleOpenEdit();
+    try {
+      await axios.get(`/api/admin/getAllQuestionDetails/${id}`).then((res) => {
+        setId(res.data._id);
+        setQuestions(res.data.question);
+        setOption1(res.data.option1);
+        setOption2(res.data.option2);
+        setOption3(res.data.option3);
+        setOption4(res.data.option4);
+        setAnswer(res.data.answer);
+        setCategory(res.data.category);
+        setType(res.data.type);
+      });
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const formSubmit = async () => {
+    try {
+      await axios
+        .patch("/api/admin/updateQuestion", {
+          id,
+          questions,
+          option1,
+          option2,
+          option3,
+          option4,
+          answer,
+          category,
+          type,
+        })
+        .then((res) => {
+          console.log(res);
+        });
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   useEffect(() => {
     questionShow();
-  }, [questionShow]);
+  }, [questionShow, render]);
 
   return (
     <div>
       <ResponsiveAppBar />
       <QuestionModal />
+      {/* delete Modal start */}
+      <Modal
+        open={open}
+        onClose={handleClose}
+        aria-labelledby="modal-modal-title"
+        aria-describedby="modal-modal-description"
+      >
+        <Box sx={style}>
+          <Typography
+            id="modal-modal-title"
+            textAlign="center"
+            variant="h6"
+            component="h2"
+          >
+            Are You Sure Want to Delete
+          </Typography>
+          <div
+            style={{
+              display: "flex",
+              justifyContent: "space-evenly",
+              marginTop: 20,
+            }}
+          >
+            <div>
+              <Button
+                variant="contained"
+                onClick={DeleteQuestion}
+                style={{ backgroundColor: "red" }}
+              >
+                Yes
+              </Button>
+            </div>
+            <div>
+              <Button variant="contained" onClick={handleClose}>
+                NO
+              </Button>
+            </div>
+          </div>
+        </Box>
+      </Modal>
+      {/* delete modal end */}
+      {/* edit modal start */}
+      <Modal
+        open={openModal}
+        onClose={handleCloseEdit}
+        aria-labelledby="modal-modal-title"
+        aria-describedby="modal-modal-description"
+      >
+        <Box sx={styleOne}>
+          <form onSubmit={formSubmit} encType="multipart/form-data">
+            <Box>
+              <Typography gutterBottom variant="h6" component="div">
+                Update Field
+              </Typography>
+
+              <Grid container>
+                <Grid item md={6} xs={12} lg={12} marginTop={2}>
+                  <br />
+
+                  <TextField
+                    label="Question"
+                    placeholder="Edit Question"
+                    type="text"
+                    name="question"
+                    value={questions}
+                    onChange={(e) => setQuestions(e.target.value)}
+                    style={{ width: "100%" }}
+                  />
+                </Grid>
+
+                <Grid item md={6} xs={12} lg={6} marginTop={2}>
+                  <br />
+                  <TextField
+                    label="Option 1"
+                    placeholder="Edit Option 1"
+                    type="text"
+                    name="option1"
+                    value={option1}
+                    onChange={(e) => setOption1(e.target.value)}
+                  />
+                </Grid>
+
+                <Grid item md={6} xs={12} lg={6} marginTop={2}>
+                  <br />
+                  <TextField
+                    label="Option 2"
+                    placeholder="Edit Option 2"
+                    type="text"
+                    name="option2"
+                    value={option2}
+                    onChange={(e) => setOption2(e.target.value)}
+                  />
+                </Grid>
+
+                <Grid item md={6} xs={12} lg={6} marginTop={2}>
+                  <br />
+                  <TextField
+                    label="Option 3"
+                    placeholder="Edit Option 3"
+                    type="text"
+                    value={option3}
+                    name="option3"
+                    onChange={(e) => setOption3(e.target.value)}
+                  />
+                </Grid>
+
+                <Grid item md={6} xs={12} lg={6} marginTop={2}>
+                  <br />
+                  <TextField
+                    label="Option 4"
+                    placeholder="Edit Option 4"
+                    type="text"
+                    name="option4"
+                    value={option4}
+                    onChange={(e) => setOption4(e.target.value)}
+                  />
+                </Grid>
+
+                <Grid item md={6} xs={12} lg={6} marginTop={2}>
+                  <br />
+                  <TextField
+                    label="Answer"
+                    placeholder="Edit Answer"
+                    type="text"
+                    name="answer"
+                    value={answer}
+                    onChange={(e) => setAnswer(e.target.value)}
+                  />
+                </Grid>
+
+                <Grid item md={6} xs={12} lg={6} marginTop={2}>
+                  <br />
+                  <TextField
+                    label="Category"
+                    placeholder="Edit category"
+                    type="text"
+                    name="category"
+                    value={category}
+                    onChange={(e) => setCategory(e.target.value)}
+                  />
+                </Grid>
+
+                <Grid item md={6} xs={12} lg={6} marginTop={2}>
+                  <br />
+                  <TextField
+                    label="Type"
+                    placeholder="Edit Type"
+                    type="text"
+                    name="type"
+                    value={type}
+                    onChange={(e) => setType(e.target.value)}
+                  />
+                </Grid>
+              </Grid>
+
+              <div style={{ justifyContent: "end", display: "flex" }}>
+                <Button variant="contained" type="Submit">
+                  Submit
+                </Button>
+              </div>
+            </Box>
+          </form>
+        </Box>
+      </Modal>
+      {/* edit modal end */}
       <Typography
         variant="h4"
         component="h6"
@@ -50,12 +333,13 @@ function AdminQuestions() {
           <Table sx={{ minWidth: 650 }} size="small" aria-label="a dense table">
             <TableHead>
               <TableRow sx={{ border: "2px solid black" }}>
-                <TableCell style={{fontWeight:"bold"}}>No</TableCell>
-                <TableCell style={{fontWeight:"bold"}}>Question</TableCell>
-                <TableCell style={{fontWeight:"bold"}}>Choices</TableCell>
-                <TableCell style={{fontWeight:"bold"}}>Answer</TableCell>
-                <TableCell style={{fontWeight:"bold"}}>Category</TableCell>
-                <TableCell style={{fontWeight:"bold"}}>Type</TableCell>
+                <TableCell style={{ fontWeight: "bold" }}>No</TableCell>
+                <TableCell style={{ fontWeight: "bold" }}>Question</TableCell>
+                <TableCell style={{ fontWeight: "bold" }}>Choices</TableCell>
+                <TableCell style={{ fontWeight: "bold" }}>Answer</TableCell>
+                <TableCell style={{ fontWeight: "bold" }}>Category</TableCell>
+                <TableCell style={{ fontWeight: "bold" }}>Type</TableCell>
+                <TableCell style={{ fontWeight: "bold" }}>Actions</TableCell>
               </TableRow>
             </TableHead>
             <TableBody>
@@ -69,7 +353,7 @@ function AdminQuestions() {
                     }}
                   >
                     <TableCell component="th" scope="row">
-                      {i+1}
+                      {i + 1}
                     </TableCell>
                     <TableCell>{data.question}</TableCell>
                     <TableCell>
@@ -83,6 +367,18 @@ function AdminQuestions() {
                     <TableCell>{data.answer}</TableCell>
                     <TableCell>{data.category}</TableCell>
                     <TableCell>{data.type}</TableCell>
+                    <TableCell>
+                      <EditOutlinedIcon
+                        onClick={() => getQuestionDetails(`${data._id}`)}
+                        style={{ color: "blue", cursor: "pointer" }}
+                      />
+                    </TableCell>
+                    <TableCell>
+                      <DeleteIcon
+                        onClick={() => dltQst(`${data._id}`)}
+                        style={{ color: "red", cursor: "pointer" }}
+                      />
+                    </TableCell>
                   </TableRow>
                 );
               })}

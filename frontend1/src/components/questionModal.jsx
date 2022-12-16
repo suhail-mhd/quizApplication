@@ -62,10 +62,6 @@ export default function TransitionsModal() {
   const [error, setError] = useState(false);
   const [errorMsg, setErrorMsg] = useState("");
 
-  // const handleChange1 = (event) => {
-  //   event.preventDefault();
-  //   setAnswer(event.target.value);
-  // };
   const handleChange2 = (event) => {
     event.preventDefault();
     setCategory(event.target.value);
@@ -114,7 +110,6 @@ export default function TransitionsModal() {
   const getCategory = () => {
     try {
       axios.get("/api/user/getCategory").then((res) => {
-        console.log(res.data.data);
         setCategoryList(res.data.data);
       });
     } catch (err) {
