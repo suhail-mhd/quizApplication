@@ -26,7 +26,7 @@ const getCategory = asyncHandler(async (req, res) => {
 });
 
 const submitAnswer = asyncHandler(async (req, res) => {
-  let { questions } = req.body;
+  let { submit } = req.body;
 
   //  get questionId //
 
@@ -35,7 +35,7 @@ const submitAnswer = asyncHandler(async (req, res) => {
     return _id;
   }
 
-  const _id = questions.map(selectFewerProps);
+  const _id = submit?.map(selectFewerProps);
 
   // get user selected option //
 
@@ -44,7 +44,7 @@ const submitAnswer = asyncHandler(async (req, res) => {
     return check;
   }
 
-  const userOption = questions.map(pick);
+  const userOption = submit?.map(pick);
 
   // get category //
 
@@ -53,7 +53,7 @@ const submitAnswer = asyncHandler(async (req, res) => {
     return category;
   }
 
-  const category = questions.map(cat);
+  const category = submit?.map(cat);
 
   // find data by questionId //
 
@@ -80,7 +80,7 @@ const submitAnswer = asyncHandler(async (req, res) => {
   // check the answer //
 
   let score = 0;
-  for (let i = 0; i < userOption.length; i++) {
+  for (let i = 0; i < userOption?.length; i++) {
     if (check[i] == userOption[i]) {
       score = score + 10;
     }

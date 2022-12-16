@@ -6,7 +6,7 @@ import * as Action from "../redux/question_reducer";
 
 export const useFetchQuestion = () => {
   const dispatch = useDispatch();
-  const {getQuestion} = useContext(questionContext)
+  const { getQuestion } = useContext(questionContext);
   const [getData, setGetData] = useState({
     isLoading: false,
     apiData: [],
@@ -17,22 +17,22 @@ export const useFetchQuestion = () => {
     setGetData((prev) => ({ ...prev, isLoading: true }));
     (async () => {
       try {
-          let question = [{getQuestion}];
-          let answers = question[0].getQuestion.map((data) => data.answer);
-          if (question.length > 0) {
-            setGetData((prev) => ({ ...prev, isLoading: false }));
-            setGetData((prev) => ({ ...prev, apiData: question }));
+        let question = [{ getQuestion }];
+        let answers = question[0].getQuestion.map((data) => data.answer);
+        if (question.length > 0) {
+          setGetData((prev) => ({ ...prev, isLoading: false }));
+          setGetData((prev) => ({ ...prev, apiData: question }));
 
-            dispatch(Action.startExamAction({ question, answers }));
-          } else {
-            throw new Error("No Question Available");
-          }
+          dispatch(Action.startExamAction({ question, answers }));
+        } else {
+          throw new Error("No Question Available");
+        }
       } catch (error) {
         setGetData((prev) => ({ ...prev, isLoading: false }));
         setGetData((prev) => ({ ...prev, serverError: error }));
       }
     })();
-  }, [dispatch]);
+  }, []);
 
   return [getData, setGetData];
 };
