@@ -98,7 +98,7 @@ const getQuiz = asyncHandler(async (req, res) => {
 // categoryHandles
 
 const addCategory = asyncHandler(async (req, res) => {
-  const { category } = req.body;
+  const { category, type } = req.body;
 
   const categoryExist = await Category.findOne({ category });
 
@@ -107,10 +107,10 @@ const addCategory = asyncHandler(async (req, res) => {
     throw new Error("category Already Exist");
   }
 
-  const data = await Category.create({ category });
+  const data = await Category.create({ category, type });
 
   if (data) {
-    res.status(200).json({ status: true, category: data.category });
+    res.status(200).json({ status: true, category: data.category, type: data.type });
   } else {
     res.status(400).send("error while category value inserting to database");
   }
