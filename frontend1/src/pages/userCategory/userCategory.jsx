@@ -2,6 +2,7 @@ import React, { useEffect, useState, useContext } from "react";
 import { useNavigate } from "react-router-dom";
 import UserSideBar from "../../components/userSideBar/userSideBar";
 import { questionContext } from "../../contextApi/questionContext";
+import { userQuizContext } from "../../contextApi/userQuizContext";
 import Card from "@mui/material/Card";
 import CardContent from "@mui/material/CardContent";
 import Typography from "@mui/material/Typography";
@@ -22,7 +23,8 @@ const styleOne = {
 
 function UserCategory() {
   const [category, setCategory] = useState([]);
-  const {setGetQuestion} = useContext(questionContext)
+  const { setGetQuestion } = useContext(questionContext);
+  const { getQuiz } = useContext(userQuizContext);
   const navigate = useNavigate();
 
   const showCategory = () => {
@@ -38,17 +40,17 @@ function UserCategory() {
   const toQuestions = (category) => {
     try {
       axios.post("/api/user/catNav", { category }).then((res) => {
-        setGetQuestion(res.data.qCat)
+        setGetQuestion(res.data.qCat);
       });
-      navigate('/userQuestions')
+      navigate("/userQuestions");
     } catch (error) {
       console.log(error);
     }
   };
 
   const backHandler = () => {
-    navigate('/')
-  }
+    navigate("/");
+  };
 
   useEffect(() => {
     showCategory();
@@ -59,7 +61,11 @@ function UserCategory() {
       <UserSideBar />
 
       <div style={{ float: "right", marginRight: "50px", marginTop: 70 }}>
-        <Button variant="contained" style={{ backgroundColor: "#333" }} onClick={backHandler}>
+        <Button
+          variant="contained"
+          style={{ backgroundColor: "#333" }}
+          onClick={backHandler}
+        >
           Back
         </Button>
       </div>
@@ -75,8 +81,8 @@ function UserCategory() {
           - Categories -
         </Typography>
         <Grid container>
-          {category.length &&
-            category.map((data) => {
+          {getQuiz?.length &&
+            getQuiz?.map((data) => {
               return (
                 <Grid sm={12} xs={12} md={6} lg={6} xl={4}>
                   <Card
@@ -103,21 +109,16 @@ function UserCategory() {
                           variant="h5"
                           style={{ fontWeight: "bold" }}
                         >
-                          {data.category}
+                          {data?.category}
                         </Typography>
-                        {/* <Link
-                          to={"/userQuestions"}
-                          style={{ textDecoration: "none" }}
-                        > */}
                         <CardActions>
                           <Button
-                            onClick={() => toQuestions(data.category)}
+                            onClick={() => toQuestions(data?.category)}
                             size="small"
                           >
                             Move to Questions
                           </Button>
                         </CardActions>
-                        {/* </Link> */}
                       </CardContent>
                     </Box>
                   </Card>

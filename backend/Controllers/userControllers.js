@@ -122,10 +122,23 @@ const catNav = asyncHandler(async (req, res) => {
   }
 });
 
+const quizNav = asyncHandler(async (req, res) => {
+  const { quiz } = req.body;
+  try {
+    const qType = await Category.find({ type: quiz });
+    res.json({
+      qType,
+    });
+  } catch (error) {
+    console.log(error);
+  }
+});
+
 module.exports = {
   getQuestion,
   getQuiz,
   getCategory,
   submitAnswer,
   catNav,
+  quizNav
 };

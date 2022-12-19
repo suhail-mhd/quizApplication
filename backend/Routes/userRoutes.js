@@ -7,6 +7,7 @@ const {
   getCategory,
   submitAnswer,
   catNav,
+  quizNav
 } = require("../Controllers/userControllers");
 
 router.route("/getQuiz").get(getQuiz);
@@ -18,5 +19,7 @@ router.route("/getCategory").get(getCategory);
 router.route("/submitAnswer").post(submitAnswer);
 
 router.route("/catNav").post(catNav);
+
+router.route("/quizNav").post(quizNav);
 
 module.exports = router;
