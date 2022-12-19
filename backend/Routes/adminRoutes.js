@@ -13,7 +13,7 @@ const {
   updateQuestion,
   updateQuiz,
   getAllQuestionDetails,
-  getAllQuizDetails
+  getAllQuizDetails,
 } = require("../Controllers/adminControllers");
 
 adminRouter.route("/addQuestion").post(addQuestion);

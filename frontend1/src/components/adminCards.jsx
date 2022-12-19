@@ -2,14 +2,13 @@ import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import Grid from "@mui/material/Grid";
 import Card from "@mui/material/Card";
-// import CardActions from "@mui/material/CardActions";
 import CardContent from "@mui/material/CardContent";
-// import Button from "@mui/material/Button";
 import { Box, Typography } from "@mui/material";
 import DeleteIcon from "@mui/icons-material/Delete";
 import EditOutlinedIcon from "@mui/icons-material/EditOutlined";
 import Button from "@mui/material/Button";
 import Modal from "@mui/material/Modal";
+import { TextField } from "@mui/material";
 import axios from "axios";
 
 const style = {
@@ -30,25 +29,57 @@ const styleOne = {
   marginLeft: "22rem",
 };
 
+const styleTwo = {
+  position: "absolute",
+  top: "50%",
+  left: "50%",
+  transform: "translate(-50%, -50%)",
+  width: 400,
+  height: 400,
+  bgcolor: "background.paper",
+  border: "2px solid #000",
+  borderRadius: "10px",
+  boxShadow: 24,
+  // p: 4,
+};
+
+const styleThree = {
+  marginBottom: 20,
+  backgroundColor: "#001253",
+  color: "#f4f4f4",
+  borderTopRightRadius: "10px",
+  borderTopLeftRadius: "10px",
+  padding: "50px",
+  textAlign: "center",
+};
+
 function Cards() {
   const [show, setShow] = useState([]);
   const [deleteId, setDeleteId] = useState();
   const [render, setRender] = useState(false);
+  const [updateId, setUpdateId] = useState();
+  const [id, setId] = useState();
+  const [quiz, setQuiz] = useState("");
+
+  // delete quiz handle
+  const [open, setOpen] = React.useState(false);
+  const handleOpen = () => setOpen(true);
+  const handleClose = () => setOpen(false);
+
+  // edit modal handle
+  const [openModal, setOpenModal] = React.useState(false);
+  const handleOpenEdit = () => setOpenModal(true);
+  const handleCloseEdit = () => setOpenModal(false);
 
   const quizShow = () => {
     try {
-      axios.get("http://localhost:5000/api/admin/getQuiz").then((res) => {
+      axios.get("/api/admin/getQuiz").then((res) => {
         setShow(res.data.data);
       });
     } catch (error) {
       console.log(error);
     }
   };
-
-  // delete quiz handle
-  const [open, setOpen] = React.useState(false);
-  const handleOpen = () => setOpen(true);
-  const handleClose = () => setOpen(false);
 
   const dltQuiz = (id) => {
     console.log(id);
@@ -67,6 +98,34 @@ function Cards() {
       setRender(true);
     } catch (error) {
       console.log("Something went wrong", error);
+    }
+  };
+
+  const getQuizDetails = async (id) => {
+    setUpdateId(id);
+    handleOpenEdit();
+    try {
+      await axios.get(`/api/admin/getAllQuizDetails/${id}`).then((res) => {
+        setId(res.data._id);
+        setQuiz(res.data.quiz);
+      });
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const formSubmit = async () => {
+    try {
+      await axios
+        .patch("/api/admin/updateQuiz", {
+          id,
+          quiz,
+        })
+        .then((res) => {
+          console.log(res);
+        });
+    } catch (error) {
+      console.log(error);
     }
   };
 
@@ -117,6 +176,59 @@ function Cards() {
         </Box>
       </Modal>
       {/* delete modal end */}
+      {/* edit modal start */}
+      <Modal
+        open={openModal}
+        onClose={handleCloseEdit}
+        aria-labelledby="modal-modal-title"
+        aria-describedby="modal-modal-description"
+      >
+        <Box sx={styleTwo}>
+          <form onSubmit={formSubmit} encType="multipart/form-data">
+            <Box>
+              <Typography
+                gutterBottom
+                variant="h6"
+                component="div"
+                style={styleThree}
+              >
+                Update Field
+              </Typography>
+
+              <Grid container>
+                <Grid item md={6} xs={12} lg={12} marginTop={2}>
+                  <br />
+
+                  <TextField
+                    variant="standard"
+                    label="Quiz"
+                    placeholder="Edit Quiz"
+                    type="text"
+                    name="quiz"
+                    value={quiz}
+                    onChange={(e) => setQuiz(e.target.value)}
+                    style={{ marginLeft: "3rem" }}
+                  />
+                </Grid>
+              </Grid>
+
+              <div
+                style={{
+                  justifyContent: "end",
+                  display: "flex",
+                  marginRight: "1rem",
+                  marginTop: "3rem",
+                }}
+              >
+                <Button variant="contained" type="Submit">
+                  Submit
+                </Button>
+              </div>
+            </Box>
+          </form>
+        </Box>
+      </Modal>
+      {/* edit modal end */}
       <Grid container>
         {show.length &&
           show.map((data) => {
@@ -167,7 +279,7 @@ function Cards() {
                 </Link>
                 <div style={styleOne}>
                   <EditOutlinedIcon
-                    // onClick={() => getQuestionDetails(`${data._id}`)}
+                    onClick={() => getQuizDetails(`${data._id}`)}
                     style={{
                       color: "blue",
                       cursor: "pointer",

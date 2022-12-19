@@ -164,8 +164,6 @@ const getAllQuestionDetails = asyncHandler(async (req, res) => {
 const updateQuestion = asyncHandler(async (req, res) => {
   const { id } = req.body;
 
-  // console.log(id);
-
   const newQuestionData = {
     questions: req.body.questions,
     option1: req.body.option1,
@@ -186,6 +184,8 @@ const updateQuestion = asyncHandler(async (req, res) => {
   res.status(200).json(questionData);
 });
 
+// update quiz
+
 const getAllQuizDetails = asyncHandler(async (req, res) => {
   const id = req.params.id;
 
@@ -203,11 +203,8 @@ const getAllQuizDetails = asyncHandler(async (req, res) => {
 const updateQuiz = asyncHandler(async (req, res) => {
   const { id } = req.body;
 
-  // console.log(id);
-
   const newQuizData = {
     quiz: req.body.quiz,
-    
   };
 
   const QuizData = await Quiz.findByIdAndUpdate(id, newQuizData, {
@@ -231,5 +228,5 @@ module.exports = {
   getAllQuestionDetails,
   getAllQuizDetails,
   updateQuestion,
-  updateQuiz
+  updateQuiz,
 };

@@ -47,16 +47,16 @@ const styleOne = {
 };
 
 const styleTwo = {
-  position:"relative",
+  position: "relative",
   backgroundColor: "#001253",
   color: "#f4f4f4",
   borderTopRightRadius: "10px",
   borderTopLeftRadius: "10px",
   padding: "50px",
   textAlign: "center",
-  marginTop:"-2rem",
+  marginTop: "-2rem",
   width: 364,
-  marginLeft:"-2rem"
+  marginLeft: "-2rem",
 };
 
 function AdminQuestions() {
@@ -75,6 +75,16 @@ function AdminQuestions() {
   const [categoryList, setCategoryList] = useState([]);
   const [type, setType] = useState("");
 
+  // delete question handle
+  const [open, setOpen] = React.useState(false);
+  const handleOpen = () => setOpen(true);
+  const handleClose = () => setOpen(false);
+
+  // edit modal handle
+  const [openModal, setOpenModal] = React.useState(false);
+  const handleOpenEdit = () => setOpenModal(true);
+  const handleCloseEdit = () => setOpenModal(false);
+
   const questionShow = () => {
     try {
       axios.get("/api/admin/getQuestion").then((res) => {
@@ -85,16 +95,6 @@ function AdminQuestions() {
       console.log(error);
     }
   };
-
-  // delete question handle
-  const [open, setOpen] = React.useState(false);
-  const handleOpen = () => setOpen(true);
-  const handleClose = () => setOpen(false);
-
-  // edit modal handle
-  const [openModal, setOpenModal] = React.useState(false);
-  const handleOpenEdit = () => setOpenModal(true);
-  const handleCloseEdit = () => setOpenModal(false);
 
   const dltQst = (id) => {
     console.log(id);
@@ -172,7 +172,7 @@ function AdminQuestions() {
 
   useEffect(() => {
     questionShow();
-    getCategory()
+    getCategory();
   }, [questionShow, render]);
 
   return (
@@ -230,7 +230,12 @@ function AdminQuestions() {
         <Box sx={styleOne}>
           <form onSubmit={formSubmit} encType="multipart/form-data">
             <Box>
-              <Typography gutterBottom variant="h6" component="div" style={styleTwo}>
+              <Typography
+                gutterBottom
+                variant="h6"
+                component="div"
+                style={styleTwo}
+              >
                 Update Field
               </Typography>
 
@@ -239,7 +244,7 @@ function AdminQuestions() {
                   <br />
 
                   <TextField
-                  variant="standard"
+                    variant="standard"
                     label="Question"
                     placeholder="Edit Question"
                     type="text"
@@ -253,7 +258,7 @@ function AdminQuestions() {
                 <Grid item md={6} xs={12} lg={6} marginTop={2}>
                   <br />
                   <TextField
-                  variant="standard"
+                    variant="standard"
                     label="Option 1"
                     placeholder="Edit Option 1"
                     type="text"
@@ -266,7 +271,7 @@ function AdminQuestions() {
                 <Grid item md={6} xs={12} lg={6} marginTop={2}>
                   <br />
                   <TextField
-                  variant="standard"
+                    variant="standard"
                     label="Option 2"
                     placeholder="Edit Option 2"
                     type="text"
@@ -279,7 +284,7 @@ function AdminQuestions() {
                 <Grid item md={6} xs={12} lg={6} marginTop={2}>
                   <br />
                   <TextField
-                  variant="standard"
+                    variant="standard"
                     label="Option 3"
                     placeholder="Edit Option 3"
                     type="text"
@@ -292,7 +297,7 @@ function AdminQuestions() {
                 <Grid item md={6} xs={12} lg={6} marginTop={2}>
                   <br />
                   <TextField
-                  variant="standard"
+                    variant="standard"
                     label="Option 4"
                     placeholder="Edit Option 4"
                     type="text"
@@ -305,7 +310,7 @@ function AdminQuestions() {
                 <Grid item md={6} xs={12} lg={6} marginTop={2}>
                   <br />
                   <TextField
-                  variant="standard"
+                    variant="standard"
                     label="Answer"
                     placeholder="Edit Answer"
                     type="text"
@@ -318,47 +323,47 @@ function AdminQuestions() {
                 <Grid item md={6} xs={12} lg={6} marginTop={2}>
                   <br />
                   <FormControl variant="standard" sx={{ m: 1, minWidth: 120 }}>
-                  <InputLabel htmlFor="demo-customized-select-native">
-                    Category
-                  </InputLabel>
+                    <InputLabel htmlFor="demo-customized-select-native">
+                      Category
+                    </InputLabel>
 
-                  <NativeSelect
-                    id="demo-customized-select-native"
-                    value={category}
-                    onChange={(e) => setCategory(e.target.value)}
-                    label="category"
-                  >
-                    <option aria-label="None" value="" />
-                    {categoryList.length &&
-                      categoryList.map((data) => {
-                        return (
-                          <option value={data.category} key={data.id}>
-                            {data.category}
-                          </option>
-                        );
-                      })}
-                  </NativeSelect>
-                </FormControl>
+                    <NativeSelect
+                      id="demo-customized-select-native"
+                      value={category}
+                      onChange={(e) => setCategory(e.target.value)}
+                      label="category"
+                    >
+                      <option aria-label="None" value="" />
+                      {categoryList.length &&
+                        categoryList.map((data) => {
+                          return (
+                            <option value={data.category} key={data.id}>
+                              {data.category}
+                            </option>
+                          );
+                        })}
+                    </NativeSelect>
+                  </FormControl>
                 </Grid>
 
                 <Grid item md={6} xs={12} lg={6} marginTop={2}>
                   <br />
                   <FormControl variant="standard" sx={{ m: 1, minWidth: 120 }}>
-                  <InputLabel htmlFor="demo-customized-select-native">
-                    Type
-                  </InputLabel>
-                  <NativeSelect
-                    id="demo-customized-select-native"
-                    value={type}
-                    onChange={(e) => setType(e.target.value)}
-                    label="type"
-                  >
-                    <option aria-label="None" value="" />
-                    <option>Software</option>
-                    <option>GK</option>
-                    <option>Other</option>
-                  </NativeSelect>
-                </FormControl>
+                    <InputLabel htmlFor="demo-customized-select-native">
+                      Type
+                    </InputLabel>
+                    <NativeSelect
+                      id="demo-customized-select-native"
+                      value={type}
+                      onChange={(e) => setType(e.target.value)}
+                      label="type"
+                    >
+                      <option aria-label="None" value="" />
+                      <option>Software</option>
+                      <option>GK</option>
+                      <option>Other</option>
+                    </NativeSelect>
+                  </FormControl>
                 </Grid>
               </Grid>
 
