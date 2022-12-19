@@ -216,6 +216,20 @@ const updateQuiz = asyncHandler(async (req, res) => {
   res.status(200).json(QuizData);
 });
 
+// navigate to question based on quiz
+
+const quizNav = asyncHandler(async (req, res) => {
+  const { quiz } = req.body;
+  try {
+    const qType = await Question.find({ type: quiz });
+    res.json({
+      qType,
+    });
+  } catch (error) {
+    console.log(error);
+  }
+});
+
 module.exports = {
   addQuestion,
   getQuestion,
@@ -229,4 +243,5 @@ module.exports = {
   getAllQuizDetails,
   updateQuestion,
   updateQuiz,
+  quizNav,
 };

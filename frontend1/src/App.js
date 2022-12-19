@@ -10,25 +10,28 @@ import UserQuestions from "./pages/userQuestions/userQuestions";
 import UserResult from "./pages/userResult/UserResult";
 import Result from "./contextApi/resultContext";
 import Question from "./contextApi/questionContext";
+import AdminQuizContext from "./contextApi/adminQuizContext";
 
 function App() {
   return (
     <>
-      <Question>
-        <Result>
-          <BrowserRouter>
-            <Routes>
-              <Route path="/admin" element={<AdminHome />} />
-              <Route path="/adminQuestions" element={<AdminQuestions />} />
-              <Route path="/adminCategory" element={<AdminCategory />} />
-              <Route path="/" element={<UserHome />} />
-              <Route path="/userCategory" element={<UserCategory />} />
-              <Route path="/userQuestions" element={<UserQuestions />} />
-              <Route path="/userResult" element={<UserResult />} />
-            </Routes>
-          </BrowserRouter>
-        </Result>
-      </Question>
+      <AdminQuizContext>
+        <Question>
+          <Result>
+            <BrowserRouter>
+              <Routes>
+                <Route path="/admin" element={<AdminHome />} />
+                <Route path="/adminQuestions" element={<AdminQuestions />} />
+                <Route path="/adminCategory" element={<AdminCategory />} />
+                <Route path="/" element={<UserHome />} />
+                <Route path="/userCategory" element={<UserCategory />} />
+                <Route path="/userQuestions" element={<UserQuestions />} />
+                <Route path="/userResult" element={<UserResult />} />
+              </Routes>
+            </BrowserRouter>
+          </Result>
+        </Question>
+      </AdminQuizContext>
     </>
   );
 }

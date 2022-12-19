@@ -59,6 +59,7 @@ export default function TransitionsModal() {
   const [category, setCategory] = useState("");
   const [categoryList, setCategoryList] = useState([]);
   const [type, setType] = useState("");
+  const [typeList, setTypeList] = useState([]);
   const [error, setError] = useState(false);
   const [errorMsg, setErrorMsg] = useState("");
 
@@ -117,8 +118,19 @@ export default function TransitionsModal() {
     }
   };
 
+  const getType = () => {
+    try {
+      axios.get("/api/admin/getQuiz").then((res) => {
+        setTypeList(res.data.data);
+      });
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
   useEffect(() => {
     getCategory();
+    getType()
   }, []);
 
   return (
@@ -389,9 +401,14 @@ export default function TransitionsModal() {
                     label="type"
                   >
                     <option aria-label="None" value="" />
-                    <option>Software</option>
-                    <option>GK</option>
-                    <option>Other</option>
+                    {typeList.length &&
+                      typeList.map((data) => {
+                        return (
+                          <option value={data.quiz} key={data.id}>
+                            {data.quiz}
+                          </option>
+                        );
+                      })}
                   </NativeSelect>
                 </FormControl>
                 {error && type.length <= 0 ? (

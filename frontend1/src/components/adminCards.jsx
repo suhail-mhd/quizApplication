@@ -1,5 +1,6 @@
-import React, { useState, useEffect } from "react";
-import { Link } from "react-router-dom";
+import React, { useState, useEffect, useContext } from "react";
+import { Link, useNavigate } from "react-router-dom";
+import { adminQuizContext } from "../contextApi/adminQuizContext";
 import Grid from "@mui/material/Grid";
 import Card from "@mui/material/Card";
 import CardContent from "@mui/material/CardContent";
@@ -60,6 +61,8 @@ function Cards() {
   const [updateId, setUpdateId] = useState();
   const [id, setId] = useState();
   const [quiz, setQuiz] = useState("");
+  const navigate = useNavigate();
+  const { setGetQuiz } = useContext(adminQuizContext);
 
   // delete quiz handle
   const [open, setOpen] = React.useState(false);
@@ -124,6 +127,17 @@ function Cards() {
         .then((res) => {
           console.log(res);
         });
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const quizHandler = (quiz) => {
+    try {
+      axios.post("/api/admin/quizNav", { quiz }).then((res) => {
+        setGetQuiz(res.data.qType);
+      });
+      navigate("/adminQuestions");
     } catch (error) {
       console.log(error);
     }
@@ -234,49 +248,51 @@ function Cards() {
           show.map((data) => {
             return (
               <div>
-                <Link to="/adminQuestions" style={{ textDecoration: "none" }}>
-                  <Grid
-                    sm={12}
-                    xs={12}
-                    md={6}
-                    lg={6}
-                    xl={4}
+                {/* <Link to="/adminQuestions" style={{ textDecoration: "none" }}> */}
+                <Grid
+                  sm={12}
+                  xs={12}
+                  md={6}
+                  lg={6}
+                  xl={4}
+                  style={{
+                    marginTop: 100,
+                    marginLeft: 100,
+                    borderRadius: 20,
+                  }}
+                >
+                  <Card
+                    sx={{ maxWidth: 345 }}
                     style={{
-                      marginTop: 100,
-                      marginLeft: 100,
-                      borderRadius: 20,
+                      position: "relative",
+                      marginLeft: "30px",
+                      marginTop: "10px",
+                      width: 300,
+                      borderRadius: "20px",
+                      boxShadow:
+                        "0 10px 20px rgba(0,0,0,0.19), 0 6px 6px rgba(0,0,0,0.23)",
                     }}
                   >
-                    <Card
-                      sx={{ maxWidth: 345 }}
+                    <CardContent
                       style={{
-                        position: "relative",
-                        marginLeft: "30px",
-                        marginTop: "10px",
-                        width: 300,
-                        borderRadius: "20px",
-                        boxShadow:
-                          "0 10px 20px rgba(0,0,0,0.19), 0 6px 6px rgba(0,0,0,0.23)",
+                        display: "flex",
+                        justifyContent: "space-between",
+                        cursor: "pointer",
                       }}
+                      onClick={() => quizHandler(data.quiz)}
                     >
-                      <CardContent
-                        style={{
-                          display: "flex",
-                          justifyContent: "space-between",
-                        }}
+                      <Typography
+                        gutterBottom
+                        variant="h5"
+                        component="div"
+                        style={{ fontWeight: "bold" }}
                       >
-                        <Typography
-                          gutterBottom
-                          variant="h5"
-                          component="div"
-                          style={{ fontWeight: "bold" }}
-                        >
-                          {data.quiz}
-                        </Typography>
-                      </CardContent>
-                    </Card>
-                  </Grid>
-                </Link>
+                        {data.quiz}
+                      </Typography>
+                    </CardContent>
+                  </Card>
+                </Grid>
+                {/* </Link> */}
                 <div style={styleOne}>
                   <EditOutlinedIcon
                     onClick={() => getQuizDetails(`${data._id}`)}

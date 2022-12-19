@@ -1,6 +1,7 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import ResponsiveAppBar from "../components/AppBar";
 import QuestionModal from "../components/questionModal";
+import { adminQuizContext } from "../contextApi/adminQuizContext";
 import { Box, Typography } from "@mui/material";
 import Table from "@mui/material/Table";
 import TableBody from "@mui/material/TableBody";
@@ -74,6 +75,8 @@ function AdminQuestions() {
   const [category, setCategory] = useState("");
   const [categoryList, setCategoryList] = useState([]);
   const [type, setType] = useState("");
+  const [typeList, setTypeList] = useState([]);
+  const { getQuiz } = useContext(adminQuizContext);
 
   // delete question handle
   const [open, setOpen] = React.useState(false);
@@ -84,17 +87,6 @@ function AdminQuestions() {
   const [openModal, setOpenModal] = React.useState(false);
   const handleOpenEdit = () => setOpenModal(true);
   const handleCloseEdit = () => setOpenModal(false);
-
-  const questionShow = () => {
-    try {
-      axios.get("/api/admin/getQuestion").then((res) => {
-        // console.log(res.data.data);
-        setQuestion(res.data.data);
-      });
-    } catch (error) {
-      console.log(error);
-    }
-  };
 
   const dltQst = (id) => {
     console.log(id);
@@ -170,10 +162,20 @@ function AdminQuestions() {
     }
   };
 
+  const getType = () => {
+    try {
+      axios.get("/api/admin/getQuiz").then((res) => {
+        setTypeList(res.data.data);
+      });
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
   useEffect(() => {
-    questionShow();
     getCategory();
-  }, [questionShow, render]);
+    getType();
+  }, [render]);
 
   return (
     <div>
@@ -359,9 +361,14 @@ function AdminQuestions() {
                       label="type"
                     >
                       <option aria-label="None" value="" />
-                      <option>Software</option>
-                      <option>GK</option>
-                      <option>Other</option>
+                      {typeList.length &&
+                        typeList.map((data) => {
+                          return (
+                            <option value={data.quiz} key={data.id}>
+                              {data.quiz}
+                            </option>
+                          );
+                        })}
                     </NativeSelect>
                   </FormControl>
                 </Grid>
@@ -404,7 +411,7 @@ function AdminQuestions() {
               </TableRow>
             </TableHead>
             <TableBody>
-              {question.map((data, i) => {
+              {getQuiz?.map((data, i) => {
                 return (
                   <TableRow
                     sx={{
@@ -416,27 +423,27 @@ function AdminQuestions() {
                     <TableCell component="th" scope="row">
                       {i + 1}
                     </TableCell>
-                    <TableCell>{data.question}</TableCell>
+                    <TableCell>{data?.question}</TableCell>
                     <TableCell>
                       <ol type="A">
-                        <li>{data.option1}</li>
-                        <li>{data.option2}</li>
-                        <li>{data.option3}</li>
-                        <li>{data.option4}</li>
+                        <li>{data?.option1}</li>
+                        <li>{data?.option2}</li>
+                        <li>{data?.option3}</li>
+                        <li>{data?.option4}</li>
                       </ol>
                     </TableCell>
-                    <TableCell>{data.answer}</TableCell>
-                    <TableCell>{data.category}</TableCell>
-                    <TableCell>{data.type}</TableCell>
+                    <TableCell>{data?.answer}</TableCell>
+                    <TableCell>{data?.category}</TableCell>
+                    <TableCell>{data?.type}</TableCell>
                     <TableCell>
                       <EditOutlinedIcon
-                        onClick={() => getQuestionDetails(`${data._id}`)}
+                        onClick={() => getQuestionDetails(`${data?._id}`)}
                         style={{ color: "blue", cursor: "pointer" }}
                       />
                     </TableCell>
                     <TableCell>
                       <DeleteIcon
-                        onClick={() => dltQst(`${data._id}`)}
+                        onClick={() => dltQst(`${data?._id}`)}
                         style={{ color: "red", cursor: "pointer" }}
                       />
                     </TableCell>
