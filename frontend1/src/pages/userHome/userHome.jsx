@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useContext } from "react";
+import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import UserSideBar from "../../components/userSideBar/userSideBar";
 import Card from "@mui/material/Card";
@@ -8,63 +8,36 @@ import { Box, Button } from "@mui/material";
 import axios from "axios";
 import "./userHome.css";
 import Grid from "@mui/material/Grid";
-import CardActions from "@mui/material/CardActions";
 import { Link } from "react-router-dom";
-import { questionContext } from "../../contextApi/questionContext";
 
 const styleOne = {
   width: "100px",
-  height: "100px",
+  height: "80px",
   position: "absolute",
   marginLeft: "13rem",
-  marginTop: "-1rem",
 };
 
 function UserHome() {
-  const [category, setCategory] = useState([]);
-  const {setGetQuestion} = useContext(questionContext)
+  const [quiz, setQuiz] = useState([]);
   const navigate = useNavigate();
 
-  const showCategory = () => {
+  const showQuiz = () => {
     try {
-      axios.get("/api/user/getCategory").then((res) => {
-        setCategory(res.data.data);
+      axios.get("/api/user/getQuiz").then((res) => {
+        setQuiz(res.data.data);
       });
     } catch (err) {
       console.log(err);
     }
   };
 
-  const toQuestions = (category) => {
-    try {
-      axios.post("/api/user/catNav", { category }).then((res) => {
-        setGetQuestion(res.data.qCat)
-      });
-      navigate('/userQuestions')
-    } catch (error) {
-      console.log(error);
-    }
-  };
-
   useEffect(() => {
-    showCategory();
-  }, [showCategory]);
+    showQuiz();
+  }, [showQuiz]);
 
   return (
     <div>
       <UserSideBar />
-
-      <div style={{ float: "right", marginRight: "50px", marginTop: 40 }}>
-        <Button
-          variant="outlined"
-          style={{ marginRight: 10, color: "#333", borderColor: "#333" }}
-        >
-          Outlined
-        </Button>
-        <Button variant="contained" style={{ backgroundColor: "#333" }}>
-          Contained
-        </Button>
-      </div>
       <div className="cardMove">
         <Typography
           variant="h4"
@@ -72,58 +45,48 @@ function UserHome() {
           textAlign="center"
           fontFamily="egoe UI"
           fontWeight={"bold"}
-          style={{ marginLeft: "-30rem", marginBottom: "2em" }}
+          style={{ marginLeft: "-50rem", marginBottom: "2em" }}
         >
-          - Categories -
+          - Quiz -
         </Typography>
         <Grid container>
-          {category.length &&
-            category.map((data) => {
+          {quiz.length &&
+            quiz.map((data) => {
               return (
-                <Grid sm={12} xs={12} md={6} lg={6} xl={4}>
-                  <Card
-                    sx={{
-                      display: "flex",
-                      width: "300px",
-                      marginLeft: "300px",
-                      boxShadow:
-                        "0 10px 20px rgba(0,0,0,0.19), 0 6px 6px rgba(0,0,0,0.23)",
-                      marginBottom: "40px",
-                      borderRadius: "20px",
-                      position: "relative",
-                    }}
-                  >
-                    <img
-                      src="../../card_img.png"
-                      alt="card-img"
-                      style={styleOne}
-                    />
-                    <Box sx={{ display: "flex", flexDirection: "column" }}>
-                      <CardContent sx={{ flex: "1 0 auto" }}>
-                        <Typography
-                          component="div"
-                          variant="h5"
-                          style={{ fontWeight: "bold" }}
-                        >
-                          {data.category}
-                        </Typography>
-                        {/* <Link
-                          to={"/userQuestions"}
-                          style={{ textDecoration: "none" }}
-                        > */}
-                        <CardActions>
-                          <Button
-                            onClick={() => toQuestions(data.category)}
-                            size="small"
+                <Link to={"/userCategory"} style={{ textDecoration: "none" }}>
+                  <Grid sm={12} xs={12} md={6} lg={6} xl={4}>
+                    <Card
+                      sx={{
+                        display: "flex",
+                        width: "300px",
+                        height: "100px",
+                        marginLeft: "300px",
+                        boxShadow:
+                          "0 10px 20px rgba(0,0,0,0.19), 0 6px 6px rgba(0,0,0,0.23)",
+                        marginBottom: "40px",
+                        borderRadius: "20px",
+                        position: "relative",
+                      }}
+                    >
+                      <img
+                        src="../../quiz.png"
+                        alt="card-img"
+                        style={styleOne}
+                      />
+                      <Box sx={{ display: "flex", flexDirection: "column" }}>
+                        <CardContent sx={{ flex: "1 0 auto" }}>
+                          <Typography
+                            component="div"
+                            variant="h5"
+                            style={{ fontWeight: "bold" }}
                           >
-                            Move to Questions
-                          </Button>
-                        </CardActions>
-                        {/* </Link> */}
-                      </CardContent>
-                    </Box>
-                  </Card>
-                </Grid>
+                            {data.quiz}
+                          </Typography>
+                        </CardContent>
+                      </Box>
+                    </Card>
+                  </Grid>
+                </Link>
               );
             })}
         </Grid>

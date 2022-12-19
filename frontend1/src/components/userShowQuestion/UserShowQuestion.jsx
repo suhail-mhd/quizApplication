@@ -172,7 +172,7 @@ function UserShowQuestion() {
   };
 
   const handleQuit = () => {
-    navigate("/");
+    navigate("/userCategory");
   };
 
   if (isLoading) return <h4 className="text-light">isLoading</h4>;

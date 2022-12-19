@@ -5,6 +5,7 @@ import AdminHome from "./pages/AdminHome";
 import AdminQuestions from "./pages/adminQuestionTable";
 import AdminCategory from "./pages/AdminCategory";
 import UserHome from "./pages/userHome/userHome";
+import UserCategory from "./pages/userCategory/userCategory";
 import UserQuestions from "./pages/userQuestions/userQuestions";
 import UserResult from "./pages/userResult/UserResult";
 import Result from "./contextApi/resultContext";
@@ -21,6 +22,7 @@ function App() {
               <Route path="/adminQuestions" element={<AdminQuestions />} />
               <Route path="/adminCategory" element={<AdminCategory />} />
               <Route path="/" element={<UserHome />} />
+              <Route path="/userCategory" element={<UserCategory />} />
               <Route path="/userQuestions" element={<UserQuestions />} />
               <Route path="/userResult" element={<UserResult />} />
             </Routes>

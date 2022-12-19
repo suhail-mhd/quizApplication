@@ -25,7 +25,7 @@ const Sidebar = () => {
       iconName: "menu",
     },
     {
-      name: "Category",
+      name: "Quiz",
       iconName: "spreadsheet",
       type: "solid",
       path: "/",
@@ -34,7 +34,7 @@ const Sidebar = () => {
       name: "Type",
       iconName: "compass",
       type: "solid",
-      path: "/userQuestions",
+      path: "#",
     },
     {
       name: "Starred",

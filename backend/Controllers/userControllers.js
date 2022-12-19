@@ -2,6 +2,18 @@ const asyncHandler = require("express-async-handler");
 const validationResult = require("express-validator");
 const Question = require("../Model/questionModel/questionModel");
 const Category = require("../Model/categoryModel/categoryModel");
+const Quiz = require("../Model/quizModel/quizModel");
+
+const getQuiz = asyncHandler(async (req, res) => {
+  try {
+    const data = await Quiz.find({});
+    res.json({
+      data,
+    });
+  } catch (error) {
+    console.log(error);
+  }
+});
 
 const getQuestion = asyncHandler(async (req, res) => {
   try {
@@ -112,6 +124,7 @@ const catNav = asyncHandler(async (req, res) => {
 
 module.exports = {
   getQuestion,
+  getQuiz,
   getCategory,
   submitAnswer,
   catNav,
