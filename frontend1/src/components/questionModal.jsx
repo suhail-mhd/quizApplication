@@ -84,27 +84,27 @@ export default function TransitionsModal() {
       type.length == 0
     ) {
       setError(true);
-    }
-
-    try {
-      axios
-        .post("/api/admin/addQuestion", {
-          question,
-          option1,
-          option2,
-          option3,
-          option4,
-          answer,
-          category,
-          type,
-        })
-        .then((res) => {
-          setQuestion(res.data);
-        });
-        handleClose()
-    } catch (error) {
-      console.log("error occurred", error);
-      setErrorMsg("Cannot use the existed question");
+    } else {
+      try {
+        axios
+          .post("/api/admin/addQuestion", {
+            question,
+            option1,
+            option2,
+            option3,
+            option4,
+            answer,
+            category,
+            type,
+          })
+          .then((res) => {
+            setQuestion(res.data);
+          });
+        handleClose();
+      } catch (error) {
+        console.log("error occurred", error);
+        setErrorMsg("Cannot use the existed question");
+      }
     }
   };
 
@@ -130,7 +130,7 @@ export default function TransitionsModal() {
 
   useEffect(() => {
     getCategory();
-    getType()
+    getType();
   }, []);
 
   return (

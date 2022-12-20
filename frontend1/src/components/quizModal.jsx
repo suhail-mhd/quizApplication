@@ -54,18 +54,18 @@ export default function TransitionsModal() {
   const quizHandler = () => {
     if (quiz.length == 0) {
       setError(true);
-    }
-
-    try {
-      axios
-        .post("http://localhost:5000/api/admin/addQuiz", { quiz })
-        .then((res) => {
-          setQuiz(res.data);
-        });
-        handleClose()
-    } catch (error) {
-      console.log("error occurred", error);
-      setErrorMsg("Cannot use the existed quiz");
+    } else {
+      try {
+        axios
+          .post("http://localhost:5000/api/admin/addQuiz", { quiz })
+          .then((res) => {
+            setQuiz(res.data);
+          });
+        handleClose();
+      } catch (error) {
+        console.log("error occurred", error);
+        setErrorMsg("Cannot use the existed quiz");
+      }
     }
   };
 
@@ -112,7 +112,7 @@ export default function TransitionsModal() {
             ) : (
               ""
             )}
-             {errorMsg && <ErrorMessage>{errorMsg}</ErrorMessage>}
+            {errorMsg && <ErrorMessage>{errorMsg}</ErrorMessage>}
             <Grid style={{ textAlign: "center" }}>
               <Grid item lg={12}>
                 <TextField

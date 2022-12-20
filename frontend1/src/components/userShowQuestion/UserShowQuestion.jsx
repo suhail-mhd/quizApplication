@@ -17,6 +17,7 @@ import "./UserShowQuestion.css";
 import { useFetchQuestion } from "../../hooks/FetchQuestion";
 import { questionContext } from "../../contextApi/questionContext";
 import { resultContext } from "../../contextApi/resultContext";
+import UserNoQuestionMsg from "../userNoQuestionMsg/UserNoQuestionMsg";
 
 const style = {
   position: "absolute",
@@ -181,130 +182,134 @@ function UserShowQuestion() {
 
   return (
     <div>
-      <Box sx={style}>
-        <Typography
-          id="transition-modal-title"
-          variant="h4"
-          component="h2"
-          style={styleOne}
-        >
-          - Questions -
-        </Typography>
-        <Typography variant="p" component="h2" style={styleFour}>
-          Question {questionIndex + 1} of {getQuestion.length}
-        </Typography>
-
-        <div>
+      {getQuestion.length > 0 ? (
+        <Box sx={style}>
           <Typography
             id="transition-modal-title"
-            variant="h5"
+            variant="h4"
             component="h2"
-            style={qStyle}
+            style={styleOne}
           >
-            {getQuestion[questionIndex]?.question}
+            - Questions -
+          </Typography>
+          <Typography variant="p" component="h2" style={styleFour}>
+            Question {questionIndex + 1} of {getQuestion.length}
           </Typography>
 
-          <Grid
-            container
-            style={{ justifyContent: "center", marginTop: "2rem" }}
-          >
-            <FormControl>
-              <RadioGroup
-                row
-                aria-labelledby="demo-row-radio-buttons-group-label"
-                name="row-radio-buttons-group"
-              >
-                <Grid sm={12} xs={12} md={6} lg={6} xl={4}>
-                  <FormControlLabel
-                    value={getQuestion[questionIndex]?.option1}
-                    control={<Radio />}
-                    label={getQuestion[questionIndex]?.option1}
-                    onChange={onSelect1}
-                  />
-                </Grid>
-                <Grid sm={12} xs={12} md={6} lg={6} xl={4}>
-                  <FormControlLabel
-                    value={getQuestion[questionIndex]?.option2}
-                    control={<Radio />}
-                    label={getQuestion[questionIndex]?.option2}
-                    onChange={onSelect2}
-                  />
-                </Grid>
-                <Grid sm={12} xs={12} md={6} lg={6} xl={4}>
-                  <FormControlLabel
-                    value={getQuestion[questionIndex]?.option3}
-                    control={<Radio />}
-                    label={getQuestion[questionIndex]?.option3}
-                    onChange={onSelect3}
-                  />
-                </Grid>
-                <Grid sm={12} xs={12} md={6} lg={6} xl={4}>
-                  <FormControlLabel
-                    value={getQuestion[questionIndex]?.option4}
-                    control={<Radio />}
-                    label={getQuestion[questionIndex]?.option4}
-                    onChange={onSelect4}
-                  />
-                </Grid>
-              </RadioGroup>
-            </FormControl>
-          </Grid>
-        </div>
-        {error ? <p style={errorStyle}>Please select a choice!!</p> : ""}
-        <Box>
-          <Box
-            textAlign="right"
-            style={{ marginRight: "2rem", marginTop: "5rem" }}
-          >
-            {questionIndex > 0 ? (
-              <Button
-                variant="contained"
-                type="submit"
-                value="submit"
-                style={styleTwo}
-                onClick={handlePrev}
-              >
-                Prev
-              </Button>
-            ) : (
-              ""
-            )}
-
-            {questionIndex >= getQuestion.length - 1 ? (
-              <Button
-                variant="contained"
-                type="submit"
-                value="submit"
-                style={styleTwo}
-                onClick={handleSubmit}
-              >
-                Submit
-              </Button>
-            ) : (
-              <Button
-                variant="contained"
-                type="submit"
-                value="submit"
-                style={styleTwo}
-                onClick={handleNext}
-              >
-                Next
-              </Button>
-            )}
-          </Box>
-          <Box>
-            <Button
-              variant="contained"
-              type="submit"
-              value="submit"
-              style={styleThree}
-              onClick={handleQuit}
+          <div>
+            <Typography
+              id="transition-modal-title"
+              variant="h5"
+              component="h2"
+              style={qStyle}
             >
-              Quit
-            </Button>
+              {getQuestion[questionIndex]?.question}
+            </Typography>
+
+            <Grid
+              container
+              style={{ justifyContent: "center", marginTop: "2rem" }}
+            >
+              <FormControl>
+                <RadioGroup
+                  row
+                  aria-labelledby="demo-row-radio-buttons-group-label"
+                  name="row-radio-buttons-group"
+                >
+                  <Grid sm={12} xs={12} md={6} lg={6} xl={4}>
+                    <FormControlLabel
+                      value={getQuestion[questionIndex]?.option1}
+                      control={<Radio />}
+                      label={getQuestion[questionIndex]?.option1}
+                      onChange={onSelect1}
+                    />
+                  </Grid>
+                  <Grid sm={12} xs={12} md={6} lg={6} xl={4}>
+                    <FormControlLabel
+                      value={getQuestion[questionIndex]?.option2}
+                      control={<Radio />}
+                      label={getQuestion[questionIndex]?.option2}
+                      onChange={onSelect2}
+                    />
+                  </Grid>
+                  <Grid sm={12} xs={12} md={6} lg={6} xl={4}>
+                    <FormControlLabel
+                      value={getQuestion[questionIndex]?.option3}
+                      control={<Radio />}
+                      label={getQuestion[questionIndex]?.option3}
+                      onChange={onSelect3}
+                    />
+                  </Grid>
+                  <Grid sm={12} xs={12} md={6} lg={6} xl={4}>
+                    <FormControlLabel
+                      value={getQuestion[questionIndex]?.option4}
+                      control={<Radio />}
+                      label={getQuestion[questionIndex]?.option4}
+                      onChange={onSelect4}
+                    />
+                  </Grid>
+                </RadioGroup>
+              </FormControl>
+            </Grid>
+          </div>
+          {error ? <p style={errorStyle}>Please select a choice!!</p> : ""}
+          <Box>
+            <Box
+              textAlign="right"
+              style={{ marginRight: "2rem", marginTop: "5rem" }}
+            >
+              {questionIndex > 0 ? (
+                <Button
+                  variant="contained"
+                  type="submit"
+                  value="submit"
+                  style={styleTwo}
+                  onClick={handlePrev}
+                >
+                  Prev
+                </Button>
+              ) : (
+                ""
+              )}
+
+              {questionIndex >= getQuestion.length - 1 ? (
+                <Button
+                  variant="contained"
+                  type="submit"
+                  value="submit"
+                  style={styleTwo}
+                  onClick={handleSubmit}
+                >
+                  Submit
+                </Button>
+              ) : (
+                <Button
+                  variant="contained"
+                  type="submit"
+                  value="submit"
+                  style={styleTwo}
+                  onClick={handleNext}
+                >
+                  Next
+                </Button>
+              )}
+            </Box>
+            <Box>
+              <Button
+                variant="contained"
+                type="submit"
+                value="submit"
+                style={styleThree}
+                onClick={handleQuit}
+              >
+                Quit
+              </Button>
+            </Box>
           </Box>
         </Box>
-      </Box>
+      ) : (
+        <UserNoQuestionMsg />
+      )}
       <ToastContainer />
     </div>
   );

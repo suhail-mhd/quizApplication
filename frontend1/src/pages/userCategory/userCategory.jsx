@@ -54,7 +54,8 @@ function UserCategory() {
 
   useEffect(() => {
     showCategory();
-  }, [showCategory]);
+    
+  }, [showCategory,getQuiz ]);
 
   return (
     <div>

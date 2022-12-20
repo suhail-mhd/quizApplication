@@ -79,6 +79,7 @@ function UserHome() {
                       marginBottom: "40px",
                       borderRadius: "20px",
                       position: "relative",
+                      cursor: "pointer",
                     }}
                     onClick={() => quizHandler(data.quiz)}
                   >
