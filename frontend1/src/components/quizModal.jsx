@@ -57,7 +57,7 @@ export default function TransitionsModal() {
     } else {
       try {
         axios
-          .post("http://localhost:5000/api/admin/addQuiz", { quiz })
+          .post("/api/admin/addQuiz", { quiz })
           .then((res) => {
             setQuiz(res.data);
           });

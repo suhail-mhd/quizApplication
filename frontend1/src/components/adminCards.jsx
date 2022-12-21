@@ -85,7 +85,6 @@ function Cards() {
   };
 
   const dltQuiz = (id) => {
-    console.log(id);
     setDeleteId(id);
     handleOpen();
   };
