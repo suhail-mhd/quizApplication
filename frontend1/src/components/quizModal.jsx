@@ -56,11 +56,9 @@ export default function TransitionsModal() {
       setError(true);
     } else {
       try {
-        axios
-          .post("/api/admin/addQuiz", { quiz })
-          .then((res) => {
-            setQuiz(res.data);
-          });
+        axios.post("/api/admin/addQuiz", { quiz }).then((res) => {
+          setQuiz(res.data);
+        });
         handleClose();
       } catch (error) {
         console.log("error occurred", error);

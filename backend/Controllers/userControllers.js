@@ -128,9 +128,38 @@ const quizNav = asyncHandler(async (req, res) => {
     const qType = await Category.find({ type: quiz });
     res.json({
       qType,
+      quiz
     });
   } catch (error) {
     console.log(error);
+  }
+});
+
+const getAllQuestions = asyncHandler(async (req, res) => {
+  const category = req.params.category;
+
+  try {
+    const allQuestions = await Question.find({category});
+    res.json(allQuestions);
+  } catch (error) {
+    console.log(
+      "Something went wrong when we try to get all Question value",
+      error
+    );
+  }
+});
+
+const getAllCategories = asyncHandler(async (req, res) => {
+  const type = req.params.type;
+
+  try {
+    const allQuestions = await Category.find({type});
+    res.json(allQuestions);
+  } catch (error) {
+    console.log(
+      "Something went wrong when we try to get all Question value",
+      error
+    );
   }
 });
 
@@ -140,5 +169,7 @@ module.exports = {
   getCategory,
   submitAnswer,
   catNav,
-  quizNav
+  quizNav,
+  getAllQuestions,
+  getAllCategories
 };

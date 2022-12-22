@@ -71,7 +71,7 @@ const addQuiz = asyncHandler(async (req, res) => {
   const quizExist = await Quiz.findOne({ quiz });
 
   if (quizExist) {
-    res.status(400);
+    res.status(409);
     throw new Error("Quiz Already Exist");
   }
 
@@ -230,6 +230,20 @@ const quizNav = asyncHandler(async (req, res) => {
   }
 });
 
+const getAllQuestions = asyncHandler(async (req, res) => {
+  const type = req.params.type;
+
+  try {
+    const allQuestions = await Question.find({type});
+    res.json(allQuestions);
+  } catch (error) {
+    console.log(
+      "Something went wrong when we try to get all Question value",
+      error
+    );
+  }
+});
+
 module.exports = {
   addQuestion,
   getQuestion,
@@ -244,4 +258,5 @@ module.exports = {
   updateQuestion,
   updateQuiz,
   quizNav,
+  getAllQuestions
 };

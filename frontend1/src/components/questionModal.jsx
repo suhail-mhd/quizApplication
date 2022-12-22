@@ -1,6 +1,5 @@
-import React, { useState, useEffect, useContext } from "react";
+import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import { adminQuizContext } from "../contextApi/adminQuizContext";
 import Backdrop from "@mui/material/Backdrop";
 import Box from "@mui/material/Box";
 import Modal from "@mui/material/Modal";
@@ -21,7 +20,7 @@ const style = {
   left: "50%",
   transform: "translate(-50%, -50%)",
   width: 400,
-  height: 600,
+  height: 700,
   bgcolor: "background.paper",
   border: "2px solid #000",
   borderRadius: "10px",
@@ -63,8 +62,6 @@ export default function TransitionsModal() {
   const [typeList, setTypeList] = useState([]);
   const [error, setError] = useState(false);
   const [errorMsg, setErrorMsg] = useState("");
-  const { getQuiz } = useContext(adminQuizContext);
-  console.log(getQuiz);
 
   const handleChange2 = (event) => {
     event.preventDefault();
@@ -173,7 +170,7 @@ export default function TransitionsModal() {
             </Typography>
             {errorMsg && <ErrorMessage>{errorMsg}</ErrorMessage>}
             <Grid container style={{ textAlign: "center", marginLeft: "1rem" }}>
-              <Grid item lg={12} style={{ display: "flex", width:"100%" }}>
+              <Grid item lg={12} style={{ display: "flex" }}>
                 <TextField
                   variant="standard"
                   label="Question"
@@ -205,7 +202,7 @@ export default function TransitionsModal() {
                   placeholder="Enter the Options"
                   type="text"
                   name="option1"
-                  style={{ marginBottom: 5,  width:"150px" }}
+                  style={{ marginBottom: 5, width:"150px" }}
                   onChange={(e) => setOption1(e.target.value)}
                 />
                 {error && option1.length <= 0 ? (
@@ -322,6 +319,39 @@ export default function TransitionsModal() {
                   ""
                 )}
               </Grid>
+
+              {/* <Grid item lg={12} style={{ display: "flex" }}>
+                <FormControl variant="standard" sx={{ m: 1, minWidth: 200 }}>
+                  <InputLabel htmlFor="demo-customized-select-native">
+                    Answer
+                  </InputLabel>
+                  <NativeSelect
+                    id="demo-customized-select-native"
+                    value={answer}
+                    onChange={handleChange1}
+                    label="answer"
+                  >
+                    <option aria-label="None" value="" />
+                    <option>A</option>
+                    <option>B</option>
+                    <option>C</option>
+                    <option>D</option>
+                  </NativeSelect>
+                </FormControl>
+                {error && answer.length <= 0 ? (
+                  <p
+                    style={{
+                      color: "red",
+                      textAlign: "center",
+                      fontWeight: "bold",
+                    }}
+                  >
+                    Please fill in the field
+                  </p>
+                ) : (
+                  ""
+                )}
+              </Grid> */}
               <div style={{ display: "flex" }}>
                 <FormControl variant="standard" sx={{ m: 1, minWidth: 120 }}>
                   <InputLabel htmlFor="demo-customized-select-native">
@@ -360,48 +390,27 @@ export default function TransitionsModal() {
                 )}
               </div>
               <div style={{ display: "flex" }}>
-                {getQuiz.length > 0 ? (
-                  <div>
-                    {getQuiz?.map((data) => {
-                      return (
-                        <TextField
-                          value={data?.type}
-                          variant="standard"
-                          label="Type"
-                          placeholder="Enter the Type"
-                          type="text"
-                          name="type"
-                          style={{ marginBottom: 5,width:"150px" }}
-                          onChange={handleChange3}
-                        />
-                      );
-                    })}
-                  </div>
-                ) : (
-                  <FormControl variant="standard" sx={{ m: 1, minWidth: 120 }}>
-                    <InputLabel htmlFor="demo-customized-select-native">
-                      Type
-                    </InputLabel>
-                    <NativeSelect
-                      id="demo-customized-select-native"
-                      value={type}
-                      onChange={handleChange3}
-                      label="type"
-                      style={{width:"150px"}}
-                    >
-                      <option aria-label="None" value="" />
-                      {typeList.length &&
-                        typeList.map((data) => {
-                          return (
-                            <option value={data.quiz} key={data.id}>
-                              {data.quiz}
-                            </option>
-                          );
-                        })}
-                    </NativeSelect>
-                  </FormControl>
-                )}
-
+                <FormControl variant="standard" sx={{ m: 1, minWidth: 120 }}>
+                  <InputLabel htmlFor="demo-customized-select-native">
+                    Type
+                  </InputLabel>
+                  <NativeSelect
+                    id="demo-customized-select-native"
+                    value={type}
+                    onChange={handleChange3}
+                    label="type"
+                  >
+                    <option aria-label="None" value="" />
+                    {typeList.length &&
+                      typeList.map((data) => {
+                        return (
+                          <option value={data.quiz} key={data.id}>
+                            {data.quiz}
+                          </option>
+                        );
+                      })}
+                  </NativeSelect>
+                </FormControl>
                 {error && type.length <= 0 ? (
                   <p
                     style={{

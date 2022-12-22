@@ -1,6 +1,7 @@
 import React, { useEffect, useState, useContext } from "react";
 import { useNavigate } from "react-router-dom";
 import UserSideBar from "../../components/userSideBar/userSideBar";
+import UserCategory from "../userCategory/userCategory";
 import { userQuizContext } from "../../contextApi/userQuizContext";
 import Card from "@mui/material/Card";
 import CardContent from "@mui/material/CardContent";
@@ -36,9 +37,9 @@ function UserHome() {
   const quizHandler = (quiz) => {
     try {
       axios.post("/api/user/quizNav", { quiz }).then((res) => {
-        setGetQuiz(res.data.qType);
+        setGetQuiz(res.data);
       });
-      navigate("/userCategory");
+      navigate("/userCategory", { state: { name: quiz } });
     } catch (error) {
       console.log(error);
     }
@@ -66,7 +67,6 @@ function UserHome() {
           {quiz.length &&
             quiz.map((data) => {
               return (
-                // <Link to={"/userCategory"} style={{ textDecoration: "none" }}>
                 <Grid sm={12} xs={12} md={6} lg={6} xl={4}>
                   <Card
                     sx={{
@@ -97,7 +97,6 @@ function UserHome() {
                     </Box>
                   </Card>
                 </Grid>
-                // </Link>
               );
             })}
         </Grid>

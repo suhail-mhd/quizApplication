@@ -1,8 +1,7 @@
 import React, { useEffect, useState, useContext } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 import UserSideBar from "../../components/userSideBar/userSideBar";
 import { questionContext } from "../../contextApi/questionContext";
-import { userQuizContext } from "../../contextApi/userQuizContext";
 import Card from "@mui/material/Card";
 import CardContent from "@mui/material/CardContent";
 import Typography from "@mui/material/Typography";
@@ -11,7 +10,6 @@ import axios from "axios";
 import "./userCategory.css";
 import Grid from "@mui/material/Grid";
 import CardActions from "@mui/material/CardActions";
-import { Link } from "react-router-dom";
 
 const styleOne = {
   width: "100px",
@@ -22,27 +20,45 @@ const styleOne = {
 };
 
 function UserCategory() {
-  const [category, setCategory] = useState([]);
+  const [categoryType, setCategoryType] = useState([]);
+  const [getCategory, setGetCategory] = useState([]);
   const { setGetQuestion } = useContext(questionContext);
-  const { getQuiz } = useContext(userQuizContext);
   const navigate = useNavigate();
+  const location = useLocation()
+
+  const quiz = location.state?.name;
+
 
   const showCategory = () => {
     try {
       axios.get("/api/user/getCategory").then((res) => {
-        setCategory(res.data.data);
+        setCategoryType(res.data.data);
       });
     } catch (err) {
       console.log(err);
     }
   };
 
+  for (let i = 0; i < categoryType.length; i++) {
+    let type = categoryType[i].type;
+    if(quiz === type) {
+      var types = type
+    }
+  }
+  
+
+  const renderCategory = (types) => {
+    axios.get(`/api/user/getAllCategories/${types}`).then((res) => {
+      setGetCategory(res.data);
+    })
+  }
+
   const toQuestions = (category) => {
     try {
       axios.post("/api/user/catNav", { category }).then((res) => {
         setGetQuestion(res.data.qCat);
       });
-      navigate("/userQuestions");
+      navigate("/userQuestions", { state: { name: category } });
     } catch (error) {
       console.log(error);
     }
@@ -54,8 +70,8 @@ function UserCategory() {
 
   useEffect(() => {
     showCategory();
-    
-  }, [showCategory,getQuiz ]);
+    renderCategory(`${types}`)
+  }, [renderCategory]);
 
   return (
     <div>
@@ -82,8 +98,8 @@ function UserCategory() {
           - Categories -
         </Typography>
         <Grid container>
-          {getQuiz?.length &&
-            getQuiz?.map((data) => {
+          {getCategory?.length &&
+            getCategory?.map((data) => {
               return (
                 <Grid sm={12} xs={12} md={6} lg={6} xl={4}>
                   <Card

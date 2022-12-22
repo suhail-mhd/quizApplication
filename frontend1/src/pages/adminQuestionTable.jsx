@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useContext } from "react";
+import { useLocation } from "react-router-dom";
 import ResponsiveAppBar from "../components/AppBar";
 import QuestionModal from "../components/questionModal";
 import { adminQuizContext } from "../contextApi/adminQuizContext";
@@ -81,7 +82,36 @@ function AdminQuestions() {
   const [categoryList, setCategoryList] = useState([]);
   const [type, setType] = useState("");
   const [typeList, setTypeList] = useState([]);
+  const [questionType, setQuestionType] = useState([])
+  const [showQuestion, setShowQuestion] = useState([])
   const { getQuiz, setGetQuiz } = useContext(adminQuizContext);
+  const location = useLocation()
+
+  const showQuestions = () => {
+    try {
+      axios.get("/api/admin/getQuestion").then((res) => {
+        setQuestionType(res.data.data);
+      });
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
+const QuizName = location.state?.name
+
+for (let i = 0; i < questionType.length; i++) {
+  let type = questionType[i].type;
+  if(QuizName === type) {
+    var types = type
+  }
+}
+
+const renderQuestion = (types) => {
+  axios.get(`/api/admin/getAllQuestions/${types}`).then((res) => {
+    setShowQuestion(res.data);
+  })
+}
+
 
   // delete question handle
   const [open, setOpen] = React.useState(false);
@@ -178,9 +208,11 @@ function AdminQuestions() {
   };
 
   useEffect(() => {
+    showQuestions()
+    renderQuestion(`${types}`)
     getCategory();
     getType();
-  }, [render]);
+  }, [render, renderQuestion]);
 
   return (
     <div>
@@ -407,7 +439,7 @@ function AdminQuestions() {
         Questions
       </Typography>
 
-      {getQuiz.length > 0 ? (
+      {showQuestion.length > 0 ? (
         <Box sx={{ paddingLeft: 10, paddingRight: 10, marginBottom: 20 }}>
           <TableContainer
             component={Paper}
@@ -434,7 +466,7 @@ function AdminQuestions() {
                 </TableRow>
               </TableHead>
               <TableBody>
-                {getQuiz?.map((data, i) => {
+                {showQuestion?.map((data, i) => {
                   return (
                     <TableRow
                       sx={{

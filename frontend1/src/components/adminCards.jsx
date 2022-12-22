@@ -136,7 +136,7 @@ function Cards() {
       axios.post("/api/admin/quizNav", { quiz }).then((res) => {
         setGetQuiz(res.data.qType);
       });
-      navigate("/adminQuestions");
+      navigate("/adminQuestions",{ state: { name: quiz } });
     } catch (error) {
       console.log(error);
     }

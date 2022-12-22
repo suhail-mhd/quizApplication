@@ -15,6 +15,7 @@ const {
   getAllQuestionDetails,
   getAllQuizDetails,
   quizNav,
+  getAllQuestions
 } = require("../Controllers/adminControllers");
 
 adminRouter.route("/addQuestion").post(addQuestion);
@@ -42,5 +43,7 @@ adminRouter.route("/updateQuestion").patch(updateQuestion);
 adminRouter.route("/updateQuiz").patch(updateQuiz);
 
 adminRouter.route("/quizNav").post(quizNav);
+
+adminRouter.route("/getAllQuestions/:type").get(getAllQuestions);
 
 module.exports = adminRouter;

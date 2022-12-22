@@ -1,7 +1,7 @@
 import React from "react";
 import { useState, useEffect, useContext } from "react";
 import { useSelector } from "react-redux";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import Box from "@mui/material/Box";
@@ -15,7 +15,6 @@ import FormControlLabel from "@mui/material/FormControlLabel";
 import FormControl from "@mui/material/FormControl";
 import "./UserShowQuestion.css";
 import { useFetchQuestion } from "../../hooks/FetchQuestion";
-import { questionContext } from "../../contextApi/questionContext";
 import { resultContext } from "../../contextApi/resultContext";
 import UserNoQuestionMsg from "../userNoQuestionMsg/UserNoQuestionMsg";
 
@@ -98,53 +97,84 @@ function UserShowQuestion() {
   const [questionIndex, setQuestionIndex] = useState(0);
   const [error, setError] = useState(false);
   const [submit, setSubmit] = useState([]);
+  const [questionCat, setQuestionCat] = useState([])
+  const [question, setQuestion] = useState([]);
   const navigate = useNavigate();
-  const { getQuestion } = useContext(questionContext);
+  const location = useLocation()
   const { setResult } = useContext(resultContext);
 
   const [{ isLoading, apiData, serverError }] = useFetchQuestion();
 
-  const _id = getQuestion[questionIndex]?._id;
-  const category = getQuestion[questionIndex]?.category;
+  const showQuestions = () => {
+    try {
+      axios.get("/api/user/getQuestion").then((res) => {
+        setQuestionCat(res.data.data);
+      });
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
+const catName = location.state?.name
+
+  for (let i = 0; i < questionCat.length; i++) {
+    let cate = questionCat[i].category;
+    if(catName === cate) {
+      var categories = cate
+    }
+  }
+
+  const renderQuestion = (categories) => {
+    axios.get(`/api/user/getAllQuestions/${categories}`).then((res) => {
+      setQuestion(res.data);
+    })
+  }
+
+  const _id = question[questionIndex]?._id;
+  const category = question[questionIndex]?.category;
 
   // check answer
 
   const onSelect1 = () => {
-    setChecked(getQuestion[questionIndex]?.option1);
-    let check = getQuestion[questionIndex]?.option1;
+    setChecked(question[questionIndex]?.option1);
+    let check = question[questionIndex]?.option1;
     setSubmit([...submit, { _id, check, category }]);
     setError(false);
   };
 
   const onSelect2 = () => {
-    setChecked(getQuestion[questionIndex]?.option2);
-    let check = getQuestion[questionIndex]?.option2;
+    setChecked(question[questionIndex]?.option2);
+    let check = question[questionIndex]?.option2;
     setSubmit([...submit, { _id, check, category }]);
     setError(false);
   };
 
   const onSelect3 = () => {
-    setChecked(getQuestion[questionIndex]?.option3);
-    let check = getQuestion[questionIndex]?.option3;
+    setChecked(question[questionIndex]?.option3);
+    let check = question[questionIndex]?.option3;
     setSubmit([...submit, { _id, check, category }]);
     setError(false);
   };
 
   const onSelect4 = () => {
-    setChecked(getQuestion[questionIndex]?.option4);
-    let check = getQuestion[questionIndex]?.option4;
+    setChecked(question[questionIndex]?.option4);
+    let check = question[questionIndex]?.option4;
     setSubmit([...submit, { _id, check, category }]);
     setError(false);
   };
 
+
+
   useEffect(() => {
+    showQuestions()
+    renderQuestion(`${categories}`)
     console.log(submit);
-  }, [submit]);
+  }, [submit, question]);
 
   // next and prev button
 
   const handleNext = () => {
-    if (questionIndex < getQuestion.length && checked) {
+    if (questionIndex < question.length && checked) {
       setQuestionIndex(questionIndex + 1);
     } else {
       setError(true);
@@ -173,7 +203,7 @@ function UserShowQuestion() {
   };
 
   const handleQuit = () => {
-    navigate("/userCategory");
+    navigate("/userCategory", { state: { name: "Technology" } });
   };
 
   if (isLoading) return <h4 className="text-light">isLoading</h4>;
@@ -182,7 +212,7 @@ function UserShowQuestion() {
 
   return (
     <div>
-      {getQuestion.length > 0 ? (
+      {question.length > 0 ? (
         <Box sx={style}>
           <Typography
             id="transition-modal-title"
@@ -193,7 +223,7 @@ function UserShowQuestion() {
             - Questions -
           </Typography>
           <Typography variant="p" component="h2" style={styleFour}>
-            Question {questionIndex + 1} of {getQuestion.length}
+            Question {questionIndex + 1} of {question.length}
           </Typography>
 
           <div>
@@ -203,7 +233,7 @@ function UserShowQuestion() {
               component="h2"
               style={qStyle}
             >
-              {getQuestion[questionIndex]?.question}
+              {question[questionIndex]?.question}
             </Typography>
 
             <Grid
@@ -218,33 +248,33 @@ function UserShowQuestion() {
                 >
                   <Grid sm={12} xs={12} md={6} lg={6} xl={4}>
                     <FormControlLabel
-                      value={getQuestion[questionIndex]?.option1}
+                      value={question[questionIndex]?.option1}
                       control={<Radio />}
-                      label={getQuestion[questionIndex]?.option1}
+                      label={question[questionIndex]?.option1}
                       onChange={onSelect1}
                     />
                   </Grid>
                   <Grid sm={12} xs={12} md={6} lg={6} xl={4}>
                     <FormControlLabel
-                      value={getQuestion[questionIndex]?.option2}
+                      value={question[questionIndex]?.option2}
                       control={<Radio />}
-                      label={getQuestion[questionIndex]?.option2}
+                      label={question[questionIndex]?.option2}
                       onChange={onSelect2}
                     />
                   </Grid>
                   <Grid sm={12} xs={12} md={6} lg={6} xl={4}>
                     <FormControlLabel
-                      value={getQuestion[questionIndex]?.option3}
+                      value={question[questionIndex]?.option3}
                       control={<Radio />}
-                      label={getQuestion[questionIndex]?.option3}
+                      label={question[questionIndex]?.option3}
                       onChange={onSelect3}
                     />
                   </Grid>
                   <Grid sm={12} xs={12} md={6} lg={6} xl={4}>
                     <FormControlLabel
-                      value={getQuestion[questionIndex]?.option4}
+                      value={question[questionIndex]?.option4}
                       control={<Radio />}
-                      label={getQuestion[questionIndex]?.option4}
+                      label={question[questionIndex]?.option4}
                       onChange={onSelect4}
                     />
                   </Grid>
@@ -272,7 +302,7 @@ function UserShowQuestion() {
                 ""
               )}
 
-              {questionIndex >= getQuestion.length - 1 ? (
+              {questionIndex >= question.length - 1 ? (
                 <Button
                   variant="contained"
                   type="submit"
