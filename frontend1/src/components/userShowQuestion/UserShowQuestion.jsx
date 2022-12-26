@@ -1,9 +1,6 @@
 import React from "react";
 import { useState, useEffect, useContext } from "react";
-import { useSelector } from "react-redux";
 import { useNavigate, useLocation } from "react-router-dom";
-import { ToastContainer, toast } from "react-toastify";
-import "react-toastify/dist/ReactToastify.css";
 import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
 import Typography from "@mui/material/Typography";
@@ -97,10 +94,10 @@ function UserShowQuestion() {
   const [questionIndex, setQuestionIndex] = useState(0);
   const [error, setError] = useState(false);
   const [submit, setSubmit] = useState([]);
-  const [questionCat, setQuestionCat] = useState([])
+  const [questionCat, setQuestionCat] = useState([]);
   const [question, setQuestion] = useState([]);
   const navigate = useNavigate();
-  const location = useLocation()
+  const location = useLocation();
   const { setResult } = useContext(resultContext);
 
   const [{ isLoading, apiData, serverError }] = useFetchQuestion();
@@ -115,20 +112,20 @@ function UserShowQuestion() {
     }
   };
 
-const catName = location.state?.name
+  const catName = location.state?.name;
 
   for (let i = 0; i < questionCat.length; i++) {
     let cate = questionCat[i].category;
-    if(catName === cate) {
-      var categories = cate
+    if (catName === cate) {
+      var categories = cate;
     }
   }
 
   const renderQuestion = (categories) => {
     axios.get(`/api/user/getAllQuestions/${categories}`).then((res) => {
       setQuestion(res.data);
-    })
-  }
+    });
+  };
 
   const _id = question[questionIndex]?._id;
   const category = question[questionIndex]?.category;
@@ -163,14 +160,6 @@ const catName = location.state?.name
     setError(false);
   };
 
-
-
-  useEffect(() => {
-    showQuestions()
-    renderQuestion(`${categories}`)
-    console.log(submit);
-  }, [submit, question]);
-
   // next and prev button
 
   const handleNext = () => {
@@ -203,8 +192,14 @@ const catName = location.state?.name
   };
 
   const handleQuit = () => {
-    navigate("/userCategory", { state: { name: "Technology" } });
+    navigate("/");
   };
+
+  useEffect(() => {
+    showQuestions();
+    renderQuestion(`${categories}`);
+    console.log(submit);
+  }, [submit, question]);
 
   if (isLoading) return <h4 className="text-light">isLoading</h4>;
   if (serverError)
@@ -338,9 +333,8 @@ const catName = location.state?.name
           </Box>
         </Box>
       ) : (
-        <UserNoQuestionMsg />
+        <UserNoQuestionMsg question={question} />
       )}
-      <ToastContainer />
     </div>
   );
 }

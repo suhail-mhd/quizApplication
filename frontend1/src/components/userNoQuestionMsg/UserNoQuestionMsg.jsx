@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
 import Typography from "@mui/material/Typography";
+import Loader from "react-loader-spinner";
 
 const style = {
   position: "absolute",
@@ -43,35 +44,62 @@ const styleTwo = {
   margin: "1rem 17rem",
 };
 
-function useUserNoQuestionMsg() {
+const loadStyle = {
+  position: "absolute",
+  marginLeft: "19rem",
+  marginTop: "5rem",
+};
+
+function useUserNoQuestionMsg(question) {
   const navigate = useNavigate();
 
   const handleBack = () => {
-    navigate("/userCategory");
+    navigate("/");
   };
 
   return (
     <div>
-      <Box sx={style}>
-        <Typography
-          id="transition-modal-title"
-          variant="h4"
-          component="h2"
-          style={style1}
-        >
-          - Questions -
-        </Typography>
-        <h1 style={styleOne}>Sorry..questions is not available..!!</h1>
-        <Button
-          variant="contained"
-          type="submit"
-          value="submit"
-          style={styleTwo}
-          onClick={handleBack}
-        >
-          Back
-        </Button>
-      </Box>
+      {question ? (
+        <Box sx={style}>
+          <Typography
+            id="transition-modal-title"
+            variant="h4"
+            component="h2"
+            style={style1}
+          >
+            - Questions -
+          </Typography>
+          <Loader
+            style={loadStyle}
+            type="ThreeDots"
+            color="#e33324"
+            height={100}
+            width={100}
+            timeout={3000}
+          />
+        </Box>
+      ) : (
+        <Box sx={style}>
+          <Typography
+            id="transition-modal-title"
+            variant="h4"
+            component="h2"
+            style={style1}
+          >
+            - Questions -
+          </Typography>
+          <h1 style={styleOne}>Sorry..questions is not available..!!</h1>
+          <Button
+            variant="contained"
+            type="submit"
+            value="submit"
+            style={styleTwo}
+            onClick={handleBack}
+          >
+            Back
+          </Button>
+        </Box>
+      )}
     </div>
   );
 }
