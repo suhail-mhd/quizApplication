@@ -66,7 +66,7 @@ const getQuestion = asyncHandler(async (req, res) => {
 // quizHandles
 
 const addQuiz = asyncHandler(async (req, res) => {
-  const { quiz } = req.body;
+  const { quiz, category } = req.body;
 
   const quizExist = await Quiz.findOne({ quiz });
 
@@ -75,10 +75,10 @@ const addQuiz = asyncHandler(async (req, res) => {
     throw new Error("Quiz Already Exist");
   }
 
-  const data = await Quiz.create({ quiz });
+  const data = await Quiz.create({ quiz, category });
 
   if (data) {
-    res.status(200).json({ status: true, quiz: data.quiz });
+    res.status(200).json({ status: true, quiz: data.quiz, category: data.category });
   } else {
     res.status(400).send("error while quiz value inserting to database");
   }
@@ -98,7 +98,7 @@ const getQuiz = asyncHandler(async (req, res) => {
 // categoryHandles
 
 const addCategory = asyncHandler(async (req, res) => {
-  const { category, type } = req.body;
+  const { category } = req.body;
 
   const categoryExist = await Category.findOne({ category });
 
@@ -107,10 +107,10 @@ const addCategory = asyncHandler(async (req, res) => {
     throw new Error("category Already Exist");
   }
 
-  const data = await Category.create({ category, type });
+  const data = await Category.create({ category });
 
   if (data) {
-    res.status(200).json({ status: true, category: data.category, type: data.type });
+    res.status(200).json({ status: true, category: data.category });
   } else {
     res.status(400).send("error while category value inserting to database");
   }

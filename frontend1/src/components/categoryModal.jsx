@@ -50,8 +50,6 @@ export default function TransitionsModal() {
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
   const [category, setCategory] = useState("");
-  const [type, setType] = useState("");
-  const [typeList, setTypeList] = useState([]);
   const [error, setError] = useState(false);
   const [errorMsg, setErrorMsg] = useState("");
 
@@ -61,7 +59,7 @@ export default function TransitionsModal() {
     }
 
     try {
-      axios.post("/api/admin/addCategory", { category, type }).then((res) => {
+      axios.post("/api/admin/addCategory", { category }).then((res) => {
         setCategory(res.data);
       });
       handleClose()
@@ -72,26 +70,6 @@ export default function TransitionsModal() {
 
     }
   };
-
-  const handleChange3 = (event) => {
-    event.preventDefault();
-    setType(event.target.value);
-  };
-
-  const getType = () => {
-    try {
-      axios.get("/api/admin/getQuiz").then((res) => {
-        setTypeList(res.data.data);
-      });
-    } catch (err) {
-      console.log(err);
-    }
-  };
-
-  useEffect(() => {
-    getType()
-  }, [])
-  
 
   return (
     <div>
@@ -154,42 +132,6 @@ export default function TransitionsModal() {
                 />
               </Grid>
             </Grid>
-            <div style={{ textAlign: "center" }}>
-                <FormControl variant="standard" sx={{ m: 1, minWidth: 120 }}>
-                  <InputLabel htmlFor="demo-customized-select-native">
-                    Type
-                  </InputLabel>
-                  <NativeSelect
-                    id="demo-customized-select-native"
-                    value={type}
-                    onChange={handleChange3}
-                    label="type"
-                  >
-                    <option aria-label="None" value="" />
-                    {typeList.length &&
-                      typeList.map((data) => {
-                        return (
-                          <option value={data.quiz} key={data.id}>
-                            {data.quiz}
-                          </option>
-                        );
-                      })}
-                  </NativeSelect>
-                </FormControl>
-                {error && type.length <= 0 ? (
-                  <p
-                    style={{
-                      color: "red",
-                      textAlign: "center",
-                      fontWeight: "bold",
-                    }}
-                  >
-                    Please fill in the field
-                  </p>
-                ) : (
-                  ""
-                )}
-              </div>
             <Box textAlign="center">
               <Button
                 variant="contained"

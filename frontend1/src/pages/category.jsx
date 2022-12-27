@@ -7,7 +7,7 @@ import CardContent from "@mui/material/CardContent";
 import Typography from "@mui/material/Typography";
 import { Box, Button } from "@mui/material";
 import axios from "axios";
-import "./userCategory.css";
+import "./userHome.css";
 import Grid from "@mui/material/Grid";
 import CardActions from "@mui/material/CardActions";
 
@@ -19,7 +19,7 @@ const styleOne = {
   marginTop: "-1rem",
 };
 
-function UserCategory() {
+function UserHome() {
   const [categoryType, setCategoryType] = useState([]);
   const [getCategory, setGetCategory] = useState([]);
   const { setGetQuestion } = useContext(questionContext);
@@ -148,4 +148,4 @@ function UserCategory() {
   );
 }
 
-export default UserCategory;
+export default UserHome;

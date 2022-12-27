@@ -1,5 +1,4 @@
-import * as React from "react";
-import { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Backdrop from "@mui/material/Backdrop";
 import Box from "@mui/material/Box";
 import Modal from "@mui/material/Modal";
@@ -9,6 +8,9 @@ import Typography from "@mui/material/Typography";
 import { TextField } from "@mui/material";
 import axios from "axios";
 import Grid from "@mui/material/Grid";
+import FormControl from "@mui/material/FormControl";
+import NativeSelect from "@mui/material/NativeSelect";
+import InputLabel from "@mui/material/InputLabel";
 import ErrorMessage from "./ErrorMessage";
 
 const style = {
@@ -50,13 +52,15 @@ export default function TransitionsModal() {
   const [quiz, setQuiz] = useState("");
   const [error, setError] = useState(false);
   const [errorMsg, setErrorMsg] = useState("");
+  const [category, setCategory] = useState("");
+  const [categoryList, setCategoryList] = useState([]);
 
   const quizHandler = () => {
     if (quiz.length == 0) {
       setError(true);
     } else {
       try {
-        axios.post("/api/admin/addQuiz", { quiz }).then((res) => {
+        axios.post("/api/admin/addQuiz", { quiz, category }).then((res) => {
           setQuiz(res.data);
         });
         handleClose();
@@ -66,6 +70,25 @@ export default function TransitionsModal() {
       }
     }
   };
+
+  const handleChange3 = (event) => {
+    event.preventDefault();
+    setCategory(event.target.value);
+  };
+
+  const getCategory = () => {
+    try {
+      axios.get("/api/admin/getQuiz").then((res) => {
+        setCategoryList(res.data.data);
+      });
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
+  useEffect(() => {
+    getCategory()
+  }, [])
 
   return (
     <div>
@@ -123,6 +146,42 @@ export default function TransitionsModal() {
                 />
               </Grid>
             </Grid>
+            <div style={{ textAlign: "center" }}>
+                <FormControl variant="standard" sx={{ m: 1, minWidth: 120 }}>
+                  <InputLabel htmlFor="demo-customized-select-native">
+                    Category
+                  </InputLabel>
+                  <NativeSelect
+                    id="demo-customized-select-native"
+                    value={category}
+                    onChange={handleChange3}
+                    label="type"
+                  >
+                    <option aria-label="None" value="" />
+                    {categoryList.length &&
+                      categoryList.map((data) => {
+                        return (
+                          <option value={data.category} key={data.id}>
+                            {data.category}
+                          </option>
+                        );
+                      })}
+                  </NativeSelect>
+                </FormControl>
+                {error && category.length <= 0 ? (
+                  <p
+                    style={{
+                      color: "red",
+                      textAlign: "center",
+                      fontWeight: "bold",
+                    }}
+                  >
+                    Please fill in the field
+                  </p>
+                ) : (
+                  ""
+                )}
+              </div>
             <Box textAlign="center">
               <Button
                 variant="contained"
