@@ -24,10 +24,9 @@ function UserHome() {
   const [getCategory, setGetCategory] = useState([]);
   const { setGetQuestion } = useContext(questionContext);
   const navigate = useNavigate();
-  const location = useLocation()
+  const location = useLocation();
 
   const quiz = location.state?.name;
-
 
   const showCategory = () => {
     try {
@@ -40,7 +39,7 @@ function UserHome() {
   };
 
   const categoryHandle = (category) => {
-      navigate("/userQuiz", { state: { name: category } });
+    navigate("/userQuiz", { state: { name: category } });
   };
 
   useEffect(() => {

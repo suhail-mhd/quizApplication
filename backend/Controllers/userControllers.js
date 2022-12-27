@@ -58,14 +58,14 @@ const submitAnswer = asyncHandler(async (req, res) => {
 
   const userOption = submit?.map(pick);
 
-  // get category //
+  // get type //
 
-  function cat(categories) {
-    const { category } = categories;
-    return category;
+  function quiz(quizzes) {
+    const { quiz } = quizzes;
+    return quiz;
   }
 
-  const category = submit?.map(cat);
+  const type = submit?.map(quiz);
 
   // find data by questionId //
 
@@ -73,7 +73,7 @@ const submitAnswer = asyncHandler(async (req, res) => {
 
   // get total questions //
 
-  const questionsNumber = await Question.find({category});
+  const questionsNumber = await Question.find({type});
   const totalQuestions = questionsNumber.length;
 
   // total quiz point
@@ -107,6 +107,7 @@ const submitAnswer = asyncHandler(async (req, res) => {
     totalQuizPoints,
     score,
     flag,
+    type
   });
 });
 
@@ -136,10 +137,10 @@ const quizNav = asyncHandler(async (req, res) => {
 });
 
 const getAllQuestions = asyncHandler(async (req, res) => {
-  const category = req.params.category;
+  const type = req.params.type;
 
   try {
-    const allQuestions = await Question.find({category});
+    const allQuestions = await Question.find({type});
     res.json(allQuestions);
   } catch (error) {
     console.log(
@@ -149,12 +150,12 @@ const getAllQuestions = asyncHandler(async (req, res) => {
   }
 });
 
-const getAllCategories = asyncHandler(async (req, res) => {
-  const type = req.params.type;
+const getAllQuizzes = asyncHandler(async (req, res) => {
+  const category = req.params.category;
 
   try {
-    const allQuestions = await Category.find({type});
-    res.json(allQuestions);
+    const allQuiz = await Quiz.find({category});
+    res.json(allQuiz);
   } catch (error) {
     console.log(
       "Something went wrong when we try to get all Question value",
@@ -171,5 +172,5 @@ module.exports = {
   catNav,
   quizNav,
   getAllQuestions,
-  getAllCategories
+  getAllQuizzes
 };

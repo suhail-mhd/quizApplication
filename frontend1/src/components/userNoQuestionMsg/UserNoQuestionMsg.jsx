@@ -75,7 +75,7 @@ function useUserNoQuestionMsg(question) {
             color="#e33324"
             height={100}
             width={100}
-            timeout={3000}
+            timeout={2000}
           />
         </Box>
       ) : (
@@ -88,7 +88,7 @@ function useUserNoQuestionMsg(question) {
           >
             - Questions -
           </Typography>
-          <h1 style={styleOne}>Sorry..questions is not available..!!</h1>
+          <h1 style={styleOne}>Sorry..Questions is not available..!!</h1>
           <Button
             variant="contained"
             type="submit"

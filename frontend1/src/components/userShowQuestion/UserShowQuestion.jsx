@@ -1,6 +1,7 @@
 import React from "react";
 import { useState, useEffect, useContext } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
+import Loader from "react-loader-spinner";
 import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
 import Typography from "@mui/material/Typography";
@@ -112,51 +113,51 @@ function UserShowQuestion() {
     }
   };
 
-  const catName = location.state?.name;
+  const quizName = location.state?.name;
 
   for (let i = 0; i < questionCat.length; i++) {
-    let cate = questionCat[i].category;
-    if (catName === cate) {
-      var categories = cate;
+    let type = questionCat[i].type;
+    if (quizName === type) {
+      var types = type;
     }
   }
 
-  const renderQuestion = (categories) => {
-    axios.get(`/api/user/getAllQuestions/${categories}`).then((res) => {
+  const renderQuestion = (types) => {
+    axios.get(`/api/user/getAllQuestions/${types}`).then((res) => {
       setQuestion(res.data);
     });
   };
 
   const _id = question[questionIndex]?._id;
-  const category = question[questionIndex]?.category;
+  const quiz = question[questionIndex]?.type;
 
   // check answer
 
   const onSelect1 = () => {
     setChecked(question[questionIndex]?.option1);
     let check = question[questionIndex]?.option1;
-    setSubmit([...submit, { _id, check, category }]);
+    setSubmit([...submit, { _id, check, quiz }]);
     setError(false);
   };
 
   const onSelect2 = () => {
     setChecked(question[questionIndex]?.option2);
     let check = question[questionIndex]?.option2;
-    setSubmit([...submit, { _id, check, category }]);
+    setSubmit([...submit, { _id, check, quiz }]);
     setError(false);
   };
 
   const onSelect3 = () => {
     setChecked(question[questionIndex]?.option3);
     let check = question[questionIndex]?.option3;
-    setSubmit([...submit, { _id, check, category }]);
+    setSubmit([...submit, { _id, check, quiz }]);
     setError(false);
   };
 
   const onSelect4 = () => {
     setChecked(question[questionIndex]?.option4);
     let check = question[questionIndex]?.option4;
-    setSubmit([...submit, { _id, check, category }]);
+    setSubmit([...submit, { _id, check, quiz }]);
     setError(false);
   };
 
@@ -197,7 +198,7 @@ function UserShowQuestion() {
 
   useEffect(() => {
     showQuestions();
-    renderQuestion(`${categories}`);
+    renderQuestion(`${types}`);
     console.log(submit);
   }, [submit, question]);
 

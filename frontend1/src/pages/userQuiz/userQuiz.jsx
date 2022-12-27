@@ -10,7 +10,7 @@ import { Box, Button } from "@mui/material";
 import axios from "axios";
 import "./userQuiz.css";
 import Grid from "@mui/material/Grid";
-import { Link } from "react-router-dom";
+import CardActions from "@mui/material/CardActions";
 
 const styleOne = {
   width: "100px",
@@ -21,8 +21,9 @@ const styleOne = {
 
 function UserQuiz() {
   const [quiz, setQuiz] = useState([]);
+  const [getQuiz, setGetQuiz] = useState([]);
   const navigate = useNavigate();
-  const { setGetQuiz } = useContext(userQuizContext);
+  // const { setGetQuiz } = useContext(userQuizContext);
   const location = useLocation();
 
   const category = location.state?.name;
@@ -37,8 +38,21 @@ function UserQuiz() {
     }
   };
 
-  const quizHandler = (quiz) => {
-    navigate("/userCategory", { state: { name: quiz } });
+  for (let i = 0; i < quiz.length; i++) {
+    let quizCat = quiz[i].category;
+    if(category === quizCat) {
+      var quizzes = quizCat
+    }
+  }
+
+  const renderQuiz = (quizzes) => {
+    axios.get(`/api/user/getAllQuizzes/${quizzes}`).then((res) => {
+      setGetQuiz(res.data);
+    })
+  }
+
+  const toQuestions = (quiz) => {
+    navigate("/userQuestions", { state: { name: quiz } });
   };
 
   const backHandler = () => {
@@ -47,7 +61,8 @@ function UserQuiz() {
 
   useEffect(() => {
     showQuiz();
-  }, [showQuiz]);
+    renderQuiz(`${quizzes}`)
+  }, [renderQuiz]);
 
   return (
     <div>
@@ -73,8 +88,8 @@ function UserQuiz() {
           - Quiz -
         </Typography>
         <Grid container>
-          {quiz.length &&
-            quiz.map((data) => {
+          {getQuiz.length &&
+            getQuiz.map((data) => {
               return (
                 <Grid sm={12} xs={12} md={6} lg={6} xl={4}>
                   <Card
@@ -90,7 +105,6 @@ function UserQuiz() {
                       position: "relative",
                       cursor: "pointer",
                     }}
-                    onClick={() => quizHandler(data.quiz)}
                   >
                     <img src="../../quiz.png" alt="card-img" style={styleOne} />
                     <Box sx={{ display: "flex", flexDirection: "column" }}>
@@ -102,14 +116,14 @@ function UserQuiz() {
                         >
                           {data.quiz}
                         </Typography>
-                        {/* <CardActions>
+                        <CardActions>
                           <Button
-                            // onClick={() => toQuestions(data?.category)}
+                            onClick={() => toQuestions(data?.quiz)}
                             size="small"
                           >
                             Move to Questions
                           </Button>
-                        </CardActions> */}
+                        </CardActions>
                       </CardContent>
                     </Box>
                   </Card>

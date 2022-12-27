@@ -1,4 +1,4 @@
-import React, {useState,useEffect} from "react";
+import React, { useState, useEffect } from "react";
 import Backdrop from "@mui/material/Backdrop";
 import Box from "@mui/material/Box";
 import Modal from "@mui/material/Modal";
@@ -62,12 +62,11 @@ export default function TransitionsModal() {
       axios.post("/api/admin/addCategory", { category }).then((res) => {
         setCategory(res.data);
       });
-      handleClose()
+      handleClose();
     } catch (error) {
       console.log("error occurred", error);
       setError(false);
       setErrorMsg("Cannot use the existed Category");
-
     }
   };
 
@@ -119,7 +118,7 @@ export default function TransitionsModal() {
             ) : (
               ""
             )}
-             {errorMsg && <ErrorMessage>{errorMsg}</ErrorMessage>}
+            {errorMsg && <ErrorMessage>{errorMsg}</ErrorMessage>}
             <Grid style={{ textAlign: "center" }}>
               <Grid item lg={12}>
                 <TextField

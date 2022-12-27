@@ -1,6 +1,6 @@
 import React, { useContext } from "react";
 import { useDispatch } from "react-redux";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
 import Typography from "@mui/material/Typography";
@@ -46,10 +46,10 @@ const styleTwo = {
 function UserShowResult() {
   const dispatch = useDispatch();
   const { result } = useContext(resultContext);
+  const navigate = useNavigate()
 
-  const resetHandler = () => {
-    dispatch(resetAllAction());
-    dispatch(resetResultAction());
+  const resetHandler = (quiz) => {
+    navigate("/userQuestions", { state: { name: quiz } });
   };
 
   return (
@@ -166,17 +166,15 @@ function UserShowResult() {
           </div>
         </div>
         <Box textAlign="right" style={{ marginRight: "2rem" }}>
-          <Link to={"/userQuestions"} style={{ textDecoration: "none" }}>
             <Button
               variant="contained"
               type="submit"
               value="submit"
               style={styleTwo}
-              onClick={resetHandler}
+              onClick={() => resetHandler(result.type)}
             >
               Restart
             </Button>
-          </Link>
 
           <Link to={"/"} style={{ textDecoration: "none" }}>
             <Button
