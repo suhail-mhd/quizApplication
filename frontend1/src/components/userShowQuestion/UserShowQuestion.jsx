@@ -12,7 +12,6 @@ import RadioGroup from "@mui/material/RadioGroup";
 import FormControlLabel from "@mui/material/FormControlLabel";
 import FormControl from "@mui/material/FormControl";
 import "./UserShowQuestion.css";
-import { useFetchQuestion } from "../../hooks/FetchQuestion";
 import { resultContext } from "../../contextApi/resultContext";
 import UserNoQuestionMsg from "../userNoQuestionMsg/UserNoQuestionMsg";
 
@@ -90,6 +89,13 @@ const errorStyle = {
   marginTop: "2rem",
 };
 
+const loadStyle = {
+  position: "absolute",
+  top: "50%",
+  left: "50%",
+  transform: "translate(-50%, -50%)",
+};
+
 function UserShowQuestion() {
   const [checked, setChecked] = useState();
   const [questionIndex, setQuestionIndex] = useState(0);
@@ -100,8 +106,7 @@ function UserShowQuestion() {
   const navigate = useNavigate();
   const location = useLocation();
   const { setResult } = useContext(resultContext);
-
-  const [{ isLoading, apiData, serverError }] = useFetchQuestion();
+  const [isLoading, setIsLoading] = useState(false);
 
   const showQuestions = () => {
     try {
@@ -164,8 +169,9 @@ function UserShowQuestion() {
   // next and prev button
 
   const handleNext = () => {
-    if (questionIndex < question.length && checked) {
+    if (checked) {
       setQuestionIndex(questionIndex + 1);
+      setChecked();
     } else {
       setError(true);
     }
@@ -178,165 +184,185 @@ function UserShowQuestion() {
   };
 
   const handleSubmit = () => {
-    try {
-      axios
-        .post("/api/user/submitAnswer", {
-          submit,
-        })
-        .then((res) => {
-          setResult(res.data);
-        });
-      navigate("/userResult");
-    } catch (error) {
-      console.log(error);
+    if (checked) {
+      try {
+        axios
+          .post("/api/user/submitAnswer", {
+            submit,
+          })
+          .then((res) => {
+            setResult(res.data);
+          });
+        navigate("/userResult");
+      } catch (error) {
+        console.log(error);
+      }
+      setChecked();
+    } else {
+      setError(true);
     }
   };
 
-  const handleQuit = () => {
-    navigate("/");
+  const handleQuit = (category) => {
+    navigate("/userQuiz", { state: { name: category } });
   };
 
   useEffect(() => {
     showQuestions();
     renderQuestion(`${types}`);
     console.log(submit);
-  }, [submit, question]);
+  }, [question, submit]);
 
-  if (isLoading) return <h4 className="text-light">isLoading</h4>;
-  if (serverError)
-    return <h4 className="text-light">{serverError || "Unknown Error"}</h4>;
+  useEffect(() => {
+    setIsLoading(true);
+    setTimeout(() => {
+      setIsLoading(false);
+    }, 1000);
+  }, []);
 
   return (
-    <div>
-      {question.length > 0 ? (
-        <Box sx={style}>
-          <Typography
-            id="transition-modal-title"
-            variant="h4"
-            component="h2"
-            style={styleOne}
-          >
-            - Questions -
-          </Typography>
-          <Typography variant="p" component="h2" style={styleFour}>
-            Question {questionIndex + 1} of {question.length}
-          </Typography>
-
-          <div>
-            <Typography
-              id="transition-modal-title"
-              variant="h5"
-              component="h2"
-              style={qStyle}
-            >
-              {question[questionIndex]?.question}
-            </Typography>
-
-            <Grid
-              container
-              style={{ justifyContent: "center", marginTop: "2rem" }}
-            >
-              <FormControl>
-                <RadioGroup
-                  row
-                  aria-labelledby="demo-row-radio-buttons-group-label"
-                  name="row-radio-buttons-group"
-                >
-                  <Grid sm={12} xs={12} md={6} lg={6} xl={4}>
-                    <FormControlLabel
-                      value={question[questionIndex]?.option1}
-                      control={<Radio />}
-                      label={question[questionIndex]?.option1}
-                      onChange={onSelect1}
-                    />
-                  </Grid>
-                  <Grid sm={12} xs={12} md={6} lg={6} xl={4}>
-                    <FormControlLabel
-                      value={question[questionIndex]?.option2}
-                      control={<Radio />}
-                      label={question[questionIndex]?.option2}
-                      onChange={onSelect2}
-                    />
-                  </Grid>
-                  <Grid sm={12} xs={12} md={6} lg={6} xl={4}>
-                    <FormControlLabel
-                      value={question[questionIndex]?.option3}
-                      control={<Radio />}
-                      label={question[questionIndex]?.option3}
-                      onChange={onSelect3}
-                    />
-                  </Grid>
-                  <Grid sm={12} xs={12} md={6} lg={6} xl={4}>
-                    <FormControlLabel
-                      value={question[questionIndex]?.option4}
-                      control={<Radio />}
-                      label={question[questionIndex]?.option4}
-                      onChange={onSelect4}
-                    />
-                  </Grid>
-                </RadioGroup>
-              </FormControl>
-            </Grid>
-          </div>
-          {error ? <p style={errorStyle}>Please select a choice!!</p> : ""}
-          <Box>
-            <Box
-              textAlign="right"
-              style={{ marginRight: "2rem", marginTop: "5rem" }}
-            >
-              {questionIndex > 0 ? (
-                <Button
-                  variant="contained"
-                  type="submit"
-                  value="submit"
-                  style={styleTwo}
-                  onClick={handlePrev}
-                >
-                  Prev
-                </Button>
-              ) : (
-                ""
-              )}
-
-              {questionIndex >= question.length - 1 ? (
-                <Button
-                  variant="contained"
-                  type="submit"
-                  value="submit"
-                  style={styleTwo}
-                  onClick={handleSubmit}
-                >
-                  Submit
-                </Button>
-              ) : (
-                <Button
-                  variant="contained"
-                  type="submit"
-                  value="submit"
-                  style={styleTwo}
-                  onClick={handleNext}
-                >
-                  Next
-                </Button>
-              )}
-            </Box>
-            <Box>
-              <Button
-                variant="contained"
-                type="submit"
-                value="submit"
-                style={styleThree}
-                onClick={handleQuit}
-              >
-                Quit
-              </Button>
-            </Box>
-          </Box>
-        </Box>
+    <>
+      {isLoading ? (
+        <Loader
+          style={loadStyle}
+          type="ThreeDots"
+          color="orange"
+          height={100}
+          width={100}
+        />
       ) : (
-        <UserNoQuestionMsg question={question} />
+        <div>
+          {question.length > 0 ? (
+            <Box sx={style}>
+              <Typography
+                id="transition-modal-title"
+                variant="h4"
+                component="h2"
+                style={styleOne}
+              >
+                - Questions -
+              </Typography>
+              <Typography variant="p" component="h2" style={styleFour}>
+                Question {questionIndex + 1} of {question.length}
+              </Typography>
+
+              <div>
+                <Typography
+                  id="transition-modal-title"
+                  variant="h5"
+                  component="h2"
+                  style={qStyle}
+                >
+                  {question[questionIndex]?.question}
+                </Typography>
+
+                <Grid
+                  container
+                  style={{ justifyContent: "center", marginTop: "2rem" }}
+                >
+                  <FormControl>
+                    <RadioGroup
+                      row
+                      aria-labelledby="demo-row-radio-buttons-group-label"
+                      name="row-radio-buttons-group"
+                    >
+                      <Grid sm={12} xs={12} md={6} lg={6} xl={4}>
+                        <FormControlLabel
+                          value={question[questionIndex]?.option1}
+                          control={<Radio />}
+                          label={question[questionIndex]?.option1}
+                          onChange={onSelect1}
+                        />
+                      </Grid>
+                      <Grid sm={12} xs={12} md={6} lg={6} xl={4}>
+                        <FormControlLabel
+                          value={question[questionIndex]?.option2}
+                          control={<Radio />}
+                          label={question[questionIndex]?.option2}
+                          onChange={onSelect2}
+                        />
+                      </Grid>
+                      <Grid sm={12} xs={12} md={6} lg={6} xl={4}>
+                        <FormControlLabel
+                          value={question[questionIndex]?.option3}
+                          control={<Radio />}
+                          label={question[questionIndex]?.option3}
+                          onChange={onSelect3}
+                        />
+                      </Grid>
+                      <Grid sm={12} xs={12} md={6} lg={6} xl={4}>
+                        <FormControlLabel
+                          value={question[questionIndex]?.option4}
+                          control={<Radio />}
+                          label={question[questionIndex]?.option4}
+                          onChange={onSelect4}
+                        />
+                      </Grid>
+                    </RadioGroup>
+                  </FormControl>
+                </Grid>
+              </div>
+              {error ? <p style={errorStyle}>Please select a choice!!</p> : ""}
+              <Box>
+                <Box
+                  textAlign="right"
+                  style={{ marginRight: "2rem", marginTop: "5rem" }}
+                >
+                  {questionIndex > 0 ? (
+                    <Button
+                      variant="contained"
+                      type="submit"
+                      value="submit"
+                      style={styleTwo}
+                      onClick={handlePrev}
+                    >
+                      Prev
+                    </Button>
+                  ) : (
+                    ""
+                  )}
+
+                  {questionIndex >= question.length - 1 ? (
+                    <Button
+                      variant="contained"
+                      type="submit"
+                      value="submit"
+                      style={styleTwo}
+                      onClick={handleSubmit}
+                    >
+                      Submit
+                    </Button>
+                  ) : (
+                    <Button
+                      variant="contained"
+                      type="submit"
+                      value="submit"
+                      style={styleTwo}
+                      onClick={handleNext}
+                    >
+                      Next
+                    </Button>
+                  )}
+                </Box>
+                <Box>
+                  <Button
+                    variant="contained"
+                    type="submit"
+                    value="submit"
+                    style={styleThree}
+                    onClick={() => handleQuit(question[questionIndex].category)}
+                  >
+                    Quit
+                  </Button>
+                </Box>
+              </Box>
+            </Box>
+          ) : (
+            <UserNoQuestionMsg />
+          )}
+        </div>
       )}
-    </div>
+    </>
   );
 }
 

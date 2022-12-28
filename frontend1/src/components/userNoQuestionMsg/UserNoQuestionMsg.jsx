@@ -1,9 +1,7 @@
 import React from "react";
-import { useNavigate } from "react-router-dom";
 import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
 import Typography from "@mui/material/Typography";
-import Loader from "react-loader-spinner";
 
 const style = {
   position: "absolute",
@@ -35,71 +33,20 @@ const styleOne = {
   marginLeft: "5rem",
 };
 
-const styleTwo = {
-  backgroundColor: "#001253",
-  borderRadius: "20px",
-  marginTop: 25,
-  paddingLeft: "50px",
-  paddingRight: "50px",
-  margin: "1rem 17rem",
-};
-
-const loadStyle = {
-  position: "absolute",
-  marginLeft: "19rem",
-  marginTop: "5rem",
-};
-
-function useUserNoQuestionMsg(question) {
-  const navigate = useNavigate();
-
-  const handleBack = () => {
-    navigate("/");
-  };
-
+function useUserNoQuestionMsg() {
   return (
     <div>
-      {question ? (
-        <Box sx={style}>
-          <Typography
-            id="transition-modal-title"
-            variant="h4"
-            component="h2"
-            style={style1}
-          >
-            - Questions -
-          </Typography>
-          <Loader
-            style={loadStyle}
-            type="ThreeDots"
-            color="#e33324"
-            height={100}
-            width={100}
-            timeout={2000}
-          />
-        </Box>
-      ) : (
-        <Box sx={style}>
-          <Typography
-            id="transition-modal-title"
-            variant="h4"
-            component="h2"
-            style={style1}
-          >
-            - Questions -
-          </Typography>
-          <h1 style={styleOne}>Sorry..Questions is not available..!!</h1>
-          <Button
-            variant="contained"
-            type="submit"
-            value="submit"
-            style={styleTwo}
-            onClick={handleBack}
-          >
-            Back
-          </Button>
-        </Box>
-      )}
+      <Box sx={style}>
+        <Typography
+          id="transition-modal-title"
+          variant="h4"
+          component="h2"
+          style={style1}
+        >
+          - Questions -
+        </Typography>
+        <h1 style={styleOne}>Sorry..Questions is not available..!!</h1>
+      </Box>
     </div>
   );
 }

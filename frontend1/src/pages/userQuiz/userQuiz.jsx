@@ -62,7 +62,7 @@ function UserQuiz() {
   useEffect(() => {
     showQuiz();
     renderQuiz(`${quizzes}`)
-  }, [renderQuiz]);
+  }, [getQuiz]);
 
   return (
     <div>

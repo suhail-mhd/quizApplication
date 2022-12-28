@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useContext } from "react";
-import { useLocation } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
+import Loader from "react-loader-spinner";
 import ResponsiveAppBar from "../components/AppBar";
 import QuestionModal from "../components/questionModal";
 import { adminQuizContext } from "../contextApi/adminQuizContext";
@@ -66,6 +67,13 @@ const style4 = {
   color: "blue",
 };
 
+const loadStyle = {
+  position: "absolute",
+  top: "50%",
+  left: "50%",
+  transform: "translate(-50%, -50%)",
+};
+
 function AdminQuestions() {
   const [question, setQuestion] = useState([]);
   const [deleteId, setDeleteId] = useState();
@@ -82,10 +90,11 @@ function AdminQuestions() {
   const [categoryList, setCategoryList] = useState([]);
   const [type, setType] = useState("");
   const [typeList, setTypeList] = useState([]);
-  const [questionType, setQuestionType] = useState([])
-  const [showQuestion, setShowQuestion] = useState([])
-  const { getQuiz, setGetQuiz } = useContext(adminQuizContext);
-  const location = useLocation()
+  const [questionType, setQuestionType] = useState([]);
+  const [showQuestion, setShowQuestion] = useState([]);
+  const [isLoading, setIsLoading] = useState(false);
+  const location = useLocation();
+  const navigate = useNavigate();
 
   const showQuestions = () => {
     try {
@@ -97,21 +106,20 @@ function AdminQuestions() {
     }
   };
 
-const QuizName = location.state?.name
+  const QuizName = location.state?.name;
 
-for (let i = 0; i < questionType.length; i++) {
-  let type = questionType[i].type;
-  if(QuizName === type) {
-    var types = type
+  for (let i = 0; i < questionType.length; i++) {
+    let type = questionType[i].type;
+    if (QuizName === type) {
+      var types = type;
+    }
   }
-}
 
-const renderQuestion = (types) => {
-  axios.get(`/api/admin/getAllQuestions/${types}`).then((res) => {
-    setShowQuestion(res.data);
-  })
-}
-
+  const renderQuestion = (types) => {
+    axios.get(`/api/admin/getAllQuestions/${types}`).then((res) => {
+      setShowQuestion(res.data);
+    });
+  };
 
   // delete question handle
   const [open, setOpen] = React.useState(false);
@@ -206,17 +214,36 @@ const renderQuestion = (types) => {
       console.log(err);
     }
   };
+  const backHandler = () => {
+    navigate("/admin");
+  };
 
   useEffect(() => {
-    showQuestions()
-    renderQuestion(`${types}`)
+    showQuestions();
+    renderQuestion(`${types}`);
     getCategory();
     getType();
-  }, [render, renderQuestion]);
+  }, [showQuestion, render]);
+
+  useEffect(() => {
+    setIsLoading(true);
+    setTimeout(() => {
+      setIsLoading(false);
+    }, 1000);
+  }, []);
 
   return (
     <div>
       <ResponsiveAppBar />
+      <div style={{ float: "right", marginRight: "80px", marginTop: 100 }}>
+        <Button
+          variant="contained"
+          style={{ backgroundColor: "#333" }}
+          onClick={backHandler}
+        >
+          Back
+        </Button>
+      </div>
       <QuestionModal />
       {/* delete Modal start */}
       <Modal
@@ -303,7 +330,7 @@ const renderQuestion = (types) => {
                     type="text"
                     name="option1"
                     value={option1}
-                    style={{width:"150px"}}
+                    style={{ width: "150px" }}
                     onChange={(e) => setOption1(e.target.value)}
                   />
                 </Grid>
@@ -317,7 +344,7 @@ const renderQuestion = (types) => {
                     type="text"
                     name="option2"
                     value={option2}
-                    style={{width:"150px"}}
+                    style={{ width: "150px" }}
                     onChange={(e) => setOption2(e.target.value)}
                   />
                 </Grid>
@@ -331,7 +358,7 @@ const renderQuestion = (types) => {
                     type="text"
                     value={option3}
                     name="option3"
-                    style={{width:"150px"}}
+                    style={{ width: "150px" }}
                     onChange={(e) => setOption3(e.target.value)}
                   />
                 </Grid>
@@ -345,7 +372,7 @@ const renderQuestion = (types) => {
                     type="text"
                     name="option4"
                     value={option4}
-                    style={{width:"150px"}}
+                    style={{ width: "150px" }}
                     onChange={(e) => setOption4(e.target.value)}
                   />
                 </Grid>
@@ -359,7 +386,7 @@ const renderQuestion = (types) => {
                     type="text"
                     name="answer"
                     value={answer}
-                    style={{width:"150px"}}
+                    style={{ width: "150px" }}
                     onChange={(e) => setAnswer(e.target.value)}
                   />
                 </Grid>
@@ -401,7 +428,7 @@ const renderQuestion = (types) => {
                       value={type}
                       onChange={(e) => setType(e.target.value)}
                       label="type"
-                      style={{width:"150px"}}
+                      style={{ width: "150px" }}
                     >
                       <option aria-label="None" value="" />
                       {typeList.length &&
@@ -439,89 +466,111 @@ const renderQuestion = (types) => {
         Questions
       </Typography>
 
-      {showQuestion.length > 0 ? (
-        <Box sx={{ paddingLeft: 10, paddingRight: 10, marginBottom: 20 }}>
-          <TableContainer
-            component={Paper}
-            style={{
-              borderRadius: "20px",
-              boxShadow:
-                "0 10px 20px rgba(0,0,0,0.19), 0 6px 6px rgba(0,0,0,0.23)",
-            }}
-          >
-            <Table
-              sx={{ minWidth: 650 }}
-              size="small"
-              aria-label="a dense table"
-            >
-              <TableHead>
-                <TableRow sx={{ border: "2px solid black" }}>
-                  <TableCell style={{ fontWeight: "bold" }}>No</TableCell>
-                  <TableCell style={{ fontWeight: "bold" }}>Question</TableCell>
-                  <TableCell style={{ fontWeight: "bold" }}>Choices</TableCell>
-                  <TableCell style={{ fontWeight: "bold" }}>Answer</TableCell>
-                  <TableCell style={{ fontWeight: "bold" }}>Category</TableCell>
-                  <TableCell style={{ fontWeight: "bold" }}>Type</TableCell>
-                  <TableCell style={{ fontWeight: "bold" }}>Actions</TableCell>
-                </TableRow>
-              </TableHead>
-              <TableBody>
-                {showQuestion?.map((data, i) => {
-                  return (
-                    <TableRow
-                      sx={{
-                        "&:last-child td, &:last-child th": { border: 0 },
-                        height: 70,
-                        border: "1px solid black",
-                      }}
-                    >
-                      <TableCell component="th" scope="row">
-                        {i + 1}
+      {isLoading ? (
+        <Loader
+          style={loadStyle}
+          type="ThreeDots"
+          color="orange"
+          height={100}
+          width={100}
+        />
+      ) : (
+        <div>
+          {showQuestion.length > 0 ? (
+            <Box sx={{ paddingLeft: 10, paddingRight: 10, marginBottom: 20 }}>
+              <TableContainer
+                component={Paper}
+                style={{
+                  borderRadius: "20px",
+                  boxShadow:
+                    "0 10px 20px rgba(0,0,0,0.19), 0 6px 6px rgba(0,0,0,0.23)",
+                }}
+              >
+                <Table
+                  sx={{ minWidth: 650 }}
+                  size="small"
+                  aria-label="a dense table"
+                >
+                  <TableHead>
+                    <TableRow sx={{ border: "2px solid black" }}>
+                      <TableCell style={{ fontWeight: "bold" }}>No</TableCell>
+                      <TableCell style={{ fontWeight: "bold" }}>
+                        Question
                       </TableCell>
-                      <TableCell>{data?.question}</TableCell>
-                      <TableCell>
-                        <ol type="A">
-                          <li>{data?.option1}</li>
-                          <li>{data?.option2}</li>
-                          <li>{data?.option3}</li>
-                          <li>{data?.option4}</li>
-                        </ol>
+                      <TableCell style={{ fontWeight: "bold" }}>
+                        Choices
                       </TableCell>
-                      <TableCell>{data?.answer}</TableCell>
-                      <TableCell>{data?.category}</TableCell>
-                      <TableCell>{data?.type}</TableCell>
-                      <TableCell>
-                        <EditOutlinedIcon
-                          onClick={() => getQuestionDetails(`${data?._id}`)}
-                          style={{ color: "blue", cursor: "pointer" }}
-                        />
+                      <TableCell style={{ fontWeight: "bold" }}>
+                        Answer
                       </TableCell>
-                      <TableCell>
-                        <DeleteIcon
-                          onClick={() => dltQst(`${data?._id}`)}
-                          style={{ color: "red", cursor: "pointer" }}
-                        />
+                      <TableCell style={{ fontWeight: "bold" }}>
+                        Category
+                      </TableCell>
+                      <TableCell style={{ fontWeight: "bold" }}>Type</TableCell>
+                      <TableCell style={{ fontWeight: "bold" }}>
+                        Actions
                       </TableCell>
                     </TableRow>
-                  );
-                })}
-              </TableBody>
-            </Table>
-          </TableContainer>
-        </Box>
-      ) : (
-        <Typography
-          variant="h4"
-          component="h6"
-          textAlign="center"
-          fontFamily="egoe UI"
-          fontWeight={"bold"}
-          mt={5}
-          mb={5}
-          style={style4}
-        >
-          No Questions added...!! <br></br> Please add Questions
-        </Typography>
+                  </TableHead>
+                  <TableBody>
+                    {showQuestion?.map((data, i) => {
+                      return (
+                        <TableRow
+                          sx={{
+                            "&:last-child td, &:last-child th": { border: 0 },
+                            height: 70,
+                            border: "1px solid black",
+                          }}
+                        >
+                          <TableCell component="th" scope="row">
+                            {i + 1}
+                          </TableCell>
+                          <TableCell>{data?.question}</TableCell>
+                          <TableCell>
+                            <ol type="A">
+                              <li>{data?.option1}</li>
+                              <li>{data?.option2}</li>
+                              <li>{data?.option3}</li>
+                              <li>{data?.option4}</li>
+                            </ol>
+                          </TableCell>
+                          <TableCell>{data?.answer}</TableCell>
+                          <TableCell>{data?.category}</TableCell>
+                          <TableCell>{data?.type}</TableCell>
+                          <TableCell>
+                            <EditOutlinedIcon
+                              onClick={() => getQuestionDetails(`${data?._id}`)}
+                              style={{ color: "blue", cursor: "pointer" }}
+                            />
+                          </TableCell>
+                          <TableCell>
+                            <DeleteIcon
+                              onClick={() => dltQst(`${data?._id}`)}
+                              style={{ color: "red", cursor: "pointer" }}
+                            />
+                          </TableCell>
+                        </TableRow>
+                      );
+                    })}
+                  </TableBody>
+                </Table>
+              </TableContainer>
+            </Box>
+          ) : (
+            <Typography
+              variant="h4"
+              component="h6"
+              textAlign="center"
+              fontFamily="egoe UI"
+              fontWeight={"bold"}
+              mt={5}
+              mb={5}
+              style={style4}
+            >
+              No Questions added...!! <br></br> Please add Questions
+            </Typography>
+          )}
+        </div>
       )}
     </div>
   );

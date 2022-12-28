@@ -84,6 +84,10 @@ function Cards() {
     }
   };
 
+  useEffect(() => {
+    quizShow();
+  }, [quizShow, render]);
+
   const dltQuiz = (id) => {
     setDeleteId(id);
     handleOpen();
@@ -132,19 +136,8 @@ function Cards() {
   };
 
   const quizHandler = (quiz) => {
-    try {
-      axios.post("/api/admin/quizNav", { quiz }).then((res) => {
-        setGetQuiz(res.data.qType);
-      });
       navigate("/adminQuestions",{ state: { name: quiz } });
-    } catch (error) {
-      console.log(error);
-    }
   };
-
-  useEffect(() => {
-    quizShow();
-  }, [quizShow, render]);
 
   return (
     <div>

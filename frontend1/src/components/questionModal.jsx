@@ -19,7 +19,7 @@ const style = {
   top: "50%",
   left: "50%",
   transform: "translate(-50%, -50%)",
-  width: 400,
+  width: 450,
   height: 700,
   bgcolor: "background.paper",
   border: "2px solid #000",
@@ -169,15 +169,15 @@ export default function TransitionsModal() {
               Add Questions
             </Typography>
             {errorMsg && <ErrorMessage>{errorMsg}</ErrorMessage>}
-            <Grid container style={{ textAlign: "center", marginLeft: "1rem" }}>
-              <Grid item lg={12} style={{ display: "flex" }}>
+            <Grid container style={{ textAlign: "center"}}>
+              <Grid item md={6} xs={12} lg={12}>
                 <TextField
                   variant="standard"
                   label="Question"
                   placeholder="Enter the Question"
                   type="text"
                   name="question"
-                  style={{ marginBottom: 5, width:"350px" }}
+                  style={{ width:"350px", marginLeft:"-20px" }}
                   onChange={(e) => setQuestion(e.target.value)}
                 />
                 {error && question.length <= 0 ? (
@@ -186,6 +186,7 @@ export default function TransitionsModal() {
                       color: "red",
                       textAlign: "center",
                       fontWeight: "bold",
+                      margin:0
                     }}
                   >
                     Question is required
@@ -195,14 +196,14 @@ export default function TransitionsModal() {
                 )}
               </Grid>
 
-              <Grid item lg={6} style={{ display: "flex" }}>
+              <Grid item md={6} xs={12} lg={6}>
                 <TextField
                   variant="standard"
                   label="Option1"
                   placeholder="Enter the Options"
                   type="text"
                   name="option1"
-                  style={{ marginBottom: 5, width:"150px" }}
+                  style={{ width:"150px" }}
                   onChange={(e) => setOption1(e.target.value)}
                 />
                 {error && option1.length <= 0 ? (
@@ -211,6 +212,7 @@ export default function TransitionsModal() {
                       color: "red",
                       textAlign: "center",
                       fontWeight: "bold",
+                      margin:0
                     }}
                   >
                     Please fill in the field
@@ -220,14 +222,14 @@ export default function TransitionsModal() {
                 )}
               </Grid>
 
-              <Grid item lg={6} style={{ display: "flex" }}>
+              <Grid item md={6} xs={12} lg={6}>
                 <TextField
                   variant="standard"
                   label="Option2"
                   placeholder="Enter the Options"
                   type="text"
                   name="option2"
-                  style={{ marginBottom: 5, width:"150px" }}
+                  style={{ width:"150px" }}
                   onChange={(e) => setOption2(e.target.value)}
                 />
                 {error && option2.length <= 0 ? (
@@ -236,6 +238,7 @@ export default function TransitionsModal() {
                       color: "red",
                       textAlign: "center",
                       fontWeight: "bold",
+                      margin:0
                     }}
                   >
                     Please fill in the field
@@ -245,14 +248,14 @@ export default function TransitionsModal() {
                 )}
               </Grid>
 
-              <Grid item lg={6} style={{ display: "flex" }}>
+              <Grid item md={6} xs={12} lg={6}>
                 <TextField
                   variant="standard"
                   label="Option3"
                   placeholder="Enter the Options"
                   type="text"
                   name="option3"
-                  style={{ marginBottom: 5, width:"150px" }}
+                  style={{ width:"150px" }}
                   onChange={(e) => setOption3(e.target.value)}
                 />
                 {error && option3.length <= 0 ? (
@@ -261,6 +264,7 @@ export default function TransitionsModal() {
                       color: "red",
                       textAlign: "center",
                       fontWeight: "bold",
+                      margin:0
                     }}
                   >
                     Please fill in the field
@@ -270,14 +274,14 @@ export default function TransitionsModal() {
                 )}
               </Grid>
 
-              <Grid item lg={6} style={{ display: "flex" }}>
+              <Grid item md={6} xs={12} lg={6}>
                 <TextField
                   variant="standard"
                   label="Option4"
                   placeholder="Enter the Options"
                   type="text"
                   name="option4"
-                  style={{ marginBottom: 5, width:"150px" }}
+                  style={{ width:"150px" }}
                   onChange={(e) => setOption4(e.target.value)}
                 />
                 {error && option4.length <= 0 ? (
@@ -286,6 +290,7 @@ export default function TransitionsModal() {
                       color: "red",
                       textAlign: "center",
                       fontWeight: "bold",
+                      margin:0
                     }}
                   >
                     Please fill in the field
@@ -295,14 +300,14 @@ export default function TransitionsModal() {
                 )}
               </Grid>
 
-              <Grid item lg={6} style={{ display: "flex" }}>
+              <Grid item md={6} xs={12} lg={6}>
                 <TextField
                   variant="standard"
                   label="Answer"
                   placeholder="Enter the answer"
                   type="text"
                   name="answer"
-                  style={{ marginBottom: 5, width:"150px" }}
+                  style={{ width:"150px" }}
                   onChange={(e) => setAnswer(e.target.value)}
                 />
                 {error && answer.length <= 0 ? (
@@ -311,6 +316,7 @@ export default function TransitionsModal() {
                       color: "red",
                       textAlign: "center",
                       fontWeight: "bold",
+                      margin:0
                     }}
                   >
                     Answer is required
@@ -319,41 +325,8 @@ export default function TransitionsModal() {
                   ""
                 )}
               </Grid>
-
-              {/* <Grid item lg={12} style={{ display: "flex" }}>
-                <FormControl variant="standard" sx={{ m: 1, minWidth: 200 }}>
-                  <InputLabel htmlFor="demo-customized-select-native">
-                    Answer
-                  </InputLabel>
-                  <NativeSelect
-                    id="demo-customized-select-native"
-                    value={answer}
-                    onChange={handleChange1}
-                    label="answer"
-                  >
-                    <option aria-label="None" value="" />
-                    <option>A</option>
-                    <option>B</option>
-                    <option>C</option>
-                    <option>D</option>
-                  </NativeSelect>
-                </FormControl>
-                {error && answer.length <= 0 ? (
-                  <p
-                    style={{
-                      color: "red",
-                      textAlign: "center",
-                      fontWeight: "bold",
-                    }}
-                  >
-                    Please fill in the field
-                  </p>
-                ) : (
-                  ""
-                )}
-              </Grid> */}
-              <div style={{ display: "flex" }}>
-                <FormControl variant="standard" sx={{ m: 1, minWidth: 120 }}>
+              <div>
+                <FormControl variant="standard" sx={{ m: 1, minWidth: 120 }} style={{marginLeft:"2rem"}}>
                   <InputLabel htmlFor="demo-customized-select-native">
                     Category
                   </InputLabel>
@@ -381,6 +354,7 @@ export default function TransitionsModal() {
                       color: "red",
                       textAlign: "center",
                       fontWeight: "bold",
+                      margin:0
                     }}
                   >
                     Please fill in the field
@@ -389,8 +363,8 @@ export default function TransitionsModal() {
                   ""
                 )}
               </div>
-              <div style={{ display: "flex" }}>
-                <FormControl variant="standard" sx={{ m: 1, minWidth: 120 }}>
+              <div>
+                <FormControl variant="standard" sx={{ m: 1, minWidth: 120 }} style={{marginLeft:"2rem"}}>
                   <InputLabel htmlFor="demo-customized-select-native">
                     Type
                   </InputLabel>
@@ -417,6 +391,8 @@ export default function TransitionsModal() {
                       color: "red",
                       textAlign: "center",
                       fontWeight: "bold",
+                      margin:0,
+                      paddingLeft:"2rem"
                     }}
                   >
                     Please fill in the field

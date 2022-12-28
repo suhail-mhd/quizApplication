@@ -166,15 +166,15 @@ function UserShowResult() {
           </div>
         </div>
         <Box textAlign="right" style={{ marginRight: "2rem" }}>
-            <Button
+            {/* <Button
               variant="contained"
               type="submit"
               value="submit"
               style={styleTwo}
-              onClick={() => resetHandler(result.type)}
+              onClick={() => resetHandler(result?.type)}
             >
               Restart
-            </Button>
+            </Button> */}
 
           <Link to={"/"} style={{ textDecoration: "none" }}>
             <Button
