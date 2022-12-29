@@ -60,13 +60,18 @@ export default function TransitionsModal() {
       setError(true);
     } else {
       try {
-        axios.post("/api/admin/addQuiz", { quiz, category }).then((res) => {
-          setQuiz(res.data);
-        });
+        axios
+          .post("/api/admin/addQuiz", { quiz, category })
+          .then((res) => {
+            setQuiz(res.data);
+          })
+          .catch((err) => {
+            setErrorMsg(err.response.data);
+            setOpen(true);
+          });
         handleClose();
       } catch (error) {
         console.log("error occurred", error);
-        setErrorMsg("Cannot use the existed quiz");
       }
     }
   };

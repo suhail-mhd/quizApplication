@@ -56,17 +56,23 @@ export default function TransitionsModal() {
   const categoryHandler = () => {
     if (category.length == 0) {
       setError(true);
-    }
-
-    try {
-      axios.post("/api/admin/addCategory", { category }).then((res) => {
-        setCategory(res.data);
-      });
-      handleClose();
-    } catch (error) {
-      console.log("error occurred", error);
-      setError(false);
-      setErrorMsg("Cannot use the existed Category");
+    } else {
+      try {
+        axios
+          .post("/api/admin/addCategory", { category })
+          .then((res) => {
+            setCategory(res.data);
+          })
+          .catch((err) => {
+            setErrorMsg(err.response.data);
+            setOpen(true);
+          });
+        handleClose();
+      } catch (error) {
+        console.log("error occurred", error);
+        setError(false);
+        setErrorMsg("Cannot use the existed Category");
+      }
     }
   };
 

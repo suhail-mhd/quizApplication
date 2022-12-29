@@ -62,7 +62,6 @@ function Cards() {
   const [id, setId] = useState();
   const [quiz, setQuiz] = useState("");
   const navigate = useNavigate();
-  const { setGetQuiz } = useContext(adminQuizContext);
 
   // delete quiz handle
   const [open, setOpen] = React.useState(false);
@@ -83,10 +82,6 @@ function Cards() {
       console.log(error);
     }
   };
-
-  useEffect(() => {
-    quizShow();
-  }, [quizShow, render]);
 
   const dltQuiz = (id) => {
     setDeleteId(id);
@@ -136,8 +131,12 @@ function Cards() {
   };
 
   const quizHandler = (quiz) => {
-      navigate("/adminQuestions",{ state: { name: quiz } });
+    navigate("/adminQuestions", { state: { name: quiz } });
   };
+
+  useEffect(() => {
+    quizShow();
+  }, [quizShow, render, quiz]);
 
   return (
     <div>

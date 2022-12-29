@@ -169,7 +169,7 @@ function UserShowQuestion() {
   // next and prev button
 
   const handleNext = () => {
-    if (checked) {
+    if (checked && questionIndex < question.length) {
       setQuestionIndex(questionIndex + 1);
       setChecked();
     } else {
@@ -178,8 +178,10 @@ function UserShowQuestion() {
   };
 
   const handlePrev = () => {
+    setError(false);
     if (questionIndex > 0) {
       setQuestionIndex(questionIndex - 1);
+      setChecked(checked);
     }
   };
 

@@ -45,7 +45,7 @@ const styleThree = {
   paddingRight: "50px",
 };
 
-export default function TransitionsModal() {
+export default function TransitionsModal(QuizName) {
   const [open, setOpen] = React.useState(false);
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
@@ -58,19 +58,20 @@ export default function TransitionsModal() {
   const [answer, setAnswer] = useState("");
   const [category, setCategory] = useState("");
   const [categoryList, setCategoryList] = useState([]);
-  const [type, setType] = useState("");
+  // const [type, setType] = useState("");
   const [typeList, setTypeList] = useState([]);
   const [error, setError] = useState(false);
   const [errorMsg, setErrorMsg] = useState("");
+const type = QuizName?.QuizName
 
   const handleChange2 = (event) => {
     event.preventDefault();
     setCategory(event.target.value);
   };
-  const handleChange3 = (event) => {
-    event.preventDefault();
-    setType(event.target.value);
-  };
+  // const handleChange3 = (event) => {
+  //   event.preventDefault();
+  //   setType(event.target.value);
+  // };
 
   const questionHandler = () => {
     if (
@@ -99,6 +100,10 @@ export default function TransitionsModal() {
           })
           .then((res) => {
             setQuestion(res.data);
+          })
+          .catch((err) => {
+            setErrorMsg(err.response.data);
+            setOpen(true);
           });
         handleClose();
       } catch (error) {
@@ -169,7 +174,7 @@ export default function TransitionsModal() {
               Add Questions
             </Typography>
             {errorMsg && <ErrorMessage>{errorMsg}</ErrorMessage>}
-            <Grid container style={{ textAlign: "center"}}>
+            <Grid container style={{ textAlign: "center" }}>
               <Grid item md={6} xs={12} lg={12}>
                 <TextField
                   variant="standard"
@@ -177,7 +182,7 @@ export default function TransitionsModal() {
                   placeholder="Enter the Question"
                   type="text"
                   name="question"
-                  style={{ width:"350px", marginLeft:"-20px" }}
+                  style={{ width: "350px", marginLeft: "-20px" }}
                   onChange={(e) => setQuestion(e.target.value)}
                 />
                 {error && question.length <= 0 ? (
@@ -186,7 +191,7 @@ export default function TransitionsModal() {
                       color: "red",
                       textAlign: "center",
                       fontWeight: "bold",
-                      margin:0
+                      margin: 0,
                     }}
                   >
                     Question is required
@@ -203,7 +208,7 @@ export default function TransitionsModal() {
                   placeholder="Enter the Options"
                   type="text"
                   name="option1"
-                  style={{ width:"150px" }}
+                  style={{ width: "150px" }}
                   onChange={(e) => setOption1(e.target.value)}
                 />
                 {error && option1.length <= 0 ? (
@@ -212,7 +217,7 @@ export default function TransitionsModal() {
                       color: "red",
                       textAlign: "center",
                       fontWeight: "bold",
-                      margin:0
+                      margin: 0,
                     }}
                   >
                     Please fill in the field
@@ -229,7 +234,7 @@ export default function TransitionsModal() {
                   placeholder="Enter the Options"
                   type="text"
                   name="option2"
-                  style={{ width:"150px" }}
+                  style={{ width: "150px" }}
                   onChange={(e) => setOption2(e.target.value)}
                 />
                 {error && option2.length <= 0 ? (
@@ -238,7 +243,7 @@ export default function TransitionsModal() {
                       color: "red",
                       textAlign: "center",
                       fontWeight: "bold",
-                      margin:0
+                      margin: 0,
                     }}
                   >
                     Please fill in the field
@@ -255,7 +260,7 @@ export default function TransitionsModal() {
                   placeholder="Enter the Options"
                   type="text"
                   name="option3"
-                  style={{ width:"150px" }}
+                  style={{ width: "150px" }}
                   onChange={(e) => setOption3(e.target.value)}
                 />
                 {error && option3.length <= 0 ? (
@@ -264,7 +269,7 @@ export default function TransitionsModal() {
                       color: "red",
                       textAlign: "center",
                       fontWeight: "bold",
-                      margin:0
+                      margin: 0,
                     }}
                   >
                     Please fill in the field
@@ -281,7 +286,7 @@ export default function TransitionsModal() {
                   placeholder="Enter the Options"
                   type="text"
                   name="option4"
-                  style={{ width:"150px" }}
+                  style={{ width: "150px" }}
                   onChange={(e) => setOption4(e.target.value)}
                 />
                 {error && option4.length <= 0 ? (
@@ -290,7 +295,7 @@ export default function TransitionsModal() {
                       color: "red",
                       textAlign: "center",
                       fontWeight: "bold",
-                      margin:0
+                      margin: 0,
                     }}
                   >
                     Please fill in the field
@@ -307,7 +312,7 @@ export default function TransitionsModal() {
                   placeholder="Enter the answer"
                   type="text"
                   name="answer"
-                  style={{ width:"150px" }}
+                  style={{ width: "150px" }}
                   onChange={(e) => setAnswer(e.target.value)}
                 />
                 {error && answer.length <= 0 ? (
@@ -316,7 +321,7 @@ export default function TransitionsModal() {
                       color: "red",
                       textAlign: "center",
                       fontWeight: "bold",
-                      margin:0
+                      margin: 0,
                     }}
                   >
                     Answer is required
@@ -326,7 +331,11 @@ export default function TransitionsModal() {
                 )}
               </Grid>
               <div>
-                <FormControl variant="standard" sx={{ m: 1, minWidth: 120 }} style={{marginLeft:"2rem"}}>
+                <FormControl
+                  variant="standard"
+                  sx={{ m: 1, minWidth: 120 }}
+                  style={{ marginLeft: "2rem" }}
+                >
                   <InputLabel htmlFor="demo-customized-select-native">
                     Category
                   </InputLabel>
@@ -354,7 +363,7 @@ export default function TransitionsModal() {
                       color: "red",
                       textAlign: "center",
                       fontWeight: "bold",
-                      margin:0
+                      margin: 0,
                     }}
                   >
                     Please fill in the field
@@ -363,36 +372,25 @@ export default function TransitionsModal() {
                   ""
                 )}
               </div>
-              <div>
-                <FormControl variant="standard" sx={{ m: 1, minWidth: 120 }} style={{marginLeft:"2rem"}}>
-                  <InputLabel htmlFor="demo-customized-select-native">
-                    Type
-                  </InputLabel>
-                  <NativeSelect
-                    id="demo-customized-select-native"
-                    value={type}
-                    onChange={handleChange3}
-                    label="type"
-                  >
-                    <option aria-label="None" value="" />
-                    {typeList.length &&
-                      typeList.map((data) => {
-                        return (
-                          <option value={data.quiz} key={data.id}>
-                            {data.quiz}
-                          </option>
-                        );
-                      })}
-                  </NativeSelect>
-                </FormControl>
+              {/* <div>
+              <TextField
+                  variant="standard"
+                  label="Type"
+                  placeholder="Enter the Type"
+                  type="text"
+                  name="type"
+                  style={{ width: "150px" }}
+                  value={type}
+                  // onChange={(e) => setAnswer(e.target.value)}
+                />
                 {error && type.length <= 0 ? (
                   <p
                     style={{
                       color: "red",
                       textAlign: "center",
                       fontWeight: "bold",
-                      margin:0,
-                      paddingLeft:"2rem"
+                      margin: 0,
+                      paddingLeft: "2rem",
                     }}
                   >
                     Please fill in the field
@@ -400,7 +398,7 @@ export default function TransitionsModal() {
                 ) : (
                   ""
                 )}
-              </div>
+              </div> */}
             </Grid>
             <Box textAlign="center">
               <Button

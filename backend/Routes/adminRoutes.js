@@ -10,10 +10,13 @@ const {
   getCategory,
   deleteQuestion,
   deleteQuiz,
+  deleteCategory,
   updateQuestion,
   updateQuiz,
+  updateCategory,
   getAllQuestionDetails,
   getAllQuizDetails,
+  getAllCategoryDetails,
   quizNav,
   getAllQuestions
 } = require("../Controllers/adminControllers");
@@ -34,13 +37,19 @@ adminRouter.route("/deleteQuestion").post(deleteQuestion);
 
 adminRouter.route("/deleteQuiz").post(deleteQuiz);
 
+adminRouter.route("/deleteCategory").post(deleteCategory);
+
 adminRouter.route("/getAllQuestionDetails/:id").get(getAllQuestionDetails);
 
 adminRouter.route("/getAllQuizDetails/:id").get(getAllQuizDetails);
 
+adminRouter.route("/getAllCategoryDetails/:id").get(getAllCategoryDetails);
+
 adminRouter.route("/updateQuestion").patch(updateQuestion);
 
 adminRouter.route("/updateQuiz").patch(updateQuiz);
+
+adminRouter.route("/updateCategory").patch(updateCategory);
 
 adminRouter.route("/quizNav").post(quizNav);
 

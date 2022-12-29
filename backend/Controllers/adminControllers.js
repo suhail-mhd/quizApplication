@@ -20,8 +20,8 @@ const addQuestion = asyncHandler(async (req, res) => {
   const questionExist = await Question.findOne({ question });
 
   if (questionExist) {
-    res.status(400);
-    throw new Error("Question Already Exist");
+    res.status(400).send("Question Already Exist")
+    throw new Error();
   }
 
   const data = await Question.create({
@@ -71,8 +71,8 @@ const addQuiz = asyncHandler(async (req, res) => {
   const quizExist = await Quiz.findOne({ quiz });
 
   if (quizExist) {
-    res.status(409);
-    throw new Error("Quiz Already Exist");
+    res.status(400).send("Quiz Already Exist");
+    throw new Error()
   }
 
   const data = await Quiz.create({ quiz, category });
@@ -103,8 +103,8 @@ const addCategory = asyncHandler(async (req, res) => {
   const categoryExist = await Category.findOne({ category });
 
   if (categoryExist) {
-    res.status(400);
-    throw new Error("category Already Exist");
+    res.status(400).send("category Already Exist")
+    throw new Error();
   }
 
   const data = await Category.create({ category });
@@ -142,6 +142,15 @@ const deleteQuiz = asyncHandler(async (req, res) => {
   const { deleteId } = req.body;
   const dltQuiz = await Quiz.findById(deleteId);
   await dltQuiz.delete();
+  res.json({});
+});
+
+// delete category
+
+const deleteCategory = asyncHandler(async (req, res) => {
+  const { deleteId } = req.body;
+  const dltCat = await Category.findById(deleteId);
+  await dltCat.delete();
   res.json({});
 });
 
@@ -216,6 +225,38 @@ const updateQuiz = asyncHandler(async (req, res) => {
   res.status(200).json(QuizData);
 });
 
+// update category
+
+const getAllCategoryDetails = asyncHandler(async (req, res) => {
+  const id = req.params.id;
+
+  try {
+    const allCategory = await Category.findById(id);
+    res.json(allCategory);
+  } catch (error) {
+    console.log(
+      "Something went wrong when we try to get all Question value",
+      error
+    );
+  }
+});
+
+const updateCategory = asyncHandler(async (req, res) => {
+  const { id } = req.body;
+
+  const newCategoryData = {
+    category: req.body.getCategory,
+  };
+
+  const CategoryData = await Category.findByIdAndUpdate(id, newCategoryData, {
+    new: true,
+    runValidators: true,
+    useFindAndModify: false,
+  });
+
+  res.status(200).json(CategoryData);
+});
+
 // navigate to question based on quiz
 
 const quizNav = asyncHandler(async (req, res) => {
@@ -253,10 +294,13 @@ module.exports = {
   getCategory,
   deleteQuestion,
   deleteQuiz,
+  deleteCategory,
   getAllQuestionDetails,
   getAllQuizDetails,
+  getAllCategoryDetails,
   updateQuestion,
   updateQuiz,
+  updateCategory,
   quizNav,
   getAllQuestions
 };

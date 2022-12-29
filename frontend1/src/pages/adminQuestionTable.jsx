@@ -223,7 +223,18 @@ function AdminQuestions() {
     renderQuestion(`${types}`);
     getCategory();
     getType();
-  }, [showQuestion, render]);
+  }, [
+    showQuestion,
+    render,
+    questions,
+    option1,
+    option2,
+    option3,
+    option4,
+    answer,
+    category,
+    type,
+  ]);
 
   useEffect(() => {
     setIsLoading(true);
@@ -244,7 +255,7 @@ function AdminQuestions() {
           Back
         </Button>
       </div>
-      <QuestionModal />
+      <QuestionModal QuizName={QuizName} />
       {/* delete Modal start */}
       <Modal
         open={open}
