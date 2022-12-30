@@ -1,56 +1,20 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate, Link } from "react-router-dom";
+import { useForm } from 'react-hook-form'
 import "./userLogin.css";
 import axios from "axios";
 import ErrorMessage from "../../components/ErrorMessage";
+import TextField from "@mui/material/TextField";
 
 function UserLogin() {
-  // const [email,setEmail] = useState("")
-  // const [password,setPassword] = useState("")
-  // const [error,setError] = useState('')
-  // const [errors,setErrors] = useState({})
-  // const navigate = useNavigate();
+  const [error, setError] = useState("");
+  const navigate = useNavigate();
 
-  // // callling useEffect and navigate to homepage and checking there is user logged in or not.
-  // useEffect(()=>{
-  //    const userInfo = localStorage.getItem('userInfo');
-
-  //    if(userInfo){
-  //      navigate('/homepage')
-  //    }
-  // },[navigate])
-
-  // // sending data to backend calling the function submitHandler
-
-  // const submitHandler = async(e) => {
-  //   e.preventDefault();
-
-  //   console.log(email,password);
-
-  //   try {
-  //     const config = {
-  //       headers: {
-  //           "Content-type": "application/json"
-  //       },
-  //   }
-
-  //     //sending file using axios
-  //     const data = await axios.post('/api/users/login',{
-  //      email,
-  //     password
-  //     },config)
-
-  //     console.log(data);
-  //     // Storing data to localstorage.
-  //     localStorage.setItem('userInfo',JSON.stringify(data))
-  //       navigate('/homepage')
-  //   } catch (error) {
-  //     console.log(error);
-  //     setErrors(Validation(email,password))
-  //   }
-
-  //   console.log(error);
-  // }
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm();
 
   return (
     <div className="login_container">
@@ -61,25 +25,53 @@ function UserLogin() {
             //    onSubmit={submitHandler}
           >
             <h1 style={{ color: "#333" }}>Login to Your Account</h1>
-            <input
-              type="email"
-              placeholder="Email"
+            {error && <ErrorMessage>{error}</ErrorMessage>}
+
+            <TextField
+            className={'input'}
+              margin="normal"
+              required
+              fullWidth
+              id="email"
+              label="Email"
               name="email"
-              //   value={email}
-              //   onChange={(e) => setEmail(e.target.value)}
-              className="input"
+              autoComplete="email"
+              autoFocus
+              variant="standard"
+              {...register("email", {
+                required: "Email is required",
+                pattern: {
+                  value: /^\S+@\S+$/i,
+                  message: "This is not a valid email",
+                },
+              })}
             />
-            {/* {errors.email && <p className="error">{errors.email}</p>} */}
-            <input
-              type="password"
-              placeholder="Password"
+            <p style={{ color: "red", fontSize: "12px" }}>
+              {errors.email && errors.email.message}
+            </p>
+
+            <TextField
+            className={'input'}
+              margin="normal"
+              required
+              fullWidth
               name="password"
-              //   value={password}
-              //   onChange={(e) => setPassword(e.target.value)}
-              className="input"
+              label="Password"
+              type="password"
+              id="password"
+              autoComplete="current-password"
+              variant="standard"
+              {...register("password", {
+                required: "Password is required",
+                minLength: {
+                  value: 6,
+                  message: "Minimum length is 6 characters",
+                },
+              })}
             />
-            {/* {errors.password && <p className="error">{errors.password}</p>} */}
-            {/* {error && <Errormessage variant="danger" className='error_msg' >{error}</Errormessage>} */}
+            <p style={{ color: "red", fontSize: "12px" }}>
+              {errors.password && errors.password.message}
+            </p>
             <button type="submit" className="green_btn">
               Sign In
             </button>

@@ -3,6 +3,7 @@ const router = express.Router();
 
 const {
   registerUser,
+  loginUser,
   getQuiz,
   getQuestion,
   getCategory,
@@ -14,6 +15,8 @@ const {
 } = require("../Controllers/userControllers");
 
 router.route("/registerUser").post(registerUser);
+
+router.route("/loginUser").get(loginUser);
 
 router.route("/getQuiz").get(getQuiz);
 

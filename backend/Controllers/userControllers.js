@@ -40,6 +40,26 @@ const registerUser = asyncHandler(async (req, res) => {
   }
 });
 
+//user login
+
+const loginUser = asyncHandler(async (req, res) => {
+  const { email, password } = req.body;
+
+  const user = await User.findOne({ email });
+
+    if (user && (await user.matchPassword(password))) {
+      res.json({
+        _id: user._id,
+        email: user.email,
+        name: user.name,
+        token: generateToken(user._id),
+      });
+    } else {
+      res.status(400);
+      throw new Error("Email OR Password Not matching");
+    }
+});
+
 // get quiz
 
 const getQuiz = asyncHandler(async (req, res) => {
@@ -204,6 +224,7 @@ const getAllQuizzes = asyncHandler(async (req, res) => {
 
 module.exports = {
   registerUser,
+  loginUser,
   getQuestion,
   getQuiz,
   getCategory,

@@ -34,7 +34,7 @@ function UseSignUp() {
 
         localStorage.setItem("userInfo", JSON.stringify(data));
         //    setLoading(false)
-        navigate("/userHome");
+        navigate("/");
       } catch (error) {
         console.log(error);
         //  setLoading(false)
@@ -42,15 +42,6 @@ function UseSignUp() {
       }
     }
   };
-
-  useEffect(() => {
-    const userInfo = localStorage.getItem("userInfo");
-    if (userInfo) {
-      navigate("/userHome");
-    } else {
-      navigate("/useSignUp");
-    }
-  }, [navigate]);
 
   return (
     <>
