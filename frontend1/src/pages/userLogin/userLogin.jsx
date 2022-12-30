@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate, Link } from "react-router-dom";
-import { useForm } from 'react-hook-form'
+import { useForm } from "react-hook-form";
 import "./userLogin.css";
 import axios from "axios";
 import ErrorMessage from "../../components/ErrorMessage";
@@ -16,19 +16,37 @@ function UserLogin() {
     formState: { errors },
   } = useForm();
 
+  const submitHandle = async (data) => {
+    const { email, password } = data;
+
+    try {
+      const { data, status } = await axios.post("/api/user/loginUser", {
+        email,
+        password,
+      });
+
+      localStorage.setItem("userInfo", JSON.stringify(data));
+      navigate("/userHome");
+    } catch (error) {
+      console.log(error);
+      setError("Invalid Login Access!");
+    }
+  };
+
   return (
     <div className="login_container">
       <div className="login_form_container">
         <div className="right">
           <form
             className="form_container"
-            //    onSubmit={submitHandler}
+            onSubmit={handleSubmit(submitHandle)}
+            noValidate
           >
             <h1 style={{ color: "#333" }}>Login to Your Account</h1>
             {error && <ErrorMessage>{error}</ErrorMessage>}
 
             <TextField
-            className={'input'}
+              className={"input"}
               margin="normal"
               required
               fullWidth
@@ -51,7 +69,7 @@ function UserLogin() {
             </p>
 
             <TextField
-            className={'input'}
+              className={"input"}
               margin="normal"
               required
               fullWidth

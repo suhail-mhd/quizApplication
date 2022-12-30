@@ -16,7 +16,7 @@ const {
 
 router.route("/registerUser").post(registerUser);
 
-router.route("/loginUser").get(loginUser);
+router.route("/loginUser").post(loginUser);
 
 router.route("/getQuiz").get(getQuiz);
 

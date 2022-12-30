@@ -23,7 +23,6 @@ function UseSignUp() {
     if (password !== confirmPassword) {
       setError("Password Not Matching");
     } else {
-      //   setLoading(true)
       try {
         const { data, status } = await axios.post("/api/user/registerUser", {
           name,
@@ -33,11 +32,9 @@ function UseSignUp() {
         });
 
         localStorage.setItem("userInfo", JSON.stringify(data));
-        //    setLoading(false)
         navigate("/");
       } catch (error) {
         console.log(error);
-        //  setLoading(false)
         setError("Cannot use the existed data(email,phone)");
       }
     }

@@ -9,13 +9,12 @@ const Quiz = require("../Model/quizModel/quizModel");
 //user register
 
 const registerUser = asyncHandler(async (req, res) => {
-  const { name, email, phone, password } =
-    req.body;
+  const { name, email, phone, password } = req.body;
 
   const UserExist = await User.findOne({ email });
 
   if (UserExist) {
-    res.status(400).send("Email Already Exist")
+    res.status(400).send("Email Already Exist");
     throw new Error();
   }
 
@@ -47,17 +46,17 @@ const loginUser = asyncHandler(async (req, res) => {
 
   const user = await User.findOne({ email });
 
-    if (user && (await user.matchPassword(password))) {
-      res.json({
-        _id: user._id,
-        email: user.email,
-        name: user.name,
-        token: generateToken(user._id),
-      });
-    } else {
-      res.status(400);
-      throw new Error("Email OR Password Not matching");
-    }
+  if (user && (await user.matchPassword(password))) {
+    res.json({
+      _id: user._id,
+      email: user.email,
+      name: user.name,
+      token: generateToken(user._id),
+    });
+  } else {
+    res.status(400);
+    throw new Error("Email OR Password Not matching");
+  }
 });
 
 // get quiz
@@ -131,7 +130,7 @@ const submitAnswer = asyncHandler(async (req, res) => {
 
   // get total questions //
 
-  const questionsNumber = await Question.find({type});
+  const questionsNumber = await Question.find({ type });
   const totalQuestions = questionsNumber.length;
 
   // total quiz point
@@ -165,7 +164,7 @@ const submitAnswer = asyncHandler(async (req, res) => {
     totalQuizPoints,
     score,
     flag,
-    type
+    type,
   });
 });
 
@@ -187,7 +186,7 @@ const quizNav = asyncHandler(async (req, res) => {
     const qType = await Category.find({ type: quiz });
     res.json({
       qType,
-      quiz
+      quiz,
     });
   } catch (error) {
     console.log(error);
@@ -198,7 +197,7 @@ const getAllQuestions = asyncHandler(async (req, res) => {
   const type = req.params.type;
 
   try {
-    const allQuestions = await Question.find({type});
+    const allQuestions = await Question.find({ type });
     res.json(allQuestions);
   } catch (error) {
     console.log(
@@ -212,7 +211,7 @@ const getAllQuizzes = asyncHandler(async (req, res) => {
   const category = req.params.category;
 
   try {
-    const allQuiz = await Quiz.find({category});
+    const allQuiz = await Quiz.find({ category });
     res.json(allQuiz);
   } catch (error) {
     console.log(
@@ -232,5 +231,5 @@ module.exports = {
   catNav,
   quizNav,
   getAllQuestions,
-  getAllQuizzes
+  getAllQuizzes,
 };
