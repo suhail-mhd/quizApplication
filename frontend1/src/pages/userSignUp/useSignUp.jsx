@@ -1,53 +1,56 @@
 import React, { useState, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
+import { useForm } from "react-hook-form";
 import "./userSignUp.css";
 import axios from "axios";
 import ErrorMessage from "../../components/ErrorMessage";
+import Grid from "@mui/material/Grid";
+import TextField from "@mui/material/TextField";
 
 function UseSignUp() {
-  // const [name , setName] = useState("");
-  // const [email , setEmail] = useState("");
-  // const [phone , setPhone] = useState("");
-  // const [password , setPassword] = useState("");
-  // const [Confirmpassword , setConfirmPassword] = useState('')
-  // const [message,setMessage] = useState(null)
-  // const [error,setError] = useState(false)
-  // const [errors,setErrors] = useState({})
-  // const navigate = useNavigate();
+  const [error, setError] = useState("");
+  const navigate = useNavigate();
 
-  // useEffect(()=>{
-  //   const userInfo = localStorage.getItem('userInfo');
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm();
 
-  //   if(userInfo){
-  //     navigate('/')
-  //   }
-  // },[navigate])
+  const submitHandle = async (data) => {
+    const { name, email, password, confirmPassword, phone } = data;
 
-  // const registerUser= async(e) =>{
-  //     e.preventDefault()
-  //   if(password !== Confirmpassword){
-  //     setMessage("Password Not Matching");
-  //   }else{
-  //     setMessage(null)
-  //     try {
-  //         const config = {
-  //           headers: {
-  //               "Content-type": "application/json"
-  //           },
-  //       }
+    if (password !== confirmPassword) {
+      setError("Password Not Matching");
+    } else {
+      //   setLoading(true)
+      try {
+        const { data, status } = await axios.post("/api/user/registerUser", {
+          name,
+          email,
+          phone,
+          password,
+        });
 
-  //       const {data}  = await axios.post("/api/users/signup",{
-  //         name , email , phone , password
-  //       },config);
+        localStorage.setItem("userInfo", JSON.stringify(data));
+        //    setLoading(false)
+        navigate("/userHome");
+      } catch (error) {
+        console.log(error);
+        //  setLoading(false)
+        setError("Cannot use the existed data(email,phone)");
+      }
+    }
+  };
 
-  //       localStorage.setItem("userInfo",JSON.stringify(data));
-  //       navigate('/')
-  //       console.log(data);
-  //     } catch (error) {
-  //       setErrors(Validation(name,email,phone,password))
-  //     }
-  //   }
-  //   }
+  useEffect(() => {
+    const userInfo = localStorage.getItem("userInfo");
+    if (userInfo) {
+      navigate("/userHome");
+    } else {
+      navigate("/useSignUp");
+    }
+  }, [navigate]);
 
   return (
     <>
@@ -64,55 +67,117 @@ function UseSignUp() {
           <div className="right">
             <form
               className="form_container"
-              // onSubmit={registerUser}
+              noValidate
+              onSubmit={handleSubmit(submitHandle)}
             >
               <h1 style={{ color: "#333" }}>Create Account</h1>
-              {/* {error && <Errormessage>{error}</Errormessage>}
-              {message && <Errormessage>{message}</Errormessage>} */}
-              <input
-                type="text"
-                placeholder="Name"
-                name="name"
-                // onChange={(e) => setName(e.target.value)}
-                // value={name}
-                className="input"
-              />
-              {/* {errors.name && <p className="error">{errors.name}</p>} */}
-              <input
-                type="email"
-                placeholder="Email"
-                name="email"
-                // onChange={(e) => setEmail(e.target.value)}
-                // value={email}
-                className="input"
-              />
-              {/* {errors.email && <p className="error">{errors.email}</p>} */}
-              <input
-                type="number"
-                name="phone"
-                // onChange={(e) => setPhone(e.target.value)}
-                // value={phone}
-                placeholder="Phone"
-                className="input"
-              />
-              {/* {errors.phone && <p className="error">{errors.phone}</p>} */}
-              <input
-                type="password"
-                placeholder="Password"
-                name="password"
-                // onChange={(e) => setPassword(e.target.value)}
-                // value={password}
-                className="input"
-              />
-              {/* {errors.password && <p className="error">{errors.password}</p>} */}
-              <input
-                type="password"
-                // onChange={(e) => setConfirmPassword(e.target.value)}
-                // value={Confirmpassword}
-                placeholder="Confirm Password"
-                name="Confirmpassword"
-                className="input"
-              />
+              {error && <ErrorMessage>{error}</ErrorMessage>}
+              <Grid item xs={12} sm={12} style={{ width: "370px" }}>
+                <TextField
+                  className="input"
+                  autoComplete="given-name"
+                  name="name"
+                  required
+                  fullWidth
+                  id="name"
+                  label="Name"
+                  autoFocus
+                  variant="standard"
+                  {...register("name", {
+                    required: "Name is required",
+                    minLength: { value: 2, message: "minimum length is 2" },
+                  })}
+                />
+                <p style={{ color: "red", fontSize: "12px" }}>
+                  {errors.name && errors.name.message}
+                </p>
+              </Grid>
+              <Grid item xs={12} style={{ width: "370px" }}>
+                <TextField
+                  className="input"
+                  required
+                  fullWidth
+                  id="email"
+                  label="Email Address"
+                  name="email"
+                  autoComplete="email"
+                  variant="standard"
+                  {...register("email", {
+                    required: "email is required",
+                    pattern: {
+                      value: /^\S+@\S+$/i,
+                      message: "This is not a valid email",
+                    },
+                  })}
+                />
+                <p style={{ color: "red", fontSize: "12px" }}>
+                  {errors.email && errors.email.message}
+                </p>
+              </Grid>
+              <Grid item xs={12} style={{ width: "370px" }}>
+                <TextField
+                  className="input"
+                  required
+                  variant="standard"
+                  label="Phone"
+                  placeholder="Enter Phone"
+                  type="number"
+                  name="phone"
+                  fullWidth
+                  {...register("phone", {
+                    required: "Number is required",
+                    minLength: {
+                      value: "10",
+                      message: "Phone Number requires 10 digits",
+                    },
+                    maxLength: {
+                      value: "10",
+                      message: "maximum length is 10 digit",
+                    },
+                  })}
+                />
+                <p style={{ color: "red", fontSize: "12px" }}>
+                  {errors.phone && errors.phone.message}
+                </p>
+              </Grid>
+              <Grid item xs={12} style={{ width: "370px" }}>
+                <TextField
+                  className="input"
+                  required
+                  fullWidth
+                  name="password"
+                  label="Password"
+                  type="password"
+                  id="password"
+                  autoComplete="new-password"
+                  variant="standard"
+                  {...register("password", {
+                    required: "Password is required",
+                    minLength: { value: "6", message: "Minimum limit is 6" },
+                  })}
+                />
+                <p style={{ color: "red", fontSize: "12px" }}>
+                  {errors.password && errors.password.message}
+                </p>
+              </Grid>
+              <Grid item xs={12} style={{ width: "370px" }}>
+                <TextField
+                  className="input"
+                  variant="standard"
+                  label="Confirm Password"
+                  placeholder="Confirm Password"
+                  type="password"
+                  fullWidth
+                  name="confirmPassword"
+                  {...register("confirmPassword", {
+                    required: "ConfirmPassword is required",
+                    minLength: { value: "6", message: "Minimum limit is 6" },
+                  })}
+                />
+                <p style={{ color: "red", fontSize: "12px" }}>
+                  {errors.confirmPassword && errors.confirmPassword.message}
+                </p>
+              </Grid>
               <button type="submit" className="green_btn">
                 Sign Up
               </button>
