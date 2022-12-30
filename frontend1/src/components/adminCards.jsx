@@ -115,7 +115,8 @@ function Cards() {
     }
   };
 
-  const formSubmit = async () => {
+  const formSubmit = async (e) => {
+    e.preventDefault();
     try {
       await axios
         .patch("/api/admin/updateQuiz", {
@@ -140,6 +141,16 @@ function Cards() {
 
   return (
     <div>
+      <Typography
+        variant="h4"
+        component="h6"
+        textAlign="center"
+        fontFamily="egoe UI"
+        fontWeight={"bold"}
+        style={{ marginLeft: "-50rem", marginTop: "2em" }}
+      >
+        - Quiz -
+      </Typography>
       {/* delete Modal start */}
       <Modal
         open={open}
@@ -239,7 +250,6 @@ function Cards() {
           show.map((data) => {
             return (
               <div>
-                {/* <Link to="/adminQuestions" style={{ textDecoration: "none" }}> */}
                 <Grid
                   sm={12}
                   xs={12}
@@ -262,6 +272,7 @@ function Cards() {
                       borderRadius: "20px",
                       boxShadow:
                         "0 10px 20px rgba(0,0,0,0.19), 0 6px 6px rgba(0,0,0,0.23)",
+                      padding: "10px 0",
                     }}
                   >
                     <CardContent
@@ -281,9 +292,16 @@ function Cards() {
                         {data.quiz}
                       </Typography>
                     </CardContent>
+                    <Typography
+                      gutterBottom
+                      variant="p"
+                      component="div"
+                      style={{ marginLeft: "1rem", marginTop: "-1rem" }}
+                    >
+                      Category: {data.category}
+                    </Typography>
                   </Card>
                 </Grid>
-                {/* </Link> */}
                 <div style={styleOne}>
                   <EditOutlinedIcon
                     onClick={() => getQuizDetails(`${data._id}`)}

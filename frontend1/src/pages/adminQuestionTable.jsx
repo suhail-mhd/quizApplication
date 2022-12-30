@@ -88,7 +88,7 @@ function AdminQuestions() {
   const [answer, setAnswer] = useState("");
   const [category, setCategory] = useState("");
   const [categoryList, setCategoryList] = useState([]);
-  const [type, setType] = useState("");
+  // const [type, setType] = useState("");
   const [typeList, setTypeList] = useState([]);
   const [questionType, setQuestionType] = useState([]);
   const [showQuestion, setShowQuestion] = useState([]);
@@ -107,6 +107,7 @@ function AdminQuestions() {
   };
 
   const QuizName = location.state?.name;
+  const type = QuizName?.QuizName;
 
   for (let i = 0; i < questionType.length; i++) {
     let type = questionType[i].type;
@@ -166,14 +167,15 @@ function AdminQuestions() {
         setOption4(res.data.option4);
         setAnswer(res.data.answer);
         setCategory(res.data.category);
-        setType(res.data.type);
+        // setType(res.data.type);
       });
     } catch (error) {
       console.log(error);
     }
   };
 
-  const formSubmit = async () => {
+  const formSubmit = async (e) => {
+    e.preventDefault();
     try {
       await axios
         .patch("/api/admin/updateQuestion", {
@@ -428,7 +430,7 @@ function AdminQuestions() {
                   </FormControl>
                 </Grid>
 
-                <Grid item md={6} xs={12} lg={6} marginTop={2}>
+                {/* <Grid item md={6} xs={12} lg={6} marginTop={2}>
                   <br />
                   <FormControl variant="standard" sx={{ m: 1, minWidth: 120 }}>
                     <InputLabel htmlFor="demo-customized-select-native">
@@ -452,7 +454,7 @@ function AdminQuestions() {
                         })}
                     </NativeSelect>
                   </FormControl>
-                </Grid>
+                </Grid> */}
               </Grid>
 
               <div style={{ justifyContent: "end", display: "flex" }}>

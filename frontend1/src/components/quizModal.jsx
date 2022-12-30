@@ -47,7 +47,11 @@ const styleTwo = {
 
 export default function TransitionsModal() {
   const [open, setOpen] = React.useState(false);
-  const handleOpen = () => setOpen(true);
+  const handleOpen = () => {
+    setOpen(true);
+    setErrorMsg(null);
+    setCategory(null);
+  };
   const handleClose = () => setOpen(false);
   const [quiz, setQuiz] = useState("");
   const [error, setError] = useState(false);

@@ -68,7 +68,7 @@ const getQuestion = asyncHandler(async (req, res) => {
 const addQuiz = asyncHandler(async (req, res) => {
   const { quiz, category } = req.body;
 
-  const quizExist = await Quiz.findOne({ quiz });
+  const quizExist = await Quiz.findOne({ quiz, category });
 
   if (quizExist) {
     res.status(400).send("Quiz Already Exist");

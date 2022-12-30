@@ -47,7 +47,10 @@ const styleThree = {
 
 export default function TransitionsModal() {
   const [open, setOpen] = React.useState(false);
-  const handleOpen = () => setOpen(true);
+  const handleOpen = () => {
+    setOpen(true);
+    setErrorMsg(null);
+  };
   const handleClose = () => setOpen(false);
   const [category, setCategory] = useState("");
   const [error, setError] = useState(false);

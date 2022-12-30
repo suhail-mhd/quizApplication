@@ -237,7 +237,7 @@ function AdminCategory() {
         mt={5}
         mb={5}
       >
-        Category
+        - Category -
       </Typography>
 
       <Box sx={{ paddingLeft: 10, paddingRight: 10, marginBottom: 20 }}>

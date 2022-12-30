@@ -47,7 +47,10 @@ const styleThree = {
 
 export default function TransitionsModal(QuizName) {
   const [open, setOpen] = React.useState(false);
-  const handleOpen = () => setOpen(true);
+  const handleOpen = () => {
+    setOpen(true);
+    setErrorMsg(null);
+  };
   const handleClose = () => setOpen(false);
   const navigate = useNavigate();
   const [question, setQuestion] = useState("");
@@ -62,7 +65,7 @@ export default function TransitionsModal(QuizName) {
   const [typeList, setTypeList] = useState([]);
   const [error, setError] = useState(false);
   const [errorMsg, setErrorMsg] = useState("");
-const type = QuizName?.QuizName
+  const type = QuizName?.QuizName;
 
   const handleChange2 = (event) => {
     event.preventDefault();
