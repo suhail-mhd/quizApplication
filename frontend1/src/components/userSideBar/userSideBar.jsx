@@ -46,12 +46,12 @@ const Sidebar = () => {
       iconName: "cog",
       type: "solid",
     },
-    {
-      name: "Log Out",
-      iconName: "log-out",
-      color: "red",
-      rotate: "180",
-    },
+    // {
+    //   name: "Log Out",
+    //   iconName: "log-out",
+    //   color: "red",
+    //   rotate: "180",
+    // },
   ];
 
   const [hovered, setHovered] = useState(null);

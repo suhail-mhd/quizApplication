@@ -33,6 +33,15 @@ function UserLogin() {
     }
   };
 
+  useEffect(() => {
+    const userInfo = localStorage.getItem("userInfo");
+    if (userInfo) {
+      navigate("/userHome");
+    } else {
+      navigate("/");
+    }
+  }, []);
+
   return (
     <div className="login_container">
       <div className="login_form_container">
