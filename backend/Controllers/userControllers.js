@@ -1,8 +1,46 @@
 const asyncHandler = require("express-async-handler");
 const validationResult = require("express-validator");
+const generateToken = require("../JWT/jwt");
+const User = require("../Model/userModel/userModel");
 const Question = require("../Model/questionModel/questionModel");
 const Category = require("../Model/categoryModel/categoryModel");
 const Quiz = require("../Model/quizModel/quizModel");
+
+//user register
+
+const registerUser = asyncHandler(async (req, res) => {
+  const { name, email, phone, password } =
+    req.body;
+
+  const UserExist = await User.findOne({ email });
+
+  if (UserExist) {
+    res.status(400).send("Email Already Exist")
+    throw new Error();
+  }
+
+  const user = await User.create({
+    name,
+    email,
+    phone,
+    password,
+  });
+
+  if (user) {
+    res.status(201).json({
+      _id: user.id,
+      name: user.name,
+      email: user.email,
+      phone: user.phone,
+      Token: generateToken(user._id),
+    });
+  } else {
+    res.status(400);
+    throw new Error("error occurred");
+  }
+});
+
+// get quiz
 
 const getQuiz = asyncHandler(async (req, res) => {
   try {
@@ -165,6 +203,7 @@ const getAllQuizzes = asyncHandler(async (req, res) => {
 });
 
 module.exports = {
+  registerUser,
   getQuestion,
   getQuiz,
   getCategory,

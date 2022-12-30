@@ -2,6 +2,7 @@ const express = require("express");
 const router = express.Router();
 
 const {
+  registerUser,
   getQuiz,
   getQuestion,
   getCategory,
@@ -11,6 +12,8 @@ const {
   getAllQuizzes,
   getAllQuestions
 } = require("../Controllers/userControllers");
+
+router.route("/registerUser").post(registerUser);
 
 router.route("/getQuiz").get(getQuiz);
 
