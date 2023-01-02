@@ -1,7 +1,29 @@
 const asyncHandler = require("express-async-handler");
+const Admin = require("../Model/adminModel/adminModel");
 const Question = require("../Model/questionModel/questionModel");
 const Quiz = require("../Model/quizModel/quizModel");
 const Category = require("../Model/categoryModel/categoryModel");
+
+// admin login 
+
+const adminLogin = asyncHandler(async (req, res) => {
+  const { email, password } = req.body;
+
+  console.log(req.body);
+
+  const user = await Admin.findOne({ email });
+
+  if (user && (await password) === user.password) {
+    res.json({
+      email: user.email,
+      _id: user._id,
+      Token: generateToken(user._id),
+    });
+  } else {
+    res.status(400);
+    throw new Error("NOT VALID");
+  }
+});
 
 // questionHandles
 
@@ -286,6 +308,7 @@ const getAllQuestions = asyncHandler(async (req, res) => {
 });
 
 module.exports = {
+  adminLogin,
   addQuestion,
   getQuestion,
   addQuiz,

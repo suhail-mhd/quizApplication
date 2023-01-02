@@ -2,6 +2,7 @@ const express = require("express");
 const adminRouter = express.Router();
 
 const {
+  adminLogin,
   addQuestion,
   getQuestion,
   addQuiz,
@@ -20,6 +21,8 @@ const {
   quizNav,
   getAllQuestions
 } = require("../Controllers/adminControllers");
+
+adminRouter.route("/adminLogin").post(adminLogin);
 
 adminRouter.route("/addQuestion").post(addQuestion);
 

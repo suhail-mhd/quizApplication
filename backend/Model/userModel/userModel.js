@@ -18,9 +18,6 @@ const userSchema = mongoose.Schema({
     password:{
         type:String,
         required:true
-    },
-    Token:{
-        type:String
     }
 },{
     timestamps: true
