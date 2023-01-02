@@ -5,6 +5,7 @@ import { useNavigate } from "react-router-dom";
 import TextField from "@mui/material/TextField";
 import axios from "axios";
 import "../pages/userLogin/userLogin.css";
+import ErrorMessage from '../components/ErrorMessage'
 
 function AdminLogin() {
   const navigate = useNavigate();
@@ -51,7 +52,7 @@ function AdminLogin() {
             noValidate
           >
             <h1 style={{ color: "#333" }}>Login to Admin Account</h1>
-            {/* {error && <ErrorMessage>{error}</ErrorMessage>} */}
+            {error && <ErrorMessage>{error}</ErrorMessage>}
 
             <TextField
               className={"input"}
@@ -73,7 +74,7 @@ function AdminLogin() {
               })}
             />
             <p style={{ color: "red", fontSize: "12px" }}>
-              {/* {errors.email && errors.email.message} */}
+              {errors.email && errors.email.message}
             </p>
 
             <TextField
@@ -96,7 +97,7 @@ function AdminLogin() {
               })}
             />
             <p style={{ color: "red", fontSize: "12px" }}>
-              {/* {errors.password && errors.password.message} */}
+              {errors.password && errors.password.message}
             </p>
             <button type="submit" className="green_btn">
               Sign In
