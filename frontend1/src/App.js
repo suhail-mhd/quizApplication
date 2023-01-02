@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import "./App.css";
+import AdminLogin from "./pages/AdminLogin";
 import AdminHome from "./pages/AdminHome";
 import AdminQuestions from "./pages/adminQuestionTable";
 import AdminCategory from "./pages/AdminCategory";
@@ -24,7 +25,8 @@ function App() {
             <Result>
               <BrowserRouter>
                 <Routes>
-                  <Route path="/admin" element={<AdminHome />} />
+                  <Route path="/admin" element={<AdminLogin />} />
+                  <Route path="/adminHome" element={<AdminHome />} />
                   <Route path="/adminQuestions" element={<AdminQuestions />} />
                   <Route path="/adminCategory" element={<AdminCategory />} />
                   <Route path="/" element={<UserLogin />} />

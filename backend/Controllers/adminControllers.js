@@ -3,13 +3,12 @@ const Admin = require("../Model/adminModel/adminModel");
 const Question = require("../Model/questionModel/questionModel");
 const Quiz = require("../Model/quizModel/quizModel");
 const Category = require("../Model/categoryModel/categoryModel");
+const generateToken = require("../JWT/jwt");
 
-// admin login 
+// admin login
 
 const adminLogin = asyncHandler(async (req, res) => {
   const { email, password } = req.body;
-
-  console.log(req.body);
 
   const user = await Admin.findOne({ email });
 
@@ -42,7 +41,7 @@ const addQuestion = asyncHandler(async (req, res) => {
   const questionExist = await Question.findOne({ question });
 
   if (questionExist) {
-    res.status(400).send("Question Already Exist")
+    res.status(400).send("Question Already Exist");
     throw new Error();
   }
 
@@ -94,13 +93,15 @@ const addQuiz = asyncHandler(async (req, res) => {
 
   if (quizExist) {
     res.status(400).send("Quiz Already Exist");
-    throw new Error()
+    throw new Error();
   }
 
   const data = await Quiz.create({ quiz, category });
 
   if (data) {
-    res.status(200).json({ status: true, quiz: data.quiz, category: data.category });
+    res
+      .status(200)
+      .json({ status: true, quiz: data.quiz, category: data.category });
   } else {
     res.status(400).send("error while quiz value inserting to database");
   }
@@ -125,7 +126,7 @@ const addCategory = asyncHandler(async (req, res) => {
   const categoryExist = await Category.findOne({ category });
 
   if (categoryExist) {
-    res.status(400).send("category Already Exist")
+    res.status(400).send("category Already Exist");
     throw new Error();
   }
 
@@ -297,7 +298,7 @@ const getAllQuestions = asyncHandler(async (req, res) => {
   const type = req.params.type;
 
   try {
-    const allQuestions = await Question.find({type});
+    const allQuestions = await Question.find({ type });
     res.json(allQuestions);
   } catch (error) {
     console.log(
@@ -325,5 +326,5 @@ module.exports = {
   updateQuiz,
   updateCategory,
   quizNav,
-  getAllQuestions
+  getAllQuestions,
 };
