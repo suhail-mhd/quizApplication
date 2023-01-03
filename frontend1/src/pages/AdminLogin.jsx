@@ -105,7 +105,7 @@ function AdminLogin() {
           </form>
         </div>
         <div className="left">
-          <h1>Welcome Admin</h1>
+          <h1 style={{textAlign:"center"}}>Welcome <br></br> Admin</h1>
         </div>
       </div>
     </div>

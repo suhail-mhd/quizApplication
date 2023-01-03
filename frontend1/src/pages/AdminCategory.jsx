@@ -119,7 +119,8 @@ function AdminCategory() {
     }
   };
 
-  const formSubmit = async () => {
+  const formSubmit = async (e) => {
+    e.preventDefault();
     try {
       await axios
         .patch("/api/admin/updateCategory", {
@@ -129,6 +130,7 @@ function AdminCategory() {
         .then((res) => {
           console.log(res);
         });
+      handleCloseEdit();
     } catch (error) {
       console.log(error);
     }

@@ -126,6 +126,7 @@ function Cards() {
         .then((res) => {
           console.log(res);
         });
+      handleCloseEdit();
     } catch (error) {
       console.log(error);
     }

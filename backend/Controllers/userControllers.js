@@ -1,61 +1,252 @@
 const asyncHandler = require("express-async-handler");
-const validationResult = require("express-validator");
-const generateToken = require("../JWT/jwt");
-const User = require("../Model/userModel/userModel");
+const generateToken = require("../utils/jwt");
+const {User, validate } = require("../Model/userModel/userModel");
 const Question = require("../Model/questionModel/questionModel");
 const Category = require("../Model/categoryModel/categoryModel");
 const Quiz = require("../Model/quizModel/quizModel");
 
+const crypto = require("crypto");
+const bcrypt = require("bcrypt");
+const Joi = require("joi");
+const passwordComplexity = require("joi-password-complexity");
+const { sendEmail } = require("../utils/mail");
+const Token = require("../Model/tokenModel/tokenModel");
+
 //user register
 
 const registerUser = asyncHandler(async (req, res) => {
-  const { name, email, phone, password } = req.body;
+  try {
+		const { error } = validate(req.body);
+		if (error)
+			return res.status(400).send({ message: error.details[0].message });
 
-  const UserExist = await User.findOne({ email });
+		let user = await User.findOne({ email: req.body.email });
+		if (user)
+			return res
+				.status(409)
+				.send({ message: "User with given email already Exist!" });
 
-  if (UserExist) {
-    res.status(400).send("Email Already Exist");
-    throw new Error();
-  }
+		const salt = await bcrypt.genSalt(Number(process.env.SALT));
+		const hashPassword = await bcrypt.hash(req.body.password, salt);
 
-  const user = await User.create({
-    name,
-    email,
-    phone,
-    password,
-  });
+		user = await new User({ ...req.body, password: hashPassword }).save();
 
-  if (user) {
-    res.status(201).json({
-      _id: user.id,
-      name: user.name,
-      email: user.email,
-      phone: user.phone,
-      Token: generateToken(user._id),
-    });
-  } else {
-    res.status(400);
-    throw new Error("error occurred");
-  }
+		const token = await new Token({
+			userId: user._id,
+			token: crypto.randomBytes(32).toString("hex"),
+		}).save();
+		const url = `${process.env.BASE_URL}users/${user.id}/verify/${token.token}`;
+		await sendEmail(user.email, "Verify Email", url);
+
+		res
+			.status(201)
+			.send({ message: "An Email sent to your account please verify" });
+	} catch (error) {
+		console.log(error);
+		res.status(500).send({ message: "Internal Server Error" });
+	}
 });
+
+// user verification
+
+const verifyUser = asyncHandler(async(req, res) => {
+  try {
+		const user = await User.findOne({ _id: req.params.id });
+		if (!user) return res.status(400).send({ message: "Invalid link" });
+
+		const token = await Token.findOne({
+			userId: user._id,
+			token: req.params.token,
+		});
+		if (!token) return res.status(400).send({ message: "Invalid link" });
+
+		await User.updateOne({ _id: user._id, verified: true });
+		await token.remove();
+
+		res.status(200).send({ message: "Email verified successfully" });
+	} catch (error) {
+		res.status(500).send({ message: "Internal Server Error" });
+	}
+})
+
+// const registerUser = asyncHandler(async (req, res) => {
+//   const { name, email, phone, password } = req.body;
+
+//   const UserExist = await User.findOne({ email });
+
+//   if (UserExist) {
+//     res.status(400).send("Email Already Exist");
+//     throw new Error();
+//   }
+
+//   const user = await User.create({
+//     name,
+//     email,
+//     phone,
+//     password,
+//   });
+
+//   if (user) {
+//     res.status(201).json({
+//       _id: user.id,
+//       name: user.name,
+//       email: user.email,
+//       phone: user.phone,
+//       token: generateToken(user._id),
+//     });
+//   } else {
+//     res.status(400);
+//     throw new Error("error occurred");
+//   }
+// });
 
 //user login
 
 const loginUser = asyncHandler(async (req, res) => {
-  const { email, password } = req.body;
+  try {
+		const { error } = validate(req.body);
+		if (error)
+			return res.status(400).send({ message: error.details[0].message });
 
-  const user = await User.findOne({ email });
+		const user = await User.findOne({ email: req.body.email });
+		if (!user)
+			return res.status(401).send({ message: "Invalid Email or Password" });
 
-  if (user && (await user.matchPassword(password))) {
-    res.json({
-      _id: user._id,
-      email: user.email,
-      name: user.name,
-      token: generateToken(user._id),
+		const validPassword = await bcrypt.compare(
+			req.body.password,
+			user.password
+		);
+		if (!validPassword)
+			return res.status(401).send({ message: "Invalid Email or Password" });
+
+		if (!user.verified) {
+			let token = await Token.findOne({ userId: user._id });
+			if (!token) {
+				token = await new Token({
+					userId: user._id,
+					token: crypto.randomBytes(32).toString("hex"),
+				}).save();
+				const url = `${process.env.BASE_URL}users/${user._id}/verify/${token.token}`;
+				await sendEmail(user.email, "Verify Email", url);
+			}
+
+			return res
+				.status(400)
+				.send({ message: "An Email sent to your account please verify" });
+		}
+
+		const token = user.generateAuthToken();
+		res.status(200).send({ data: token, message: "logged in successfully" });
+	} catch (error) {
+		res.status(500).send({ message: "Internal Server Error" });
+	}
+});
+
+// const loginUser = asyncHandler(async (req, res) => {
+//   const { email, password } = req.body;
+
+//   const user = await User.findOne({ email });
+
+//   if (user && (await user.matchPassword(password))) {
+//     res.json({
+//       _id: user._id,
+//       email: user.email,
+//       name: user.name,
+//       token: generateToken(user._id),
+//     });
+//   } else {
+//     res.status(400);
+//     throw new Error("Email OR Password Not matching");
+//   }
+// });
+
+// send password link
+
+const passwordLink = asyncHandler(async (req, res) => {
+  try {
+    const emailSchema = Joi.object({
+      email: Joi.string().email().required().label("Email"),
     });
-  } else {
-    res.status(400);
-    throw new Error("Email OR Password Not matching");
+    const { error } = emailSchema.validate(req.body);
+    if (error)
+      return res.status(400).send({ message: error.details[0].message });
+
+    let user = await User.findOne({ email: req.body.email });
+    if (!user)
+      return res
+        .status(409)
+        .send({ message: "User with given email does not exist!" });
+
+    let token = await Token.findOne({ userId: user._id });
+    if (!token) {
+      token = await new Token({
+        userId: user._id,
+        token: crypto.randomBytes(32).toString("hex"),
+      }).save();
+    }
+
+    const url = `${process.env.BASE_URL}password-reset/${user._id}/${token.token}/`;
+    await sendEmail(user.email, "Password Reset", url);
+
+    res
+      .status(200)
+      .send({ message: "Password reset link sent to your email account" });
+  } catch (error) {
+    res.status(500).send({ message: "Internal Server Error" });
+  }
+});
+
+// verify password reset link
+
+const verifyPassword = asyncHandler(async (req, res) => {
+  try {
+    const user = await User.findOne({ _id: req.params.id });
+    if (!user) return res.status(400).send({ message: "Invalid link" });
+
+    const token = await Token.findOne({
+      userId: user._id,
+      token: req.params.token,
+    });
+    if (!token) return res.status(400).send({ message: "Invalid link" });
+
+    res.status(200).send("Valid Url");
+  } catch (error) {
+    res.status(500).send({ message: "Internal Server Error" });
+  }
+});
+
+//  set new password
+
+const resetPassword = asyncHandler(async (req, res) => {
+  try {
+    const passwordSchema = Joi.object({
+      password: passwordComplexity().required().label("Password"),
+    });
+    const { error } = passwordSchema.validate(req.body);
+    if (error)
+      return res.status(400).send({ message: error.details[0].message });
+
+    const user = await User.findOne({ _id: req.params.id });
+    if (!user) return res.status(400).send({ message: "Invalid link" });
+
+    const token = await Token.findOne({
+      userId: user._id,
+      token: req.params.token,
+    });
+    if (!token) return res.status(400).send({ message: "Invalid link" });
+
+    if (!user.verified) user.verified = true;
+
+    const salt = await bcrypt.genSalt(Number(process.env.SALT));
+    const hashPassword = await bcrypt.hash(req.body.password, salt);
+
+    user.password = hashPassword;
+    await user.save();
+    await token.remove();
+
+    res.status(200).send({ message: "Password reset successfully" });
+  } catch (error) {
+    res.status(500).send({ message: "Internal Server Error" });
   }
 });
 
@@ -223,7 +414,11 @@ const getAllQuizzes = asyncHandler(async (req, res) => {
 
 module.exports = {
   registerUser,
+  verifyUser,
   loginUser,
+  passwordLink,
+  verifyPassword,
+  resetPassword,
   getQuestion,
   getQuiz,
   getCategory,

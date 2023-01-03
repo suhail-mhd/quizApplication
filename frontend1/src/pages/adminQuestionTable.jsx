@@ -192,6 +192,7 @@ function AdminQuestions() {
         .then((res) => {
           console.log(res);
         });
+      handleCloseEdit();
     } catch (error) {
       console.log(error);
     }

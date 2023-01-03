@@ -3,7 +3,7 @@ const Admin = require("../Model/adminModel/adminModel");
 const Question = require("../Model/questionModel/questionModel");
 const Quiz = require("../Model/quizModel/quizModel");
 const Category = require("../Model/categoryModel/categoryModel");
-const generateToken = require("../JWT/jwt");
+const generateToken = require("../utils/jwt");
 
 // admin login
 
