@@ -7,17 +7,12 @@ const userSchema = new mongoose.Schema({
   firstName: { type: String, required: true },
   lastName: { type: String, required: true },
   email: { type: String, required: true },
-  phone: {
-    type: Number,
-    required: true,
-    unique: true,
-  },
   password: { type: String, required: true },
   verified: { type: Boolean, default: false },
 });
 
 userSchema.methods.generateAuthToken = function () {
-  const token = jwt.sign({ _id: this._id }, 'jsonwebtokenSection', {
+  const token = jwt.sign({ _id: this._id }, "jsonwebtokenSection", {
     expiresIn: "7d",
   });
   return token;
@@ -27,7 +22,8 @@ const User = mongoose.model("user", userSchema);
 
 const validate = (data) => {
   const schema = Joi.object({
-    name: Joi.string().required().label("Name"),
+    firstName: Joi.string().required().label("First Name"),
+		lastName: Joi.string().required().label("Last Name"),
     email: Joi.string().email().required().label("Email"),
     password: passwordComplexity().required().label("Password"),
   });

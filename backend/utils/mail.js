@@ -14,7 +14,7 @@ module.exports = async (email, subject, text) => {
 		});
 
 		await transporter.sendMail({
-			from: process.env.MAILTRAP_USERNAME,
+			from: "suhail.demo@gmail.com",
 			to: email,
 			subject: subject,
 			text: text,

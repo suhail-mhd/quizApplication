@@ -11,12 +11,14 @@ app.use(cors());
 
 const adminRoute = require("./Routes/adminRoutes");
 const userRoute = require("./Routes/userRoutes");
+const passwordResetRoutes = require("./routes/passwordReset");
 
 
 // routes
 
 app.use("/api/admin", adminRoute);
 app.use("/api/user", userRoute);
+app.use("/api/password-reset", passwordResetRoutes);
 
 //errror handling
 const notFound = (req, res, next) => {

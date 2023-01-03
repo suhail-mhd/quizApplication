@@ -5,8 +5,6 @@ import AdminLogin from "./pages/AdminLogin";
 import AdminHome from "./pages/AdminHome";
 import AdminQuestions from "./pages/adminQuestionTable";
 import AdminCategory from "./pages/AdminCategory";
-import UserLogin from "./pages/userLogin/userLogin";
-import UserSignUp from "./pages/userSignUp/useSignUp";
 import UserHome from "./pages/userHome/userHome";
 import UserQuiz from "./pages/userQuiz/userQuiz";
 import UserQuestions from "./pages/userQuestions/userQuestions";
@@ -15,6 +13,10 @@ import Result from "./contextApi/resultContext";
 import Question from "./contextApi/questionContext";
 import AdminQuizContext from "./contextApi/adminQuizContext";
 import UserQuizContext from "./contextApi/userQuizContext";
+import ForgotPassword from "./components/forgotPassword/ForgotPassword";
+import PasswordReset from "./components/passwordReset/PasswordReset";
+import Login from "./pages/userLogin/userLogin";
+import Signup from "./pages/userSignUp/userSignUp";
 
 function App() {
   return (
@@ -29,8 +31,10 @@ function App() {
                   <Route path="/adminHome" element={<AdminHome />} />
                   <Route path="/adminQuestions" element={<AdminQuestions />} />
                   <Route path="/adminCategory" element={<AdminCategory />} />
-                  <Route path="/" element={<UserLogin />} />
-                  <Route path="/useSignUp" element={<UserSignUp />} />
+                  <Route path="/" element={<Login />} />
+                  <Route path="/signup" element={<Signup />} />
+                  <Route path="/forgotPassword" element={<ForgotPassword />} />
+                  <Route path="/password-reset/:id/:token" element={<PasswordReset />} />
                   <Route path="/userHome" element={<UserHome />} />
                   <Route path="/userQuiz" element={<UserQuiz />} />
                   <Route path="/userQuestions" element={<UserQuestions />} />
