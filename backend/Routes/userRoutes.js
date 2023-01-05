@@ -15,7 +15,9 @@ const {
   catNav,
   quizNav,
   getAllQuizzes,
-  getAllQuestions
+  getAllQuestions,
+  getUserData,
+  userUpdate,
 } = require("../Controllers/userControllers");
 
 router.route("/registerUser").post(registerUser);
@@ -45,5 +47,9 @@ router.route("/quizNav").post(quizNav);
 router.route("/getAllQuizzes/:category").get(getAllQuizzes);
 
 router.route("/getAllQuestions/:type").get(getAllQuestions);
+
+router.route("/getUserData/:id").get(getUserData);
+
+router.route("/userUpdate/:id").patch(userUpdate);
 
 module.exports = router;

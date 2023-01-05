@@ -34,13 +34,14 @@ const registerUser = asyncHandler(async (req, res) => {
     const token = await new Token({
       userId: user._id,
       token: crypto.randomBytes(32).toString("hex"),
+      otp: 24681,
     }).save();
-    const url = `${process.env.BASE_URL}users/${user.id}/verify/${token.token}`;
-    await sendEmail(user.email, "Verify Email", url);
+    // const url = `${process.env.BASE_URL}users/${user.id}/verify/${token.token}`;
+    // await sendEmail(user.email, "Verify Email", url);
 
-    res
-      .status(201)
-      .send({ message: "An Email sent to your account please verify" });
+    // res
+    //   .status(201)
+    //   .send({ message: "An Email sent to your account please verify" });
   } catch (error) {
     console.log(error);
     res.status(500).send({ message: "Internal Server Error" });
@@ -69,82 +70,29 @@ const verifyUser = asyncHandler(async (req, res) => {
   }
 });
 
-// const registerUser = asyncHandler(async (req, res) => {
-//   const { name, email, phone, password } = req.body;
-
-//   const UserExist = await User.findOne({ email });
-
-//   if (UserExist) {
-//     res.status(400).send("Email Already Exist");
-//     throw new Error();
-//   }
-
-//   const user = await User.create({
-//     name,
-//     email,
-//     phone,
-//     password,
-//   });
-
-//   if (user) {
-//     res.status(201).json({
-//       _id: user.id,
-//       name: user.name,
-//       email: user.email,
-//       phone: user.phone,
-//       token: generateToken(user._id),
-//     });
-//   } else {
-//     res.status(400);
-//     throw new Error("error occurred");
-//   }
-// });
-
-//user login
-
 const loginUser = asyncHandler(async (req, res) => {
   try {
-		// const { error } = validate(req.body);
-		// if (error)
-		// 	return res.status(400).send({ message: error.details[0].message });
+    // const { error } = validate(req.body);
+    // if (error)
+    // 	return res.status(400).send({ message: error.details[0].message });
 
-		const user = await User.findOne({ email: req.body.email });
-		if (!user)
-			return res.status(401).send({ message: "Invalid Email or Password" });
+    const user = await User.findOne({ email: req.body.email });
+    if (!user)
+      return res.status(401).send({ message: "Invalid Email or Password" });
 
-		const validPassword = await bcrypt.compare(
-			req.body.password,
-			user.password
-		);
-		if (!validPassword)
-			return res.status(401).send({ message: "Invalid Email or Password" });
+    const validPassword = await bcrypt.compare(
+      req.body.password,
+      user.password
+    );
+    if (!validPassword)
+      return res.status(401).send({ message: "Invalid Email or Password" });
 
-		const token = user.generateAuthToken();
-		res.status(200).send({ data: token, message: "logged in successfully" });
-	} catch (error) {
-		res.status(500).send({ message: "Internal Server Error" });
-	}
+    const token = user.generateAuthToken();
+    res.status(200).send({ data: token, message: "logged in successfully" });
+  } catch (error) {
+    res.status(500).send({ message: "Internal Server Error" });
+  }
 });
-
-// const loginUser = asyncHandler(async (req, res) => {
-//   const { email, password } = req.body;
-
-//   const user = await User.findOne({ email });
-
-//   if (user && (await user.matchPassword(password))) {
-//     res.json({
-//       _id: user._id,
-//       email: user.email,
-//       name: user.name,
-//       token: generateToken(user._id),
-//     });
-//   } else {
-//     res.status(400);
-//     throw new Error("Email OR Password Not matching");
-//   }
-// });
-
-// send password link
 
 const passwordLink = asyncHandler(async (req, res) => {
   try {
@@ -396,6 +344,49 @@ const getAllQuizzes = asyncHandler(async (req, res) => {
   }
 });
 
+// profile
+
+const getUserData = asyncHandler(async (req, res) => {
+  // console.log(req.params.id);
+  const id = req.params.id;
+
+  const user = await User.findById({ _id: id });
+
+  if (user) {
+    res.status(200).json({
+      user,
+    });
+  } else {
+    res.status(400).send("error while getting data from database in profile");
+  }
+});
+
+const userUpdate = asyncHandler(async (req, res) => {
+  const userId = req.params.id;
+  // console.log(userId);
+
+  const data = {
+    firstName: req.body.firstName,
+    lastName: req.body.lastName,
+    email: req.body.email,
+    phone: req.body.phone,
+  };
+
+  // console.log(data);
+
+  try {
+    const updatedData = await User.findByIdAndUpdate(userId, data, {
+      new: true,
+      runValidators: true,
+      useFindAndModify: false,
+    });
+
+    res.status(200).json({ message: "Data Updated" });
+  } catch (error) {
+    res.status(400).json({ message: "Data Not Found" });
+  }
+});
+
 module.exports = {
   registerUser,
   verifyUser,
@@ -411,4 +402,6 @@ module.exports = {
   quizNav,
   getAllQuestions,
   getAllQuizzes,
+  getUserData,
+  userUpdate,
 };

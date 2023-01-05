@@ -17,6 +17,7 @@ import ForgotPassword from "./components/forgotPassword/ForgotPassword";
 import PasswordReset from "./components/passwordReset/PasswordReset";
 import Login from "./pages/userLogin/userLogin";
 import Signup from "./pages/userSignUp/userSignUp";
+import GetOtp from "./components/GetOtp/GetOtp";
 
 function App() {
   return (
@@ -34,7 +35,8 @@ function App() {
                   <Route path="/" element={<Login />} />
                   <Route path="/signup" element={<Signup />} />
                   <Route path="/forgotPassword" element={<ForgotPassword />} />
-                  <Route path="/password-reset/:id/:token" element={<PasswordReset />} />
+                  <Route path="/getOtp" element={<GetOtp />} />
+                  <Route path="/password-reset/:id/:otp" element={<PasswordReset />} />
                   <Route path="/userHome" element={<UserHome />} />
                   <Route path="/userQuiz" element={<UserQuiz />} />
                   <Route path="/userQuestions" element={<UserQuestions />} />

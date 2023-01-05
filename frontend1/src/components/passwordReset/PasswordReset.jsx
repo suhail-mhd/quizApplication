@@ -1,5 +1,5 @@
 import { useEffect, useState, Fragment } from "react";
-import { useParams } from "react-router-dom";
+import { useParams, useLocation } from "react-router-dom";
 import axios from "axios";
 import styles from "./styles.module.css";
 
@@ -9,7 +9,10 @@ const PasswordReset = () => {
 	const [msg, setMsg] = useState("");
 	const [error, setError] = useState("");
 	const param = useParams();
-	const url = `/api/password-reset/${param.id}/${param.token}`;
+	const location = useLocation();
+
+	var email = location.state?.email;
+	const url = `/api/password-reset/${param.id}/${param.otp}`;
 
 	useEffect(() => {
 		const verifyUrl = async () => {
@@ -64,7 +67,7 @@ const PasswordReset = () => {
 						</button>
 					</form>
 				</div>
-			) : (
+			 ) : (
 				<h1>404 Not Found</h1>
 			)}
 		</Fragment>
