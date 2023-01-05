@@ -5,9 +5,6 @@ const {
   registerUser,
   verifyUser,
   loginUser,
-  passwordLink,
-  verifyPassword,
-  resetPassword,
   getQuiz,
   getQuestion,
   getCategory,
@@ -25,12 +22,6 @@ router.route("/registerUser").post(registerUser);
 router.route("/verifyUser/:id/verify/:token/").get(verifyUser);
 
 router.route("/loginUser").post(loginUser);
-
-router.route("/passwordLink").post(passwordLink);
-
-router.route("/verifyPassword/:id/:token").get(verifyPassword);
-
-router.route("/resetPassword/:id/:token").post(resetPassword);
 
 router.route("/getQuiz").get(getQuiz);
 
