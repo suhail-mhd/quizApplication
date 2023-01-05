@@ -3,7 +3,7 @@ const router = express.Router();
 
 const {
   registerUser,
-  verifyUser,
+  // verifyUser,
   loginUser,
   getQuiz,
   getQuestion,
@@ -19,7 +19,7 @@ const {
 
 router.route("/registerUser").post(registerUser);
 
-router.route("/verifyUser/:id/verify/:token/").get(verifyUser);
+// router.route("/verifyUser/:id/verify/:token/").get(verifyUser);
 
 router.route("/loginUser").post(loginUser);
 

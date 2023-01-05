@@ -42,7 +42,7 @@ router.post("/", async (req, res) => {
       .json({
         userId: user._id,
         otp: token.otp,
-        message: "Link send successfully",
+        message: "request send successfully",
       });
   } catch (error) {
     res.status(500).send({ message: "Internal Server Error" });

@@ -36,7 +36,7 @@ const registerUser = asyncHandler(async (req, res) => {
       token: crypto.randomBytes(32).toString("hex"),
       otp: 24681,
     }).save();
-    const url = `${process.env.BASE_URL}users/${user.id}/verify/${token.token}`;
+    // const url = `${process.env.BASE_URL}users/${user.id}/verify/${token.token}`;
     // await sendEmail(user.email, "Verify Email", url);
 
     // res
@@ -48,32 +48,33 @@ const registerUser = asyncHandler(async (req, res) => {
   }
 });
 
-// user verification
+// // user verification
 
-const verifyUser = asyncHandler(async (req, res) => {
-  try {
-    const user = await User.findOne({ _id: req.params.id });
-    if (!user) return res.status(400).send({ message: "Invalid link" });
+// const verifyUser = asyncHandler(async (req, res) => {
+//   try {
+//     const user = await User.findOne({ _id: req.params.id });
+//     if (!user) return res.status(400).send({ message: "Invalid link" });
 
-    const token = await Token.findOne({
-      userId: user._id,
-      token: req.params.otp,
-    });
-    if (!token) return res.status(400).send({ message: "Invalid link" });
+//     const token = await Token.findOne({
+//       userId: user._id,
+//       token: req.params.otp,
+//     });
+//     if (!token) return res.status(400).send({ message: "Invalid link" });
 
-    await User.updateOne({ _id: user._id, verified: true });
-    await token.remove();
+//     await User.updateOne({ _id: user._id, verified: true });
+//     await token.remove();
 
-    res.status(200).send({ message: "Email verified successfully" });
-  } catch (error) {
-    res.status(500).send({ message: "Internal Server Error" });
-  }
-});
+//     res.status(200).send({ message: "Email verified successfully" });
+//   } catch (error) {
+//     res.status(500).send({ message: "Internal Server Error" });
+//   }
+// });
 
 const loginUser = asyncHandler(async (req, res) => {
   try {
 
 		const user = await User.findOne({ email: req.body.email });
+    console.log(user);
 		if (!user)
 			return res.status(401).send({ message: "Invalid Email or Password" });
 
@@ -81,6 +82,7 @@ const loginUser = asyncHandler(async (req, res) => {
 			req.body.password,
 			user.password
 		);
+    console.log(validPassword);
 		if (!validPassword)
 			return res.status(401).send({ message: "Invalid Email or Password" });
 
@@ -90,14 +92,10 @@ const loginUser = asyncHandler(async (req, res) => {
 				token = await new Token({
 					userId: user._id,
 					token: crypto.randomBytes(32).toString("hex"),
+          otp: 24681,
 				}).save();
-				const url = `${process.env.BASE_URL}users/${user._id}/verify/${token.token}`;
-				await sendEmail(user.email, "Verify Email", url);
 			}
 
-			return res
-				.status(400)
-				.send({ message: "An Email sent to your account please verify" });
 		}
 
 		const token = user.generateAuthToken();
@@ -314,7 +312,7 @@ const userUpdate = asyncHandler(async (req, res) => {
 
 module.exports = {
   registerUser,
-  verifyUser,
+  // verifyUser,
   loginUser,
   getQuestion,
   getQuiz,
