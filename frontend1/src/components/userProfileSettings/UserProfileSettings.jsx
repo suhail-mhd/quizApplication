@@ -16,9 +16,8 @@ const styleThree = {
 
 const pages = [
   "Account Settings",
-  "Settings",
-  "Settings",
-  "Settings",
+  "Company Settings",
+  "Notification",
   "Settings",
 ];
 

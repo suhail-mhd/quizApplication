@@ -11,6 +11,7 @@ import axios from "axios";
 import "./userQuiz.css";
 import Grid from "@mui/material/Grid";
 import CardActions from "@mui/material/CardActions";
+import UserAppBar from "../../components/userAppBar/UserAppBar";
 
 const styleOne = {
   width: "100px",
@@ -67,6 +68,7 @@ function UserQuiz() {
   return (
     <div>
       <UserSideBar />
+      <UserAppBar/>
       <div style={{ float: "right", marginRight: "50px", marginTop: 70 }}>
         <Button
           variant="contained"
