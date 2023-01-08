@@ -1,52 +1,87 @@
 const asyncHandler = require("express-async-handler");
 const generateToken = require("../utils/jwt");
-const { User, validate } = require("../Model/userModel/userModel");
+const User = require("../Model/userModel/userModel");
 const Question = require("../Model/questionModel/questionModel");
 const Category = require("../Model/categoryModel/categoryModel");
 const Quiz = require("../Model/quizModel/quizModel");
+const Token = require("../Model/tokenModel/tokenModel");
 
 const crypto = require("crypto");
 const bcrypt = require("bcrypt");
-const Joi = require("joi");
-const passwordComplexity = require("joi-password-complexity");
-const sendEmail = require("../utils/mail");
-const Token = require("../Model/tokenModel/tokenModel");
 
 //user register
 
 const registerUser = asyncHandler(async (req, res) => {
-  try {
-    const { error } = validate(req.body);
-    if (error)
-      return res.status(400).send({ message: error.details[0].message });
+  const { firstName, lastName, email, phone, password } = req.body;
 
-    let user = await User.findOne({ email: req.body.email });
-    if (user)
-      return res
-        .status(409)
-        .send({ message: "User with given email already Exist!" });
+  const UserExist = await User.findOne({ email });
 
-    const salt = await bcrypt.genSalt(Number(process.env.SALT));
-    const hashPassword = await bcrypt.hash(req.body.password, salt);
+  if (UserExist) {
+    res.status(400);
+    throw new Error("User Already Exist");
+  }
 
-    user = await new User({ ...req.body, password: hashPassword }).save();
+  const user = await User.create({
+    firstName,
+    lastName,
+    email,
+    phone,
+    password,
+  });
 
-    const token = await new Token({
-      userId: user._id,
-      token: crypto.randomBytes(32).toString("hex"),
-      otp: 24681,
-    }).save();
-    // const url = `${process.env.BASE_URL}users/${user.id}/verify/${token.token}`;
-    // await sendEmail(user.email, "Verify Email", url);
-
-    // res
-    //   .status(201)
-    //   .send({ message: "An Email sent to your account please verify" });
-  } catch (error) {
-    console.log(error);
-    res.status(500).send({ message: "Internal Server Error" });
+  const token = await Token.create({
+    userId: user._id,
+    token: crypto.randomBytes(32).toString("hex"),
+    otp: 24681,
+  });
+  if (user) {
+    res.status(201).json({
+      _id: user.id,
+      firstName: user.firstName,
+      lastName: user.lastName,
+      email: user.email,
+      phone: user.phone,
+      Token: generateToken(user._id),
+    });
+  } else {
+    res.status(400);
+    throw new Error("error occured");
   }
 });
+
+// const registerUser = asyncHandler(async (req, res) => {
+//   try {
+//     const { error } = validate(req.body);
+//     if (error)
+//       return res.status(400).send({ message: error.details[0].message });
+
+//     let user = await User.findOne({ email: req.body.email });
+//     if (user)
+//       return res
+//         .status(409)
+//         .send({ message: "User with given email already Exist!" });
+
+//     const salt = await bcrypt.genSalt(Number(process.env.SALT));
+//     const hashPassword = await bcrypt.hash(req.body.password, salt);
+
+//     user = await new User({ ...req.body, password: hashPassword }).save();
+
+//     const token = await new Token({
+//       userId: user._id,
+//       token: crypto.randomBytes(32).toString("hex"),
+//       otp: 24681,
+//     }).save();
+//     // const url = `${process.env.BASE_URL}users/${user.id}/verify/${token.token}`;
+//     // await sendEmail(user.email, "Verify Email", url);
+
+//     // res
+//     //   .status(201)
+//     //   .send({ message: "An Email sent to your account please verify" });
+//   } catch (error) {
+//     console.log(error);
+//     res.status(500).send({ message: "Internal Server Error" });
+//   }
+// });
 
 // // user verification
 
@@ -71,37 +106,67 @@ const registerUser = asyncHandler(async (req, res) => {
 // });
 
 const loginUser = asyncHandler(async (req, res) => {
-  try {
+  const { email, password } = req.body;
 
-		const user = await User.findOne({ email: req.body.email });
-		if (!user)
-			return res.status(401).send({ message: "Invalid Email or Password" });
+  const user = await User.findOne({ email });
 
-		const validPassword = await bcrypt.compare(
-			req.body.password,
-			user.password
-		);
-		if (!validPassword)
-			return res.status(401).send({ message: "Invalid Email or Password" });
+  if (!user.verified) {
+    let token = await Token.findOne({ userId: user._id });
+    if (!token) {
+      token = await Token.create({
+        userId: user._id,
+        token: crypto.randomBytes(32).toString("hex"),
+        otp: 24681,
+      });
+    }
+  }
 
-		if (!user.verified) {
-			let token = await Token.findOne({ userId: user._id });
-			if (!token) {
-				token = await new Token({
-					userId: user._id,
-					token: crypto.randomBytes(32).toString("hex"),
-          otp: 24681,
-				}).save();
-			}
-
-		}
-
-		const token = user.generateAuthToken();
-		res.status(200).send({ data: token, message: "logged in successfully" });
-	} catch (error) {
-		res.status(500).send({ message: "Internal Server Error" });
-	}
+  if (user && (await user.matchPassword(password))) {
+    res.json({
+      _id: user._id,
+      email: user.email,
+      firstName: user.firstName,
+      lastName: user.lastName,
+      token: generateToken(user._id),
+    });
+  } else {
+    res.status(400);
+    throw new Error("Email OR Password Not matching");
+  }
 });
+
+// const loginUser = asyncHandler(async (req, res) => {
+//   try {
+
+// 		const user = await User.findOne({ email: req.body.email });
+// 		if (!user)
+// 			return res.status(401).send({ message: "Invalid Email or Password" });
+
+// 		const validPassword = await bcrypt.compare(
+// 			req.body.password,
+// 			user.password
+// 		);
+// 		if (!validPassword)
+// 			return res.status(401).send({ message: "Invalid Email or Password" });
+
+// 		if (!user.verified) {
+// 			let token = await Token.findOne({ userId: user._id });
+// 			if (!token) {
+// 				token = await new Token({
+// 					userId: user._id,
+// 					token: crypto.randomBytes(32).toString("hex"),
+//           otp: 24681,
+// 				}).save();
+// 			}
+
+// 		}
+
+// 		const token = user.generateAuthToken();
+// 		res.status(200).send({ data: token, message: "logged in successfully" });
+// 	} catch (error) {
+// 		res.status(500).send({ message: "Internal Server Error" });
+// 	}
+// });
 
 // get quiz
 
