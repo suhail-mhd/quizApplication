@@ -73,6 +73,7 @@ const style = {
 export default function UserAppBar() {
   const [logout, setLogout] = useState(false);
   const navigate = useNavigate();
+  const loc = JSON.parse(localStorage.getItem("userInfo"));
 
   // modal
   const [open, setOpen] = React.useState(false);
@@ -81,7 +82,7 @@ export default function UserAppBar() {
 
   //   Logout handling
   const logoutHandle = () => {
-    localStorage.removeItem("token");
+    localStorage.removeItem("userInfo");
     setLogout(true);
     navigate("/");
     setOpen(false);
@@ -92,8 +93,8 @@ export default function UserAppBar() {
   }, [logout]);
 
   const profilePage = () => {
-    navigate('/userProfile')
-  }
+    navigate("/userProfile");
+  };
 
   const [anchorEl, setAnchorEl] = React.useState(null);
   const [mobileMoreAnchorEl, setMobileMoreAnchorEl] = React.useState(null);

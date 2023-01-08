@@ -1,5 +1,5 @@
 const router = require("express").Router();
-const { User } = require("../Model/userModel/userModel");
+const User = require("../Model/userModel/userModel");
 const Token = require("../Model/tokenModel/tokenModel");
 const crypto = require("crypto");
 const sendEmail = require("../utils/mail");
@@ -10,22 +10,13 @@ const bcrypt = require("bcrypt");
 // send password link
 router.post("/", async (req, res) => {
   try {
-    const emailSchema = Joi.object({
-      email: Joi.string().email().required().label("Email"),
-    });
-    const { error } = emailSchema.validate(req.body);
-    if (error)
-      return res.status(400).send({ message: error.details[0].message });
-
     let user = await User.findOne({ email: req.body.email });
-    // console.log(user);
     if (!user)
       return res
         .status(409)
         .send({ message: "User with given email does not exist!" });
 
     let token = await Token.findOne({ userId: user._id });
-    // console.log(token);
     if (!token) {
       token = await new Token({
         userId: user._id,
@@ -35,15 +26,12 @@ router.post("/", async (req, res) => {
     }
 
     const url = `${process.env.BASE_URL}password-reset/${user._id}/${token.otp}/`;
-    console.log(url);
 
-    res
-      .status(200)
-      .json({
-        userId: user._id,
-        otp: token.otp,
-        message: "request send successfully",
-      });
+    res.status(200).json({
+      userId: user._id,
+      otp: token.otp,
+      message: "request send successfully",
+    });
   } catch (error) {
     res.status(500).send({ message: "Internal Server Error" });
   }
@@ -54,14 +42,12 @@ router.post("/", async (req, res) => {
 router.get("/:id/:otp", async (req, res) => {
   try {
     const user = await User.findOne({ _id: req.params.id });
-    // console.log(user);
     if (!user) return res.status(400).send({ message: "Invalid link" });
 
     const token = await Token.findOne({
       userId: user._id,
       otp: req.params.otp,
     });
-    // console.log(token);
     if (!token) return res.status(400).send({ message: "Invalid link" });
 
     res.status(200).send("Valid Url");
@@ -73,13 +59,6 @@ router.get("/:id/:otp", async (req, res) => {
 //  set new password
 router.post("/:id/:otp", async (req, res) => {
   try {
-    const passwordSchema = Joi.object({
-      password: passwordComplexity().required().label("Password"),
-    });
-    const { error } = passwordSchema.validate(req.body);
-    if (error)
-      return res.status(400).send({ message: error.details[0].message });
-
     const user = await User.findOne({ _id: req.params.id });
     if (!user) return res.status(400).send({ message: "Invalid link" });
 
