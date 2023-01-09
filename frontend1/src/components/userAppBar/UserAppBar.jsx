@@ -72,6 +72,7 @@ const style = {
 
 export default function UserAppBar() {
   const [logout, setLogout] = useState(false);
+  const [userId, setUserId] = useState();
   const navigate = useNavigate();
   const loc = JSON.parse(localStorage.getItem("userInfo"));
 
@@ -92,8 +93,18 @@ export default function UserAppBar() {
     console.log("render");
   }, [logout]);
 
+  const data = () => {
+    if (loc) {
+      setUserId(loc._id);
+    }
+  };
+
+  useEffect(() => {
+    data();
+  }, []);
+
   const profilePage = () => {
-    navigate("/userProfile");
+    navigate(`/userProfile/${userId}`);
   };
 
   const [anchorEl, setAnchorEl] = React.useState(null);
@@ -157,14 +168,13 @@ export default function UserAppBar() {
       open={isMobileMenuOpen}
       onClose={handleMobileMenuClose}
     >
-      <MenuItem>
-        <IconButton size="large" aria-label="show 4 new mails" color="inherit">
-          <Badge badgeContent={4} color="error">
-            <MailIcon />
-          </Badge>
-        </IconButton>
-        <p>Messages</p>
-      </MenuItem>
+      <Button
+        onClick={handleOpen}
+        className="gap-1"
+        style={{ color: "orangered" }}
+      >
+        <i class="ri-logout-circle-line"></i> Logout
+      </Button>
       <MenuItem>
         <IconButton
           size="large"

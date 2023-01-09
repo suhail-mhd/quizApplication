@@ -40,7 +40,7 @@ function App() {
                   <Route path="/userQuiz" element={<UserQuiz />} />
                   <Route path="/userQuestions" element={<UserQuestions />} />
                   <Route path="/userResult" element={<UserResult />} />
-                  <Route path="/userProfile" element={<UserProfile />} />
+                  <Route path="/userProfile/:id" element={<UserProfile />} />
                 </Routes>
               </BrowserRouter>
             </Result>
