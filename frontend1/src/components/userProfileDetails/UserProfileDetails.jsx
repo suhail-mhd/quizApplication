@@ -13,6 +13,9 @@ import Button from "@mui/material/Button";
 import { TextField } from "@mui/material";
 import Grid from "@mui/material/Grid";
 import axios from "axios";
+import Snackbar from "@mui/material/Snackbar";
+import IconButton from '@mui/material/IconButton';
+import CloseIcon from '@mui/icons-material/Close';
 
 const style = {
   width: "100px",
@@ -58,6 +61,24 @@ function UserProfileDetails() {
   const [snackOpen, snackClose] = useState(false);
   const userId = useParams();
 
+  // snackbar
+  const SnackClose = () => {
+    snackClose(false);
+  };
+
+  const action = (
+    <React.Fragment>
+      <IconButton
+        size="small"
+        aria-label="close"
+        color="inherit"
+        onClick={SnackClose}
+      >
+        <CloseIcon fontSize="small" />
+      </IconButton>
+    </React.Fragment>
+  );
+
   const userData = () => {
     try {
       axios.get(`/api/user/getUserData/${userId.id}`).then((res) => {
@@ -100,6 +121,13 @@ function UserProfileDetails() {
 
   return (
     <div>
+      <Snackbar
+        open={snackOpen}
+        autoHideDuration={6000}
+        onClose={snackClose}
+        message={updateRes}
+        action={action}
+      />
       <Grid container style={{ marginTop: "-3.5rem" }}>
         <Grid item xs={12} sm={12} lg={6} md={6}>
           <Card
