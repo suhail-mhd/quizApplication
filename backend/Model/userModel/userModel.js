@@ -24,6 +24,10 @@ const userSchema = mongoose.Schema(
       type: String,
       required: true,
     },
+    image: {
+      url: String,
+      public_id: String
+    },
     verified: {
       type: Boolean,
       default: false,

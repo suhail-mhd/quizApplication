@@ -1,5 +1,6 @@
 const express = require("express");
 const router = express.Router();
+const expressFormidable = require("express-formidable");
 
 const {
   registerUser,
@@ -14,6 +15,7 @@ const {
   getAllQuestions,
   getUserData,
   userUpdate,
+  imageUpload,
 } = require("../Controllers/userControllers");
 
 router.route("/registerUser").post(registerUser);
@@ -39,5 +41,9 @@ router.route("/getAllQuestions/:type").get(getAllQuestions);
 router.route("/getUserData/:id").get(getUserData);
 
 router.route("/userUpdate/:id").patch(userUpdate);
+
+router
+  .route("/imageUpload", expressFormidable({ maxFieldsSize: 5 * 1024 * 1024 }))
+  .post(imageUpload);
 
 module.exports = router;

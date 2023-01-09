@@ -1,11 +1,20 @@
 const asyncHandler = require("express-async-handler");
 const crypto = require("crypto");
+const cloudinary = require('cloudinary').v2
 const generateToken = require("../utils/jwt");
 const User = require("../Model/userModel/userModel");
 const Question = require("../Model/questionModel/questionModel");
 const Category = require("../Model/categoryModel/categoryModel");
 const Quiz = require("../Model/quizModel/quizModel");
 const Token = require("../Model/tokenModel/tokenModel");
+
+// cloudinary config
+
+cloudinary.config({
+  cloud_name: process.env.CLOUDINARY_NAME,
+  api_key: process.env.CLOUDINARY_API,
+  api_secret: process.env.CLOUDINARY_SECRET
+})
 
 //user register
 
@@ -265,6 +274,7 @@ const userUpdate = asyncHandler(async (req, res) => {
     lastName: req.body.lastName,
     email: req.body.email,
     phone: req.body.phone,
+    image: req.body.image
   };
 
   try {
@@ -280,6 +290,21 @@ const userUpdate = asyncHandler(async (req, res) => {
   }
 });
 
+const imageUpload = asyncHandler(async(req, res) => {
+try {
+  console.log(req.files.image);
+  const file = req.files.image
+  const result = await cloudinary.uploader.upload(file.tempFilePath)
+  console.log("/////",result);
+  res.json({
+   url: result.secure_url,
+   public_id: result.public_id
+  })
+} catch (error) {
+  console.log(error);
+}
+})
+
 module.exports = {
   registerUser,
   loginUser,
@@ -293,4 +318,5 @@ module.exports = {
   getAllQuizzes,
   getUserData,
   userUpdate,
+  imageUpload
 };

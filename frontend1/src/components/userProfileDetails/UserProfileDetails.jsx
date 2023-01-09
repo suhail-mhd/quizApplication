@@ -14,8 +14,11 @@ import { TextField } from "@mui/material";
 import Grid from "@mui/material/Grid";
 import axios from "axios";
 import Snackbar from "@mui/material/Snackbar";
-import IconButton from '@mui/material/IconButton';
-import CloseIcon from '@mui/icons-material/Close';
+import IconButton from "@mui/material/IconButton";
+import CloseIcon from "@mui/icons-material/Close";
+import { storage } from "../../firebase/Firebase";
+import { ref, getDownloadURL, uploadBytesResumable } from "firebase/storage";
+import ProgressBar from "../ProgressBar";
 
 const style = {
   width: "100px",
@@ -59,7 +62,13 @@ function UserProfileDetails() {
   const [userDataValue, setUserDataValue] = useState({});
   const [updateRes, setUpdateRes] = useState();
   const [snackOpen, snackClose] = useState(false);
+  const [image, setImage] = useState(null);
+  const [error, setError] = useState(null);
+  const [progress, setProgress] = useState(0);
+  const [url, setUrl] = useState(null);
   const userId = useParams();
+
+  let types = ['image/png', 'image/jpeg']
 
   // snackbar
   const SnackClose = () => {
@@ -115,6 +124,32 @@ function UserProfileDetails() {
     }
   };
 
+  const profileHandler = (e) => {
+    let selected = e.target.files[0];
+    // console.log(selected);
+    if (selected && types.includes(selected.type)) {
+      setImage(selected);
+      setError('')
+    } else {
+      setImage(null)
+      setError('Please select an image file (png or jpeg)')
+    }
+  };
+
+  // const handleImage = async (e) => {
+  //   const file = e.target.files[0];
+  //   let formData = new FormData();
+  //   formData.append("image", file);
+  //   console.log([...formData]);
+  //   try {
+  //     const { data } = await axios.post("/api/user/imageUpload", formData);
+  //     console.log(data);
+  //     setImage({ url: data.url, public_id: data.public_id });
+  //   } catch (error) {
+  //     console.log(error);
+  //   }
+  // };
+
   useEffect(() => {
     userData();
   }, [render]);
@@ -146,8 +181,19 @@ function UserProfileDetails() {
           >
             <CardContent style={{ textAlign: "center" }}>
               <div>
+                {error && <p style={{color:"red", fontSize:"9px"}}>{error}</p>}
                 <img src={Avatar} alt="profile_pic" style={style} />
-                <CameraAltIcon fontSize="" style={style1} />
+                <label htmlFor="image">
+                  <CameraAltIcon fontSize="" style={style1} />
+                </label>
+                <input
+                  type="file"
+                  accept="images/*"
+                  onChange={profileHandler}
+                  name="image"
+                  id="image"
+                  hidden
+                />
               </div>
               <Typography
                 gutterBottom
@@ -170,6 +216,7 @@ function UserProfileDetails() {
                 {userDataValue.lastName}
               </Typography>
             </CardContent>
+            {image && <ProgressBar image={image} setImage={setImage} />}
             <CardContent>
               <List
                 sx={{
